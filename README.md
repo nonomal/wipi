@@ -35,7 +35,7 @@ https://custw.qifengle1412.cn/
 ### clone 本项目。
 
 ```shell
-git clone --depth=1 https://github.com/zhxuc/wipi.git ypur-project-name
+git clone --depth=1 https://github.com/zhxuc/wipi.git your-project-name
 ```
 
 ### 安装依赖
