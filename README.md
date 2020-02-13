@@ -15,17 +15,21 @@ A blog system write by nestjs, nextjs, and MySQL.
 
 ## 线上预览
 
+- 首页：https://custw.qifengle1412.cn/
+- 后台：https://custw.qifengle1412.cn/admin/login
+- 账户：wipi，密码：wipi123456（请不要随便删数据哦）
+
 ### 前台页面
 
-https://custw.qifengle1412.cn/
+地址：https://custw.qifengle1412.cn/
 
-### 后台管理页面截图
+### 后台页面
 
 <ul style="display: flex; flex-wrap: no-wrap; list-style: none; padding: 0">
-  <li><img style="width: 180px; height: 120px" src="https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZW0/wipi-login.png" alt="登录页面" /></li>
-  <li><img style="width: 180px; height: 120px; margin-left: 10px" src="https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZR2/wipi-admin-index.png" alt="后台首页" /></li>
-  <li  ><img style="width: 180px; height: 120px; margin-left: 10px" src="https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZOL/wipi-admin-article.png" alt="文章管理" /></li>
-  <li  ><img style="width: 180px; height: 120px; margin-left: 10px" src="https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZTJ/wipi-admin-page.png" alt="页面管理" /></li>
+  <li><img style="width: 180px; height: 120px" src="https://user-gold-cdn.xitu.io/2020/2/13/1703f19269e0161c?w=2976&h=1426&f=png&s=118268" alt="登录页面" /></li>
+  <li><img style="width: 180px; height: 120px; margin-left: 10px" src="https://user-gold-cdn.xitu.io/2020/2/13/1703f19269d3eb83?w=3334&h=1682&f=png&s=216969" alt="后台首页" /></li>
+  <li  ><img style="width: 180px; height: 120px; margin-left: 10px" src="https://user-gold-cdn.xitu.io/2020/2/13/1703f1926b951133?w=3346&h=1570&f=png&s=333153" alt="文章管理" /></li>
+  <li  ><img style="width: 180px; height: 120px; margin-left: 10px" src="https://user-gold-cdn.xitu.io/2020/2/13/1703f1926bca5113?w=3338&h=1378&f=png&s=185996" alt="页面管理" /></li>
 </ul>
 
 更多页面及特性可以本地启动使用。
@@ -35,7 +39,7 @@ https://custw.qifengle1412.cn/
 ### clone 本项目。
 
 ```shell
-git clone --depth=1 https://github.com/zhxuc/wipi.git ypur-project-name
+git clone --depth=1 https://github.com/zhxuc/wipi.git your-project-name
 ```
 
 ### 安装依赖
@@ -72,7 +76,7 @@ cd server && yarn start:dev
 
 ## 项目部署
 
-在服务端使用 pm2 进行部署即可，可以查看[`deploy.sh`](./deploy.sh)文件。
+在服务器使用 pm2 进行部署即可，可以查看[`deploy.sh`](./deploy.sh)文件。
 
 ## 搜索服务
 
