@@ -38,12 +38,12 @@ export const UserInfo = () => {
   return (
     <Dropdown overlay={menu}>
       <div
-        style={{
-          display: "inline-block",
-          cursor: "pointer",
-          height: 64,
-          fontSize: 14
-        }}
+      // style={{
+      //   display: "inline-block",
+      //   cursor: "pointer",
+      //   height: 64,
+      //   fontSize: 14
+      // }}
       >
         {user && user.avatar ? (
           <Avatar size={"small"} src={user.avatar} />

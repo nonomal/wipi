@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Layout, Row, Col, Menu, Breadcrumb, Icon, message } from "antd";
+import React, { useState } from "react";
+import { Layout, Row, Col, Menu, Breadcrumb, Icon, Tooltip } from "antd";
 import Link from "next/link";
 import { Helmet } from "react-helmet";
 import { useSetting } from "@/hooks/useSetting";
 import { useRouter } from "next/router";
-import { Search } from "@components/admin/Search";
 import { UserInfo } from "@components/admin/UserInfo";
 import style from "./index.module.scss";
 
@@ -217,8 +216,19 @@ export const AdminLayout: React.FC<IAdminLayoutProps> = ({
               />
             </Col>
             <Col span={18} xs={22} style={{ textAlign: "right" }}>
-              {/* <Search /> */}
-              <UserInfo />
+              <div className={style.info}>
+                <Tooltip placement="top" title="项目源码">
+                  <a
+                    className={style.github}
+                    href="https://github.com/zhxuc/wipi"
+                    target="_blank"
+                  >
+                    <Icon type="github" />
+                    <span></span>
+                  </a>
+                </Tooltip>
+                <UserInfo />
+              </div>
             </Col>
           </Row>
         </Header>
