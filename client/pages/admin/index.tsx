@@ -4,12 +4,12 @@ import Link from "next/link";
 import { Row, Col, Statistic, List, Card } from "antd";
 import { AdminLayout } from "@/layout/AdminLayout";
 import { SearchKeyWordChart } from "@components/admin/SearchKeyWordChart";
-import { ViewChart } from "@components/admin/ViewChart";
+// import { ViewChart } from "@components/admin/ViewChart";
 import { ArticleProvider } from "@providers/article";
 import { CommentProvider } from "@providers/comment";
 import { TagProvider } from "@/providers/tag";
 import { FileProvider } from "@/providers/file";
-import { ViewProvider } from "@/providers/view";
+// import { ViewProvider } from "@/providers/view";
 
 import style from "./index.module.scss";
 
@@ -26,13 +26,13 @@ const Home: NextPage<IHomeProps> = ({
   files = [],
   comments = []
 }) => {
-  const [views, setViews] = useState<IView[]>([]);
+  // const [views, setViews] = useState<IView[]>([]);
 
-  useEffect(() => {
-    ViewProvider.getViews().then(res => {
-      setViews(res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   ViewProvider.getViews().then(res => {
+  //     setViews(res);
+  //   });
+  // }, []);
 
   return (
     <AdminLayout background="transparent" padding={0}>
@@ -73,11 +73,11 @@ const Home: NextPage<IHomeProps> = ({
         </Card>
       </Row>
 
-      <Row style={{ marginTop: 16 }}>
+      {/* <Row style={{ marginTop: 16 }}>
         <Card title="页面访问" bordered={false}>
           <ViewChart data={views} />
         </Card>
-      </Row>
+      </Row> */}
 
       <Row gutter={16} style={{ marginTop: 16 }}>
         <Col xs={24} sm={14}>
