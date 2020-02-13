@@ -1,25 +1,29 @@
-import React, { useCallback } from "react";
-import { Form, Modal, Button, Input, Icon } from "antd";
+import React, { useCallback, useState } from "react";
+import { Form, Button, Input, Icon } from "antd";
 import Router from "next/router";
 import { FormComponentProps } from "antd/es/form";
 import { UserProvider } from "@providers/user";
-import { AdminLayout } from "@/layout/AdminLayout";
 import style from "./index.module.scss";
 
 interface ILoginProps extends FormComponentProps {}
 
 const _Login: React.FC<ILoginProps> = ({ form }) => {
   const { getFieldDecorator } = form;
+  const [loading, setLoading] = useState(false);
 
   const submit = useCallback(e => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        UserProvider.login(values).then(userInfo => {
-          sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
-          sessionStorage.setItem("token", userInfo.token);
-          Router.push("/admin");
-        });
+        setLoading(true);
+        UserProvider.login(values)
+          .then(userInfo => {
+            sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+            sessionStorage.setItem("token", userInfo.token);
+            setLoading(false);
+            Router.push("/admin");
+          })
+          .catch(e => setLoading(false));
       }
     });
   }, []);
@@ -62,6 +66,8 @@ const _Login: React.FC<ILoginProps> = ({ form }) => {
               htmlType="submit"
               size="large"
               style={{ width: "100%" }}
+              loading={loading}
+              disabled={loading}
             >
               登录
             </Button>
