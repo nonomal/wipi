@@ -72,7 +72,7 @@ cd server && yarn start:dev
 
 ## 项目部署
 
-在服务端使用 pm2 进行部署即可，可以查看[`deploy.sh`](./deploy.sh)文件。
+在服务器使用 pm2 进行部署即可，可以查看[`deploy.sh`](./deploy.sh)文件。
 
 ## 搜索服务
 
