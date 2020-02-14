@@ -37,15 +37,18 @@ export class ViewService {
    * 获取所有访问
    */
   async findAll(): Promise<View[]> {
-    return this.viewRepository.find({ order: { createAt: 'DESC' } });
+    return this.viewRepository.find({ order: { updateAt: 'ASC' } });
   }
 
   /**
    * 查找指定路径访问统计
    * @param url
    */
-  async findByUrl(url): Promise<View[]> {
-    return this.viewRepository.find({ where: { url } });
+  async findByUrl(url): Promise<any> {
+    return this.viewRepository.find({
+      where: { url },
+      order: { updateAt: 'ASC' },
+    });
   }
 
   /**
