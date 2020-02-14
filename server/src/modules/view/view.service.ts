@@ -37,7 +37,7 @@ export class ViewService {
    * 获取所有访问
    */
   async findAll(): Promise<View[]> {
-    return this.viewRepository.find({ order: { updateAt: 'ASC' } });
+    return this.viewRepository.find({ order: { updateAt: 'DESC' } });
   }
 
   /**
