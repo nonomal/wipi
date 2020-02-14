@@ -109,8 +109,8 @@ const Views: NextPage = () => {
     },
     {
       title: "访问时间",
-      dataIndex: "createAt",
-      key: "createAt",
+      dataIndex: "updateAt",
+      key: "updateAt",
       render: date => dayjs.default(date).format("YYYY-MM-DD HH:mm:ss")
     }
   ];
