@@ -3,6 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -25,4 +26,11 @@ export class Search {
     name: 'create_at',
   })
   createAt: Date;
+
+  @UpdateDateColumn({
+    type: 'datetime',
+    comment: '更新时间',
+    name: 'update_at',
+  })
+  updateAt: Date;
 }

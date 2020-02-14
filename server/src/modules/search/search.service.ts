@@ -44,7 +44,7 @@ export class SearchService {
    * 获取所有搜索记录
    */
   async findAll(): Promise<Search[]> {
-    return this.searchRepository.find({ order: { createAt: 'DESC' } });
+    return this.searchRepository.find({ order: { updateAt: 'ASC' } });
   }
 
   /**
