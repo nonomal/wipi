@@ -20,7 +20,7 @@ const Views: NextPage = () => {
   const [views, setViews] = useState<IView[]>([]);
   const [loading, setLoaidng] = useState(false);
   const [urls, setURLs] = useState([]);
-  const [url, setURL] = useState(null);
+  const [url, setURL] = useState("");
 
   const getViews = useCallback(() => {
     if (loading) {
@@ -164,7 +164,7 @@ const Views: NextPage = () => {
               style={{ width: "100%" }}
               placeholder="查看指定页面统计"
               onChange={setURL}
-              {...(url ? { value: url } : {})}
+              value={url}
             >
               {urls.map(url => {
                 return (
@@ -189,7 +189,7 @@ const Views: NextPage = () => {
               <Button
                 icon="rollback"
                 onClick={() => {
-                  setURL(null);
+                  setURL("");
                   getViews();
                 }}
                 disabled={loading}
