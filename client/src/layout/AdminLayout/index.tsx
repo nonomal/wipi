@@ -38,7 +38,7 @@ const menus = [
   },
 
   {
-    icon: "form",
+    icon: "file-add",
     label: "页面管理",
     children: [
       {
@@ -139,11 +139,12 @@ export const AdminLayout: React.FC<IAdminLayoutProps> = ({
   const setting = useSetting();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [collapsedWith, setCollapsedWith] = useState(80);
   const { pathname } = router;
   const breadcrumbs = resolveBreadcrumbs(pathname);
 
   return (
-    <Layout>
+    <Layout className={style.wrapper}>
       <Helmet>
         <title>{"管理后台 - " + setting.systemTitle}</title>
         <meta name="keyword" content={setting.seoKeyword} />
@@ -155,15 +156,21 @@ export const AdminLayout: React.FC<IAdminLayoutProps> = ({
         ></link>
       </Helmet>
       <Sider
+        className={style.sider}
         trigger={null}
         collapsible
         collapsed={collapsed}
-        collapsedWidth="0"
+        collapsedWidth={collapsedWith}
+        breakpoint="xs"
+        onBreakpoint={broken => {
+          setCollapsedWith(broken ? 0 : 80);
+          setCollapsed(broken);
+        }}
       >
         <div className={style.logo}>管理后台</div>
         <Menu
           theme="dark"
-          mode="vertical"
+          mode="inline"
           selectedKeys={[pathname]}
           style={{ lineHeight: "64px" }}
         >
@@ -173,18 +180,21 @@ export const AdminLayout: React.FC<IAdminLayoutProps> = ({
                 <SubMenu
                   key={menu.label}
                   title={
-                    <span>
+                    <>
                       <Icon type={menu.icon} />
-                      {menu.label}
-                    </span>
+                      <span>{menu.label}</span>
+                    </>
                   }
                 >
                   {menu.children.map(subMenu => {
                     return (
-                      <Menu.Item key={subMenu.path}>
-                        <Link href={subMenu.path}>
-                          <a>{subMenu.label}</a>
-                        </Link>
+                      <Menu.Item
+                        key={subMenu.path}
+                        onClick={() => {
+                          router.push(subMenu.path);
+                        }}
+                      >
+                        <span>{subMenu.label}</span>
                       </Menu.Item>
                     );
                   })}
@@ -192,20 +202,26 @@ export const AdminLayout: React.FC<IAdminLayoutProps> = ({
               );
             } else {
               return (
-                <Menu.Item key={menu.path}>
-                  <Link href={menu.path}>
-                    <a>
-                      <Icon type={menu.icon} />
-                      {menu.label}
-                    </a>
-                  </Link>
+                <Menu.Item
+                  key={menu.path}
+                  onClick={() => {
+                    router.push(menu.path);
+                  }}
+                >
+                  <Icon type={menu.icon} />
+                  <span>{menu.label}</span>
                 </Menu.Item>
               );
             }
           })}
         </Menu>
       </Sider>
-      <Layout>
+      <Layout
+        className={style.content}
+        style={{
+          marginLeft: collapsed ? collapsedWith : 200
+        }}
+      >
         <Header style={{ background: "#fff", padding: "0 24px" }}>
           <Row>
             <Col span={6} xs={2}>
