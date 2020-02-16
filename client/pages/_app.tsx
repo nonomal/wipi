@@ -1,6 +1,7 @@
 import App from "next/app";
 import { ViewProvider } from "@providers/view";
 import { PageTransition } from "next-page-transitions";
+import { NProgress } from "@components/NProgress";
 import "@/theme/antd.less";
 import "@/theme/reset.scss";
 import "@/theme/markdown.scss";
@@ -69,6 +70,7 @@ class MyApp extends App {
             <Component {...pageProps} />
           </PageTransition>
         )} */}
+        <NProgress color={"#ff0064"} />
         <Component {...pageProps} />
       </div>
     );
