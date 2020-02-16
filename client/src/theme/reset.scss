@@ -47,6 +47,19 @@ body {
       transform 0.25s linear, border-color 0.25s linear;
   }
 
+  .ant-breadcrumb,
+  .ant-breadcrumb a {
+    color: rgba(0, 0, 0, 0.45) !important;
+  }
+
+  .ant-breadcrumb-separator {
+    color: rgba(0, 0, 0, 0.45) !important;
+  }
+
+  .ant-breadcrumb > span:last-child a {
+    color: rgba(0, 0, 0, 0.65) !important;
+  }
+
   // .page-transition-enter {
   //   opacity: 0.1;
   //   transform: translate3d(0, 20px, 0);
