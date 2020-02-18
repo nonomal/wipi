@@ -1,3 +1,76 @@
+.editor {
+  padding: 16px;
+  background-color: #fff;
+
+  input,
+  textarea {
+    display: block;
+    width: 100%;
+    outline: none;
+    border: none;
+    border-bottom: 1px dashed #ddd;
+    border-radius: 0;
+    box-shadow: none !important;
+    padding-left: 0;
+  }
+
+  input {
+    + input {
+      margin-top: 8px;
+    }
+  }
+
+  textarea {
+    margin-top: 1rem;
+  }
+
+  .controls {
+    text-align: right;
+    color: #555;
+    font-size: 12px;
+
+    span {
+      cursor: pointer;
+    }
+
+    .divider {
+      margin: 0 16px;
+      display: inline-block;
+      transform: translateY(-1px);
+    }
+  }
+
+  .emojis {
+    font-size: 18px;
+    text-align: justify;
+    max-height: 145px;
+    overflow: auto;
+    margin: 1rem 0;
+
+    i {
+      font-style: normal;
+      padding: 7px 0;
+      width: 38px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+      vertical-align: middle;
+      user-select: none;
+    }
+  }
+
+  .markdown {
+    margin-top: 1rem;
+    overflow: auto;
+    padding: 4px 8px;
+  }
+
+  .footer {
+    margin-top: 1rem;
+    text-align: right;
+  }
+}
+
 .commentActions {
   cursor: pointer;
 

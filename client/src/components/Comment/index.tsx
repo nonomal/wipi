@@ -3,6 +3,7 @@ import { Row, Col, Comment, Button, Input, Icon, message } from "antd";
 import { format } from "timeago.js";
 import cls from "classnames";
 import { CommentProvider } from "@providers/comment";
+import { Editor } from "./Editor";
 import style from "./index.module.scss";
 
 const { TextArea } = Input;
@@ -15,102 +16,6 @@ interface ICommemtItemProps {
   depth?: number; // 第几层嵌套
   parentComment?: IComment | null; // 父级评论
 }
-
-const Editor = ({
-  articleId,
-  isInPage = false,
-  parentCommentId,
-  onSuccess = () => {},
-  renderFooter = null
-}) => {
-  const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [content, setContent] = useState("");
-
-  useEffect(() => {
-    let userInfo: any = window.localStorage.getItem("commentUser");
-
-    try {
-      userInfo = JSON.parse(userInfo);
-      setName(userInfo.name);
-      setEmail(userInfo.email);
-    } catch (err) {}
-  }, [loading]);
-
-  const submit = () => {
-    let regexp = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
-
-    if (!regexp.test(email)) {
-      message.error("请输入合法邮箱地址");
-      return;
-    }
-
-    const data = { articleId, name, email, content, parentCommentId, isInPage };
-
-    setLoading(true);
-    CommentProvider.addComment(data).then(() => {
-      message.success("评论成功，已提交审核");
-      setLoading(false);
-      setName("");
-      setEmail("");
-      setContent("");
-      window.localStorage.setItem(
-        "commentUser",
-        JSON.stringify({ name, email })
-      );
-      onSuccess();
-    });
-  };
-
-  return (
-    <div>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Input
-            style={{ marginBottom: 16 }}
-            value={name}
-            onChange={e => {
-              setName(e.target.value);
-            }}
-            placeholder="请输入您的称呼"
-          ></Input>
-        </Col>
-        <Col span={12}>
-          <Input
-            style={{ marginBottom: 16 }}
-            value={email}
-            onChange={e => {
-              setEmail(e.target.value);
-            }}
-            placeholder="请输入您的邮箱（不会公开）"
-          ></Input>
-        </Col>
-      </Row>
-      <TextArea
-        style={{ marginBottom: 16 }}
-        placeholder={"请输入评论，支持 Markdown"}
-        rows={4}
-        onChange={e => {
-          setContent(e.target.value);
-        }}
-        value={content}
-      />
-      {renderFooter ? (
-        renderFooter({ loading, submit, disabled: !name || !email || !content })
-      ) : (
-        <Button
-          loading={loading}
-          onClick={submit}
-          type="primary"
-          disabled={!name || !email || !content}
-        >
-          提交评论
-        </Button>
-      )}
-    </div>
-  );
-};
 
 const CommentItem: React.FC<ICommemtItemProps> = ({
   children,
@@ -171,7 +76,7 @@ const CommentItem: React.FC<ICommemtItemProps> = ({
                         setReply(false);
                       }}
                     >
-                      收起
+                      关闭
                     </Button>
                     <Button
                       type="primary"
