@@ -20,8 +20,6 @@ import { AdminLayout } from "@/layout/AdminLayout";
 import { ViewProvider } from "@/providers/view";
 import style from "./index.module.scss";
 
-const uaparser = new UAParser();
-
 function showInfo({ title, content }) {
   Modal.info({
     title,
@@ -31,6 +29,60 @@ function showInfo({ title, content }) {
     onOk() {}
   });
 }
+
+// 解析 ip 地址
+const parseIp = (ip, userAgent) => {
+  const hide = message.loading("正在解析中", 0);
+  const uaparser = new UAParser();
+  uaparser.setUA(userAgent);
+  const uaInfo = uaparser.getResult();
+  const content = [
+    <Descriptions.Item label="浏览器">
+      {uaInfo.browser.name} {uaInfo.browser.version}
+    </Descriptions.Item>,
+    <Descriptions.Item label="内核">
+      {uaInfo.engine.name} {uaInfo.engine.version}
+    </Descriptions.Item>,
+    <Descriptions.Item label="操作系统">
+      {uaInfo.os.name} {uaInfo.os.version}
+    </Descriptions.Item>,
+    <Descriptions.Item label="设备">
+      {uaInfo.device.vendor
+        ? uaInfo.device.vendor +
+          " " +
+          uaInfo.device.model +
+          " " +
+          uaInfo.device.type
+        : "未知设备"}
+    </Descriptions.Item>
+  ];
+
+  const handle = () => {
+    showInfo({
+      title: ip,
+      content: (
+        <Descriptions
+          title={null}
+          bordered
+          column={{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }}
+        >
+          {content}
+        </Descriptions>
+      )
+    });
+    hide();
+  };
+
+  ViewProvider.parseIp(ip)
+    .then(res => {
+      content.push(<Descriptions.Item label="IP">{res}</Descriptions.Item>);
+      handle();
+    })
+    .catch(e => {
+      content.push(<Descriptions.Item label="IP">解析失败</Descriptions.Item>);
+      handle();
+    });
+};
 
 const Views: NextPage = () => {
   const [views, setViews] = useState<IView[]>([]);
@@ -74,61 +126,6 @@ const Views: NextPage = () => {
       message.success("访问删除成功");
       url ? getViewsByUrl(url) : getViews();
     });
-  }, []);
-
-  // 解析 ip 地址
-  const parseIp = useCallback((ip, userAgent) => {
-    const hide = message.loading("正在解析中", 0);
-    const uaInfo = uaparser.getResult();
-    uaparser.setUA(userAgent);
-    const content = [
-      <Descriptions.Item label="浏览器">
-        {uaInfo.browser.name} {uaInfo.browser.version}
-      </Descriptions.Item>,
-      <Descriptions.Item label="内核">
-        {uaInfo.engine.name} {uaInfo.engine.version}
-      </Descriptions.Item>,
-      <Descriptions.Item label="操作系统">
-        {uaInfo.os.name} {uaInfo.os.version}
-      </Descriptions.Item>,
-      <Descriptions.Item label="设备">
-        {uaInfo.device.vendor
-          ? uaInfo.device.vendor +
-            " " +
-            uaInfo.device.model +
-            " " +
-            uaInfo.device.type
-          : "未知设备"}
-      </Descriptions.Item>
-    ];
-
-    const handle = () => {
-      showInfo({
-        title: ip,
-        content: (
-          <Descriptions
-            title={null}
-            bordered
-            column={{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }}
-          >
-            {content}
-          </Descriptions>
-        )
-      });
-      hide();
-    };
-
-    ViewProvider.parseIp(ip)
-      .then(res => {
-        content.push(<Descriptions.Item label="IP">{res}</Descriptions.Item>);
-        handle();
-      })
-      .catch(e => {
-        content.push(
-          <Descriptions.Item label="IP">解析失败</Descriptions.Item>
-        );
-        handle();
-      });
   }, []);
 
   useEffect(() => {
@@ -191,7 +188,13 @@ const Views: NextPage = () => {
     key: "action",
     render: (_, record) => (
       <span className={style.action}>
-        <a onClick={() => parseIp(record.ip, record.userAgent)}>解析</a>
+        <a
+          onClick={() => {
+            parseIp(record.ip, record.userAgent);
+          }}
+        >
+          解析
+        </a>
         <Divider type="vertical" />
         <Popconfirm
           title="确认删除这个访问？"
