@@ -4,6 +4,13 @@
     background-color: #fff !important;
     overflow: hidden !important;
 
+    a {
+      text-decoration: none;
+      font-size: inherit;
+      color: #ff0064;
+      border-bottom: 1px dotted #ff0064;
+    }
+
     h1,
     h2,
     h3,
