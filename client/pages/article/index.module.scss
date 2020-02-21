@@ -23,91 +23,78 @@
   }
 }
 
-.content {
-  background: #fff;
-  max-width: 800px;
-  margin: 0 auto;
-  // padding: 32px 24px;
+.contentWrapper {
+  position: relative;
 
-  .tags {
-    margin-top: 30px;
-    border-top: 1px solid #ebebeb;
-    padding: 21px 0 0;
+  .content {
+    background: #fff;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 16px;
 
-    color: #959595;
-    font-style: italic;
-    line-height: 28px;
+    .tags {
+      margin-top: 30px;
+      border-top: 1px solid #ebebeb;
+      padding: 21px 0 0;
 
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      margin: 0 1.25rem 1rem 0;
-      padding: 0.167rem;
-      background-color: #fff;
-      border-radius: 2px;
-      font-size: 14px;
+      color: #959595;
+      font-style: italic;
+      line-height: 28px;
 
-      img {
-        width: 1.75rem;
-        height: 1.75rem;
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        margin: 0 1.25rem 1rem 0;
+        padding: 0.167rem;
+        background-color: #fff;
         border-radius: 2px;
-      }
+        font-size: 14px;
 
-      span {
-        padding: 0 0.75rem;
-        line-height: 1.75rem;
-        color: #919191;
+        img {
+          width: 1.75rem;
+          height: 1.75rem;
+          border-radius: 2px;
+        }
+
+        span {
+          padding: 0 0.75rem;
+          line-height: 1.75rem;
+          color: #919191;
+        }
       }
     }
   }
-}
 
-.comments {
-  max-width: 800px;
-  margin: 0 auto;
-
-  .title {
-    color: #8a9aa9;
-    font-size: 16px;
-    font-weight: 400;
-    text-align: center;
-    padding: 1.67rem 0 5px;
+  .markdown {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 48px;
+    }
   }
 
-  .commentContainer {
-    background: #f1f6f9;
-    border-radius: 4px;
-    padding: 16px;
-    margin-bottom: 35px;
-  }
-}
-
-.markdown {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin-top: 48px;
-  }
-}
-
-.widget {
-  background: #ffffff;
-  border: 1px solid #ebebeb;
-  padding: 21px 30px;
-  margin-bottom: 24px;
-}
-
-.anchorWidget {
-  font-size: 1.167rem;
-  color: #000;
-}
-
-@media (max-width: 768px) {
-  .anchorWidget,
   .widget {
-    display: none;
+    background: #ffffff;
+    border: 1px solid #ebebeb;
+    padding: 21px 30px;
+    margin-bottom: 24px;
+  }
+
+  .anchorWidget {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1.167rem;
+    color: #000;
+  }
+
+  @media (max-width: 768px) {
+    .anchorWidget,
+    .widget {
+      display: none;
+    }
   }
 }

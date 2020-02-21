@@ -16,39 +16,3 @@
   max-width: 800px;
   margin: 0 auto;
 }
-
-.comments {
-  .title {
-    color: #8a9aa9;
-    font-size: 16px;
-    font-weight: 400;
-    text-align: center;
-    padding: 1.67rem 0 5px;
-  }
-
-  .commentContainer {
-    background: #f1f6f9;
-    border-radius: 4px;
-    padding: 16px;
-    margin-bottom: 35px;
-  }
-}
-
-.widget {
-  background: #ffffff;
-  border: 1px solid #ebebeb;
-  padding: 21px 30px;
-  margin-bottom: 24px;
-}
-
-.anchorWidget {
-  font-size: 1.167rem;
-  color: #000;
-}
-
-@media (max-width: 768px) {
-  .anchorWidget,
-  .widget {
-    display: none;
-  }
-}

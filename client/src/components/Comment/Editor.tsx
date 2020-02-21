@@ -75,7 +75,9 @@ export const Editor = ({
   };
 
   return (
-    <div className={style.editor}>
+    <div
+      className={cls(style.editor, parentCommentId ? style.isChildren : false)}
+    >
       <div>
         <Input
           value={name}

@@ -51,6 +51,33 @@ body {
       transform 0.25s linear, border-color 0.25s linear;
   }
 
+  @media (min-width: 768px) {
+    .container {
+      width: 768px;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .container {
+      width: 970px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .container {
+      width: 1140px;
+    }
+  }
+
+  .container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 48px;
+    min-height: calc(100vh - 64px - 153px);
+  }
+
   .ant-breadcrumb,
   .ant-breadcrumb a {
     color: rgba(0, 0, 0, 0.45) !important;
@@ -62,6 +89,19 @@ body {
 
   .ant-breadcrumb > span:last-child a {
     color: rgba(0, 0, 0, 0.65) !important;
+  }
+
+  .ant-comment {
+    background-color: #fff;
+    padding: 0 16px 0px 4px;
+
+    + .ant-comment {
+      margin-top: 8px;
+    }
+  }
+
+  .ant-anchor-wrapper {
+    background-color: transparent !important;
   }
 
   // .page-transition-enter {

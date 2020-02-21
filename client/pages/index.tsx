@@ -14,10 +14,12 @@ interface IHomeProps {
 const Home: NextPage<IHomeProps> = ({ articles = [] }) => {
   return (
     <Layout backgroundColor="#fff">
-      <TagMenus />
-      <Row className={style.articleList}>
-        <ArticleList articles={articles} />
-      </Row>
+      <div className="container">
+        <TagMenus />
+        <Row className={style.articleList}>
+          <ArticleList articles={articles} />
+        </Row>
+      </div>
     </Layout>
   );
 };

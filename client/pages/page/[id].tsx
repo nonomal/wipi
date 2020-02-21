@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NextPage } from "next";
-import { Row, Col, Anchor } from "antd";
+import { Row, Col } from "antd";
 import hljs from "highlight.js";
 import "highlight.js/styles/monokai-sublime.css";
 import { Layout } from "@/layout/Layout";
-import { MyComment } from "@/components/Comment";
-import { RecentArticles } from "@components/RecentArticles";
+import { CommentAndRecommendArticles } from "@components/CommentAndRecommendArticles";
 import { PageProvider } from "@providers/page";
 import style from "./index.module.scss";
 
@@ -53,29 +52,34 @@ const Page: NextPage<IProps> = ({ page }) => {
   return (
     <Layout backgroundColor="#fff">
       {!page ? (
-        <p>页面不存在</p>
+        <div className="container">
+          <p>页面不存在</p>
+        </div>
       ) : (
         <Row gutter={16}>
           <Col sm={24} className={style.container}>
-            <div className={style.meta}>
-              {page.cover && (
-                <img className={style.cover} src={page.cover} alt="文章封面" />
-              )}
-            </div>
-            <div className={style.content}>
-              <div
-                ref={ref}
-                className={"markdown"}
-                dangerouslySetInnerHTML={{ __html: page.html }}
-              ></div>
-
-              <div className={style.comments}>
-                <p className={style.title}>评论</p>
-                <div className={style.commentContainer}>
-                  <MyComment articleId={page.id} isInPage={true} />
-                </div>
+            <div className="container">
+              <div className={style.meta}>
+                {page.cover && (
+                  <img
+                    className={style.cover}
+                    src={page.cover}
+                    alt="文章封面"
+                  />
+                )}
+              </div>
+              <div className={style.content}>
+                <div
+                  ref={ref}
+                  className={"markdown"}
+                  dangerouslySetInnerHTML={{ __html: page.html }}
+                ></div>
               </div>
             </div>
+
+            <CommentAndRecommendArticles
+              article={{ isCommentable: true, id: page.id } as any}
+            />
           </Col>
         </Row>
       )}

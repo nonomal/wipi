@@ -30,17 +30,23 @@ const ArchiveItem = ({ year, articles = [] }) => {
 const Archives: NextPage<IProps> = ({ articles }) => {
   return (
     <Layout backgroundColor="#fff">
-      <Row>
-        <Col sm={24}>
-          <div className={style.content}>
-            {Object.keys(articles).map(year => {
-              return (
-                <ArchiveItem key={year} year={year} articles={articles[year]} />
-              );
-            })}
-          </div>
-        </Col>
-      </Row>
+      <div className="container">
+        <Row>
+          <Col sm={24}>
+            <div className={style.content}>
+              {Object.keys(articles).map(year => {
+                return (
+                  <ArchiveItem
+                    key={year}
+                    year={year}
+                    articles={articles[year]}
+                  />
+                );
+              })}
+            </div>
+          </Col>
+        </Row>
+      </div>
     </Layout>
   );
 };

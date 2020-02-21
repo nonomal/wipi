@@ -4,15 +4,14 @@ import { NextPage } from "next";
 import Router from "next/router";
 import Link from "next/link";
 import cls from "classnames";
-import { Row, Col, Anchor, Modal, Form, Input, message } from "antd";
+import { Row, Anchor, Modal, Form, Input, message } from "antd";
 import * as dayjs from "dayjs";
 import hljs from "highlight.js";
 import "highlight.js/styles/atelier-dune-dark.css";
 import { useSetting } from "@/hooks/useSetting";
 import { Layout } from "@/layout/Layout";
-import { MyComment } from "@/components/Comment";
-// import { RecentArticles } from "@components/RecentArticles";
 import { ArticleProvider } from "@providers/article";
+import { CommentAndRecommendArticles } from "@components/CommentAndRecommendArticles";
 import style from "./index.module.scss";
 const url = require("url");
 
@@ -23,7 +22,9 @@ interface IProps {
 const Article: NextPage<IProps> = ({ article }) => {
   const setting = useSetting();
   const ref = useRef(null);
+  const content = useRef(null);
   const [tocs, setTocs] = useState([]);
+  const [affix, setAffix] = useState(true);
   const [password, setPassword] = useState(null);
   const [shouldCheckPassWord, setShouldCheckPassword] = useState(
     article.needPassword
@@ -81,6 +82,26 @@ const Article: NextPage<IProps> = ({ article }) => {
     }
   }, [shouldCheckPassWord]);
 
+  useEffect(() => {
+    const handler = () => {
+      const el = content && content.current;
+      if (!el) {
+        return;
+      }
+      const { top, height } = el.getBoundingClientRect();
+      const diff = top + height;
+      setAffix(diff > 100);
+    };
+
+    if (!shouldCheckPassWord) {
+      document.addEventListener("scroll", handler);
+    }
+
+    return () => {
+      document.removeEventListener("scroll", handler);
+    };
+  }, [shouldCheckPassWord]);
+
   return (
     <Layout backgroundColor="#fff">
       {/* S 密码检验 */}
@@ -112,8 +133,7 @@ const Article: NextPage<IProps> = ({ article }) => {
           <Helmet>
             <title>{article.title + " - " + setting.systemTitle}</title>
           </Helmet>
-
-          <article>
+          <article className="container">
             {setting.systemUrl && (
               <meta
                 itemProp="url"
@@ -153,59 +173,50 @@ const Article: NextPage<IProps> = ({ article }) => {
               </p>
             </div>
 
-            <div className={style.content}>
-              <div
-                ref={ref}
-                className={cls("markdown", style.markdown)}
-                dangerouslySetInnerHTML={{ __html: article.html }}
-              ></div>
-              <div className={style.tags}>
-                <div>
-                  <span>标签：</span>
-                  {article.tags.map(tag => {
-                    return (
-                      <div className={style.tag} key={tag.id}>
-                        <Link href={"/[tag]"} as={"/" + tag.value}>
-                          <a>
-                            <span>{tag.label}</span>
-                          </a>
-                        </Link>
-                      </div>
-                    );
-                  })}
+            <div className={style.contentWrapper} ref={content}>
+              <div className={style.content}>
+                <div
+                  ref={ref}
+                  className={cls("markdown", style.markdown)}
+                  dangerouslySetInnerHTML={{ __html: article.html }}
+                ></div>
+                <div className={style.tags}>
+                  <div>
+                    <span>标签：</span>
+                    {article.tags.map(tag => {
+                      return (
+                        <div className={style.tag} key={tag.id}>
+                          <Link href={"/[tag]"} as={"/" + tag.value}>
+                            <a>
+                              <span>{tag.label}</span>
+                            </a>
+                          </Link>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
+              {/* S 文章目录 */}
+              {Array.isArray(tocs) && (
+                <div className={style.anchorWidget}>
+                  <Anchor targetOffset={32} offsetTop={32} affix={affix}>
+                    {tocs.map(toc => {
+                      return (
+                        <Anchor.Link
+                          key={toc[2]}
+                          href={"#" + toc[1]}
+                          title={toc[2]}
+                        ></Anchor.Link>
+                      );
+                    })}
+                  </Anchor>
+                </div>
+              )}
+              {/* E 文章目录 */}
             </div>
           </article>
-
-          {/* S 评论 */}
-          {article.isCommentable && (
-            <div className={style.comments}>
-              <p className={style.title}>评论</p>
-              <div className={style.commentContainer}>
-                <MyComment articleId={article.id} />
-              </div>
-            </div>
-          )}
-          {/* E 评论 */}
-
-          {/* S 文章目录 */}
-          {/* {Array.isArray(tocs) && (
-            <div className={style.anchorWidget}>
-              <Anchor targetOffset={32} offsetTop={32}>
-                {tocs.map(toc => {
-                  return (
-                    <Anchor.Link
-                      key={toc[2]}
-                      href={"#" + toc[1]}
-                      title={toc[2]}
-                    ></Anchor.Link>
-                  );
-                })}
-              </Anchor>
-            </div>
-          )} */}
-          {/* E 文章目录 */}
+          <CommentAndRecommendArticles article={article} />
         </Row>
       )}
     </Layout>

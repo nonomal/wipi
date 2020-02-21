@@ -36,7 +36,7 @@ export const Layout: React.FC<Iprops> = ({
           backgroundColor
         }}
       >
-        <div className={style.wrapper}>{children}</div>
+        {children}
       </main>
       <BackTop />
       <Footer setting={setting} />
