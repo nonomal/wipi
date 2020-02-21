@@ -7,7 +7,7 @@ import cls from "classnames";
 import { Row, Col, Anchor, Modal, Form, Input, message } from "antd";
 import * as dayjs from "dayjs";
 import hljs from "highlight.js";
-import "highlight.js/styles/monokai-sublime.css";
+import "highlight.js/styles/atelier-dune-dark.css";
 import { useSetting } from "@/hooks/useSetting";
 import { Layout } from "@/layout/Layout";
 import { MyComment } from "@/components/Comment";
