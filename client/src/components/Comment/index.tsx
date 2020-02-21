@@ -170,7 +170,7 @@ export const MyComment: React.FC<IProps> = ({
 
   useEffect(() => {
     getComments();
-  }, []);
+  }, [articleId]);
 
   return (
     <div>
