@@ -30,7 +30,7 @@ const CommentItem: React.FC<ICommemtItemProps> = ({
 
   return (
     <Comment
-      style={depth > 2 ? { marginLeft: -44 } : {}}
+      style={depth > 1 ? { marginLeft: -44 } : {}}
       actions={null}
       author={
         <a>
@@ -62,6 +62,7 @@ const CommentItem: React.FC<ICommemtItemProps> = ({
               articleId={articleId}
               isInPage={isInPage}
               parentCommentId={comment.id}
+              parentComment={comment}
               onSuccess={() => {
                 getComments();
                 setReply(false);
@@ -181,6 +182,7 @@ export const MyComment: React.FC<IProps> = ({
             articleId={articleId}
             isInPage={isInPage}
             parentCommentId={null}
+            parentComment={null}
             onSuccess={getComments}
           />
         }

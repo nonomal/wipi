@@ -23,6 +23,7 @@ export const Editor = ({
   articleId,
   isInPage = false,
   parentCommentId,
+  parentComment,
   onSuccess = () => {},
   renderFooter = null
 }) => {
@@ -53,6 +54,10 @@ export const Editor = ({
     }
 
     const data = { articleId, name, email, content, parentCommentId, isInPage };
+
+    if (parentComment && parentComment.email) {
+      Object.assign(data, { reply: parentComment.email });
+    }
 
     setLoading(true);
     CommentProvider.addComment(data).then(() => {
