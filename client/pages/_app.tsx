@@ -16,20 +16,8 @@ const addView = url => {
   ViewProvider.addView({ url });
 };
 
-const preventTopBottomSpace = () => {
-  document.body.addEventListener(
-    "touchmove",
-    e => {
-      e.preventDefault();
-    },
-    { passive: false }
-  );
-};
-
 class MyApp extends App {
   componentDidMount() {
-    preventTopBottomSpace();
-
     try {
       const el = document.querySelector("#holderStyle");
       el.parentNode.removeChild(el);

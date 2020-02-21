@@ -7,6 +7,10 @@
     overflow-x: auto;
     padding-bottom: 1rem;
     margin-bottom: 0.5rem;
+
+    &::-webkit-scrollbar {
+      display: none !important;
+    }
   }
 
   li {
