@@ -55,7 +55,7 @@ const columns = [
       <Badge
         count={views}
         showZero={true}
-        overflowCount={999}
+        overflowCount={Infinity}
         style={{ backgroundColor: "#52c41a" }}
       />
     )
