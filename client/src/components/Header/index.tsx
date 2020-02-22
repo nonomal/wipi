@@ -14,7 +14,7 @@ export const _Header = ({ setting, menus }) => {
 
   return (
     <header>
-      <div className={style.wrapper}>
+      <div className={cls("container", style.wrapper)}>
         <div className={style.logo}>
           {/^http/.test(setting.systemLogo) ? (
             <Link href="/">

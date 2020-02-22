@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Row, Col, Icon } from "antd";
-import { RecentArticles } from "@components/RecentArticles";
-import { Tags } from "@components/Tags";
+import React from "react";
+import { Icon } from "antd";
 import style from "./index.module.scss";
 
 const RSS = () => {
@@ -21,8 +19,7 @@ const RSS = () => {
           </defs>
           <path
             d="M512 0C230.4 0 0 230.4 0 512s230.4 512 512 512 512-230.4 512-512S793.6 0 512 0z m-182.4 768C288 768 256 736 256 694.4s32-73.6 73.6-73.6 73.6 32 73.6 73.6-32 73.6-73.6 73.6z m185.6 0c0-144-115.2-259.2-259.2-259.2v-80c185.6 0 339.2 150.4 339.2 339.2h-80z m172.8 0c0-240-195.2-432-432-432V256c281.6 0 512 230.4 512 512h-80z"
-            fill="#fff"
-            p-id="4789"
+            fill="currentColor"
           ></path>
         </svg>
       )}
@@ -30,9 +27,9 @@ const RSS = () => {
   );
 };
 
-export const Footer = ({ setting }) => {
+export const Footer = ({ setting, className = "" }) => {
   return (
-    <footer>
+    <footer className={className}>
       <ul className={style.icons}>
         <li>
           <a className={style.github} href="/rss" target="_blank">

@@ -1,39 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NextPage } from "next";
 import Link from "next/link";
 import { Row, Col, Statistic, List, Card } from "antd";
 import { AdminLayout } from "@/layout/AdminLayout";
 import { SearchKeyWordChart } from "@components/admin/SearchKeyWordChart";
-// import { ViewChart } from "@components/admin/ViewChart";
 import { ArticleProvider } from "@providers/article";
 import { CommentProvider } from "@providers/comment";
 import { TagProvider } from "@/providers/tag";
 import { FileProvider } from "@/providers/file";
-// import { ViewProvider } from "@/providers/view";
-
 import style from "./index.module.scss";
 
 interface IHomeProps {
   articles: IArticle[];
+  articlesCount: number;
   tags: ITag[];
   files: IFile[];
+  filesCount: number;
   comments: IComment[];
+  commentsCount: number;
 }
 
 const Home: NextPage<IHomeProps> = ({
   articles = [],
+  articlesCount = 0,
   tags = [],
   files = [],
-  comments = []
+  filesCount = 0,
+  comments = [],
+  commentsCount = 0
 }) => {
-  // const [views, setViews] = useState<IView[]>([]);
-
-  // useEffect(() => {
-  //   ViewProvider.getViews().then(res => {
-  //     setViews(res);
-  //   });
-  // }, []);
-
   return (
     <AdminLayout background="transparent" padding={0}>
       <Row gutter={16}>
@@ -41,7 +36,7 @@ const Home: NextPage<IHomeProps> = ({
           <Statistic
             className={style.listItem}
             title="文章数量"
-            value={articles.length}
+            value={articlesCount}
           />
         </Col>
         <Col xs={12} sm={6}>
@@ -55,14 +50,14 @@ const Home: NextPage<IHomeProps> = ({
           <Statistic
             className={style.listItem}
             title="评论数量"
-            value={comments.length}
+            value={commentsCount}
           />
         </Col>
         <Col xs={12} sm={6}>
           <Statistic
             className={style.listItem}
             title="文件数量"
-            value={files.length}
+            value={filesCount}
           />
         </Col>
       </Row>
@@ -72,12 +67,6 @@ const Home: NextPage<IHomeProps> = ({
           <SearchKeyWordChart />
         </Card>
       </Row>
-
-      {/* <Row style={{ marginTop: 16 }}>
-        <Card title="页面访问" bordered={false}>
-          <ViewChart data={views} />
-        </Card>
-      </Row> */}
 
       <Row gutter={16} style={{ marginTop: 16 }}>
         <Col xs={24} sm={14}>
@@ -140,13 +129,21 @@ const Home: NextPage<IHomeProps> = ({
 
 Home.getInitialProps = async () => {
   const [articles, tags, files, comments] = await Promise.all([
-    ArticleProvider.getArticles(),
+    ArticleProvider.getArticles({ page: 1, pageSize: 6 }),
     TagProvider.getTags(),
-    FileProvider.getFiles(),
-    CommentProvider.getComments()
+    FileProvider.getFiles({ page: 1, pageSize: 6 }),
+    CommentProvider.getComments({ page: 1, pageSize: 6 })
   ]);
 
-  return { articles, tags, files, comments };
+  return {
+    articles: articles[0],
+    articlesCount: articles[1],
+    tags,
+    files: files[0],
+    filesCount: files[1],
+    comments: comments[0],
+    commentsCount: comments[1]
+  };
 };
 
 export default Home;

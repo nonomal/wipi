@@ -10,6 +10,22 @@ export class UserProvider {
   }
 
   /**
+   * 用户注册
+   * @param data
+   */
+  static async register(data): Promise<IUser> {
+    return httpProvider.post("/user/register", data);
+  }
+
+  /**
+   * 获取用户
+   * @param params
+   */
+  static getUsers(params): Promise<[IUser[], number]> {
+    return httpProvider.get("/user", { params });
+  }
+
+  /**
    * 更新用户信息
    * @param data
    */

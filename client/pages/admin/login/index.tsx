@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { Form, Button, Input, Icon } from "antd";
+import { Form, Button, Input, Icon, Checkbox } from "antd";
 import Router from "next/router";
+import Link from "next/link";
 import { FormComponentProps } from "antd/es/form";
 import { UserProvider } from "@providers/user";
 import style from "./index.module.scss";
@@ -18,7 +19,7 @@ const _Login: React.FC<ILoginProps> = ({ form }) => {
         setLoading(true);
         UserProvider.login(values)
           .then(userInfo => {
-            sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+            localStorage.setItem("user", JSON.stringify(userInfo));
             sessionStorage.setItem("token", userInfo.token);
             setLoading(false);
             Router.push("/admin");
@@ -71,6 +72,10 @@ const _Login: React.FC<ILoginProps> = ({ form }) => {
             >
               登录
             </Button>
+            Or{" "}
+            <Link href="/admin/register">
+              <a>注册用户</a>
+            </Link>
           </Form.Item>
         </Form>
       </div>

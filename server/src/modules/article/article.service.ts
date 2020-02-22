@@ -2,15 +2,20 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TagService } from '../tag/tag.service';
+import { CategoryService } from '../category/category.service';
 import { Article } from './article.entity';
 import { marked } from './markdown.util';
+import { Tag } from '../tag/tag.entity';
+const nodejieba = require('nodejieba');
+const topN = 4;
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article)
     private readonly articleRepository: Repository<Article>,
-    private readonly tagService: TagService
+    private readonly tagService: TagService,
+    private readonly categoryService: CategoryService
   ) {}
 
   /**
@@ -25,13 +30,15 @@ export class ArticleService {
       throw new HttpException('文章标题已存在', HttpStatus.BAD_REQUEST);
     }
 
-    let { content, tags } = article;
+    let { content, tags, category } = article;
     const { html, toc } = content ? marked(content) : { html: null, toc: null };
     tags = await this.tagService.findByIds(('' + tags).split(','));
+    let existCategory = await this.categoryService.findById(category);
     const newArticle = await this.articleRepository.create({
       ...article,
       html,
       toc: JSON.stringify(toc),
+      category: existCategory,
       tags,
       needPassword: !!article.password,
     });
@@ -51,7 +58,6 @@ export class ArticleService {
       .andWhere('article.password=:password')
       .setParameter('id', id)
       .setParameter('password', password)
-
       .getOne();
     return { pass: !!data };
   }
@@ -59,17 +65,77 @@ export class ArticleService {
   /**
    * 获取所有文章
    */
-  async findAll(status = null): Promise<Article[]> {
+  async findAll(queryParams: any = {}): Promise<[Article[], number]> {
     const query = this.articleRepository
       .createQueryBuilder('article')
-      .leftJoinAndSelect('article.tags', 'tags')
-      .orderBy('publishAt', 'DESC');
+      .leftJoinAndSelect('article.tags', 'tag')
+      .leftJoinAndSelect('article.category', 'category')
+      .orderBy('article.updateAt', 'DESC');
+
+    const { page = 1, pageSize = 12, status, ...otherParams } = queryParams;
+
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
 
     if (status) {
       query.andWhere('article.status=:status').setParameter('status', status);
     }
 
-    return query.getMany();
+    if (otherParams) {
+      Object.keys(otherParams).forEach(key => {
+        query
+          .andWhere(`article.${key} LIKE :${key}`)
+          .setParameter(`${key}`, `%${otherParams[key]}%`);
+      });
+    }
+
+    return query.getManyAndCount();
+  }
+
+  /**
+   * 根据 category 查找文章
+   * @param category
+   * @param queryParams
+   */
+  async findArticlesByCategory(category, queryParams) {
+    const query = this.articleRepository
+      .createQueryBuilder('article')
+      .leftJoinAndSelect('article.category', 'category')
+      .where('category.value=:value', { value: category })
+      .orderBy('article.updateAt', 'DESC');
+
+    const { page, pageSize, status } = queryParams;
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
+
+    if (status) {
+      query.andWhere('article.status=:status').setParameter('status', status);
+    }
+
+    return query.getManyAndCount();
+  }
+
+  /**
+   * 根据 tag 查找文章
+   * @param tag
+   * @param queryParams
+   */
+  async findArticlesByTag(tag, queryParams) {
+    const query = this.articleRepository
+      .createQueryBuilder('article')
+      .leftJoinAndSelect('article.tags', 'tag')
+      .where('tag.value=:value', { value: tag })
+      .orderBy('article.updateAt', 'DESC');
+
+    const { page, pageSize, status } = queryParams;
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
+
+    if (status) {
+      query.andWhere('article.status=:status').setParameter('status', status);
+    }
+
+    return query.getManyAndCount();
   }
 
   /**
@@ -102,6 +168,7 @@ export class ArticleService {
   async findById(id, status = null): Promise<Article> {
     const query = this.articleRepository
       .createQueryBuilder('article')
+      .leftJoinAndSelect('article.category', 'category')
       .leftJoinAndSelect('article.tags', 'tags')
       .where('article.id=:id')
       .orWhere('article.title=:title')
@@ -122,15 +189,19 @@ export class ArticleService {
    */
   async updateById(id, article: Partial<Article>): Promise<Article> {
     const oldArticle = await this.articleRepository.findOne(id);
-    let { content, tags } = article;
+    let { content, tags, category } = article;
     const { html, toc } = content ? marked(content) : oldArticle;
 
     if (tags) {
       tags = await this.tagService.findByIds(('' + tags).split(','));
     }
+
+    let existCategory = await this.categoryService.findById(category);
+
     const newArticle = {
       ...article,
       html,
+      category: existCategory,
       toc: JSON.stringify(toc),
       needPassword: !!article.password,
     };
@@ -168,6 +239,10 @@ export class ArticleService {
     return this.articleRepository.remove(article);
   }
 
+  /**
+   * 关键词搜索文章
+   * @param keyword
+   */
   async search(keyword) {
     const res = await this.articleRepository
       .createQueryBuilder('article')
@@ -178,5 +253,59 @@ export class ArticleService {
       .getMany();
 
     return res;
+  }
+
+  /**
+   * 推荐文章
+   * @param articleId
+   */
+  async recommend(articleId = null) {
+    const query = this.articleRepository
+      .createQueryBuilder('article')
+      .orderBy('article.updateAt', 'DESC')
+      .leftJoinAndSelect('article.category', 'category')
+      .leftJoinAndSelect('article.tags', 'tags');
+
+    if (!articleId) {
+      return query.take(6).getMany();
+    } else {
+      const sub = this.articleRepository
+        .createQueryBuilder('article')
+        .orderBy('article.updateAt', 'DESC')
+        .leftJoinAndSelect('article.category', 'category')
+        .leftJoinAndSelect('article.tags', 'tags')
+        .where('article.id=:id')
+        .setParameter('id', articleId);
+      const exist = await sub.getOne();
+
+      if (!exist) {
+        return query.take(6).getMany();
+      }
+
+      const { title, summary } = exist;
+      const kw1 = nodejieba.extract(title, topN);
+      const kw2 = nodejieba.extract(summary, topN);
+
+      kw1.forEach((kw, i) => {
+        if (i === 0) {
+          query.where('article.title LIKE :title');
+        } else {
+          query.orWhere('article.title LIKE :title');
+        }
+        query.setParameter('title', `%${kw.word}%`);
+      });
+
+      kw2.forEach(kw => {
+        if (!kw1.length) {
+          query.where('article.summary LIKE :summary');
+        } else {
+          query.orWhere('article.summary LIKE :summary');
+        }
+        query.setParameter('summary', `%${kw.word}%`);
+      });
+
+      const data = await query.getMany();
+      return data.filter(d => d.id !== articleId);
+    }
   }
 }

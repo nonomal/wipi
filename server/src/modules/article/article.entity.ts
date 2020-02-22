@@ -6,9 +6,12 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
+  JoinColumn,
+  OneToOne,
   ManyToOne,
 } from 'typeorm';
 import { Tag } from '../tag/tag.entity';
+import { Category } from '../category/category.entity';
 import { Comment } from '../comment/comment.entity';
 
 @Entity()
@@ -33,6 +36,14 @@ export class Article {
 
   @Column({ type: 'text', default: null })
   toc: string; // 格式化内容索引，自动生成
+
+  @ManyToOne(
+    () => Category,
+    category => category.articles,
+    { cascade: true }
+  )
+  @JoinTable()
+  category: Category;
 
   @ManyToMany(
     () => Tag,

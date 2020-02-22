@@ -36,8 +36,25 @@ export class ViewService {
   /**
    * 获取所有访问
    */
-  async findAll(): Promise<View[]> {
-    return this.viewRepository.find({ order: { updateAt: 'DESC' } });
+  async findAll(queryParams: any = {}): Promise<[View[], number]> {
+    const query = this.viewRepository
+      .createQueryBuilder('view')
+      .orderBy('view.updateAt', 'DESC');
+
+    const { page = 1, pageSize = 12, pass, ...otherParams } = queryParams;
+
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
+
+    if (otherParams) {
+      Object.keys(otherParams).forEach(key => {
+        query
+          .andWhere(`view.${key} LIKE :${key}`)
+          .setParameter(`${key}`, `%${otherParams[key]}%`);
+      });
+    }
+
+    return query.getManyAndCount();
   }
 
   /**

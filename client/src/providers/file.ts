@@ -19,8 +19,8 @@ export class FileProvider {
   /**
    * 获取指定文件
    */
-  static async getFiles(): Promise<IFile[]> {
-    return httpProvider.get("/file");
+  static async getFiles(params): Promise<[IFile[], number]> {
+    return httpProvider.get("/file", { params });
   }
 
   /**

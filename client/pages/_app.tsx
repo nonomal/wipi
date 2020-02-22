@@ -1,6 +1,5 @@
 import App from "next/app";
 import { ViewProvider } from "@providers/view";
-import { PageTransition } from "next-page-transitions";
 import { NProgress } from "@components/NProgress";
 import "@/theme/antd.less";
 import "@/theme/reset.scss";
@@ -23,13 +22,13 @@ class MyApp extends App {
       el.parentNode.removeChild(el);
     } catch (e) {}
 
-    const url = window.location.href;
+    const url = window.location.pathname;
     lastUrl = url;
     addView(url);
   }
 
   componentDidUpdate() {
-    const url = window.location.href;
+    const url = window.location.pathname;
 
     if (url === lastUrl) {
       return;
@@ -40,9 +39,7 @@ class MyApp extends App {
   }
 
   render() {
-    const { Component, pageProps, router } = this.props;
-    // const pathname = router.pathname;
-    // const isAdmin = /admin/.test(pathname);
+    const { Component, pageProps } = this.props;
 
     return (
       <div>
@@ -54,22 +51,6 @@ class MyApp extends App {
     }`
           }}
         ></style>
-        {/* {isAdmin ? (
-          <Component {...pageProps} />
-        ) : (
-          <PageTransition
-            timeout={250}
-            classNames="page-transition"
-            loadingComponent={null}
-            loadingDelay={500}
-            loadingTimeout={{
-              enter: 250,
-              exit: 0
-            }}
-          >
-            <Component {...pageProps} />
-          </PageTransition>
-        )} */}
         <NProgress color={"#ff0064"} />
         <Component {...pageProps} />
       </div>

@@ -10,6 +10,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard, Roles } from '../auth/roles.guard';
 import { ViewService } from './view.service';
 import { View } from './view.entity';
 
@@ -27,6 +28,7 @@ function getClientIP(req) {
 }
 
 @Controller('view')
+@UseGuards(RolesGuard)
 export class ViewController {
   constructor(private readonly viewService: ViewService) {}
 
@@ -46,8 +48,8 @@ export class ViewController {
    */
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll(): Promise<View[]> {
-    return this.viewService.findAll();
+  findAll(@Query() queryParam) {
+    return this.viewService.findAll(queryParam);
   }
 
   /**
@@ -74,6 +76,7 @@ export class ViewController {
    * @param id
    */
   @Delete(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   deleteById(@Param('id') id) {
     return this.viewService.deleteById(id);

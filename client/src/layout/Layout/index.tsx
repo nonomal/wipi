@@ -9,11 +9,13 @@ import style from "./index.module.scss";
 
 interface Iprops {
   backgroundColor?: string;
+  needFooter?: boolean;
 }
 
 export const Layout: React.FC<Iprops> = ({
   backgroundColor = "#f4f5f5",
-  children
+  children,
+  needFooter = true
 }) => {
   const setting = useSetting();
   const menus = useMenus();
@@ -32,6 +34,7 @@ export const Layout: React.FC<Iprops> = ({
       </Helmet>
       <Header setting={setting} menus={menus} />
       <main
+        className={style.main}
         style={{
           backgroundColor
         }}
@@ -39,7 +42,7 @@ export const Layout: React.FC<Iprops> = ({
         {children}
       </main>
       <BackTop />
-      <Footer setting={setting} />
+      {needFooter && <Footer setting={setting} />}
     </div>
   );
 };

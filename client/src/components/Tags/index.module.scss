@@ -1,41 +1,44 @@
 @import "../../theme/var.scss";
 
 .wrapper {
-  text-align: left;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+  margin-bottom: 1.3rem;
+  line-height: 1.29;
+  color: #333;
 
   .title {
-    position: relative;
-    margin-top: 0;
-    padding-bottom: 7px;
-    border-bottom: 1px solid #ebebeb;
-    margin-bottom: 21px;
-    position: relative;
-    font-size: 20px;
+    padding: 1rem 1.3rem;
+    background-color: #fff;
+    border-bottom: 1px solid hsla(0, 0%, 59.2%, 0.1);
+  }
 
-    &::after {
-      content: "";
-      width: 90px;
-      height: 1px;
-      background: $feMainColor;
-      position: absolute;
-      left: 0;
-      bottom: -1px;
-    }
+  ul {
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   }
 
   li {
     padding: 2px 7px;
-    color: #959595;
+    color: #8e8787;
     line-height: 1.5em;
     display: inline-block;
     margin: 0 7px 7px 0;
-    border: 1px solid #808080;
+    border: 1px solid #8e8787;
+    border-radius: 4px;
     transition: all ease-in-out 0.2s;
 
     &:hover {
       background-color: $feMainColor;
       color: #fff;
       border: 1px solid $feMainColor;
+    }
+
+    &.active {
+      color: $feMainColor;
+      border: 1px solid $feMainColor;
+      background-color: $feBgColor;
     }
   }
 }

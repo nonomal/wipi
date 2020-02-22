@@ -5,7 +5,7 @@ import {
   Row,
   Col,
   Button,
-  Table,
+  Select,
   Divider,
   Badge,
   Popconfirm,
@@ -18,38 +18,46 @@ import * as dayjs from "dayjs";
 import { AdminLayout } from "@/layout/AdminLayout";
 import { CommentProvider } from "@/providers/comment";
 import { SettingProvider } from "@/providers/setting";
+import { SPTDataTable } from "@components/admin/SPTDataTable";
 import style from "./index.module.scss";
 
 interface IProps {
   comments: IComment[];
+  total: number;
   setting: any;
 }
 
 const Comment: NextPage<IProps> = ({
   comments: defaultComments = [],
+  total = 0,
   setting
 }) => {
   const [comments, setComments] = useState<IComment[]>(defaultComments);
   const [selectedComment, setSelectedComment] = useState(null);
   const [replyContent, setReplyContent] = useState(null);
-
+  const [params, setParams] = useState(null);
   // 查看 html
   const [htmlVisible, setHTMLVisible] = useState(false);
 
   // 获取评论
-  const getComments = useCallback(() => {
-    CommentProvider.getComments().then(res => {
-      setComments(res);
+  const getComments = useCallback((params = {}) => {
+    return CommentProvider.getComments(params).then(res => {
+      setParams(params);
+      setComments(res[0]);
+      return res;
     });
   }, []);
 
   // 修改评论
-  const updateComment = useCallback((comment, pass = false) => {
-    CommentProvider.updateComment(comment.id, { pass }).then(() => {
-      message.success(pass ? "评论已通过" : "评论已拒绝");
-      getComments();
-    });
-  }, []);
+  const updateComment = useCallback(
+    (comment, pass = false) => {
+      CommentProvider.updateComment(comment.id, { pass }).then(() => {
+        message.success(pass ? "评论已通过" : "评论已拒绝");
+        getComments(params);
+      });
+    },
+    [params]
+  );
 
   // 回复评论
   const replayComment = useCallback(comment => {
@@ -61,7 +69,7 @@ const Comment: NextPage<IProps> = ({
       return;
     }
 
-    const userInfo = JSON.parse(window.sessionStorage.getItem("userInfo"));
+    const userInfo = JSON.parse(window.localStorage.getItem("user"));
     const email = userInfo.mail || (setting && setting.smtpFromUser);
 
     const notify = () => {
@@ -87,7 +95,7 @@ const Comment: NextPage<IProps> = ({
           setSelectedComment(null);
           message.success("回复成功");
           setReplyContent("");
-          getComments();
+          getComments(params);
         })
         .catch(_ => notify());
     };
@@ -105,15 +113,18 @@ const Comment: NextPage<IProps> = ({
     } else {
       handle(email);
     }
-  }, [selectedComment, replyContent]);
+  }, [selectedComment, replyContent, params]);
 
   // 删除评论
-  const deleteComment = useCallback(id => {
-    CommentProvider.deleteComment(id).then(() => {
-      message.success("评论删除成功");
-      getComments();
-    });
-  }, []);
+  const deleteComment = useCallback(
+    id => {
+      CommentProvider.deleteComment(id).then(() => {
+        message.success("评论删除成功");
+        getComments(params);
+      });
+    },
+    [params]
+  );
 
   const columns = [
     {
@@ -215,17 +226,41 @@ const Comment: NextPage<IProps> = ({
   return (
     <AdminLayout>
       <div className={style.wrapper}>
-        <Row style={{ marginBottom: 16 }}>
-          <Col sm={24} style={{ textAlign: "right" }}>
-            <Button onClick={getComments} icon="reload">
-              刷新
-            </Button>
-          </Col>
-        </Row>
-        <Table
+        <SPTDataTable
+          data={comments}
+          defaultTotal={total}
           columns={[...columns, actionColumn]}
-          dataSource={comments}
-          rowKey={"id"}
+          searchFields={[
+            {
+              label: "称呼",
+              field: "name",
+              msg: "请输入称呼"
+            },
+            {
+              label: "Email",
+              field: "email",
+              msg: "请输入联系方式"
+            },
+            {
+              label: "状态",
+              field: "pass",
+              children: (
+                <Select style={{ width: 180 }}>
+                  {[
+                    { label: "已通过", value: 1 },
+                    { label: "未通过", value: 0 }
+                  ].map(t => {
+                    return (
+                      <Select.Option key={t.label} value={t.value as any}>
+                        {t.label}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+              )
+            }
+          ]}
+          onSearch={getComments}
         />
         <Modal
           title={"回复评论"}
@@ -268,10 +303,10 @@ const Comment: NextPage<IProps> = ({
 
 Comment.getInitialProps = async () => {
   const [comments, setting] = await Promise.all([
-    CommentProvider.getComments(),
+    CommentProvider.getComments({ page: 1, pageSize: 12 }),
     SettingProvider.getSetting()
   ]);
-  return { comments, setting };
+  return { comments: comments[0], total: comments[1], setting };
 };
 
 export default Comment;

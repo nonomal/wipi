@@ -81,7 +81,9 @@ export class CommentService {
       // 回复邮件
       to = reply;
     } else {
-      const user = await this.userService.findAll();
+      // 管理用户应当只存在一个
+      // TODO:也可能存在多个
+      const [user] = await this.userService.findAll({ role: 'admin' });
       if (user && user[0] && user[0].mail) {
         to = user[0].mail;
       } else {
@@ -140,15 +142,29 @@ export class CommentService {
    * 查询所有评论
    * 额外添加文章信息
    */
-  async findAll(): Promise<Comment[]> {
-    const data = await this.commentRepository.find({
-      order: { createAt: 'DESC' },
-    });
-    // for (let d of data) {
-    //   const article = await this.articleService.findById(d.articleId);
-    //   Object.assign(d, { article });
-    // }
-    return data;
+  async findAll(queryParams: any = {}): Promise<[Comment[], number]> {
+    const query = this.commentRepository
+      .createQueryBuilder('comment')
+      .orderBy('comment.createAt', 'DESC');
+
+    const { page = 1, pageSize = 12, pass, ...otherParams } = queryParams;
+
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
+
+    if (pass) {
+      query.andWhere('comment.pass=:pass').setParameter('pass', pass);
+    }
+
+    if (otherParams) {
+      Object.keys(otherParams).forEach(key => {
+        query
+          .andWhere(`comment.${key} LIKE :${key}`)
+          .setParameter(`${key}`, `%${otherParams[key]}%`);
+      });
+    }
+
+    return query.getManyAndCount();
   }
 
   /**
@@ -163,17 +179,22 @@ export class CommentService {
    * 获取文章评论
    * @param articleId
    */
-  async getArticleComments(articleId) {
-    const data = await this.commentRepository
+  async getArticleComments(articleId, queryParams) {
+    const query = this.commentRepository
       .createQueryBuilder('comment')
       .where('comment.articleId=:articleId')
       .andWhere('comment.pass=:pass')
       .orderBy('comment.createAt', 'DESC')
       .setParameter('articleId', articleId)
-      .setParameter('pass', true)
-      .getMany();
+      .setParameter('pass', true);
 
-    return buildTree(data);
+    const { page = 1, pageSize = 12 } = queryParams;
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
+
+    const res = await query.getManyAndCount();
+    const data = buildTree(res[0]);
+    return [data, res[1]];
   }
 
   async findByIds(ids): Promise<Array<Comment>> {

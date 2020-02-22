@@ -4,8 +4,8 @@ export class CommentProvider {
   /**
    * 获取所有评论
    */
-  static async getComments(): Promise<IComment[]> {
-    return httpProvider.get("/comment");
+  static async getComments(params): Promise<[IComment[], number]> {
+    return httpProvider.get("/comment", { params });
   }
 
   /**
@@ -20,8 +20,11 @@ export class CommentProvider {
    * 获取指定文章评论
    * @param articleId
    */
-  static async getArticleComments(articleId): Promise<IComment[]> {
-    return httpProvider.get(`/comment/article/${articleId}`);
+  static async getArticleComments(
+    articleId,
+    params
+  ): Promise<[IComment[], number]> {
+    return httpProvider.get(`/comment/article/${articleId}`, { params });
   }
 
   /**

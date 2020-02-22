@@ -44,8 +44,25 @@ export class SMTPService {
   /**
    * 获取所有邮件
    */
-  async findAll(): Promise<SMTP[]> {
-    return this.smtpRepository.find({ order: { createAt: 'DESC' } });
+  async findAll(queryParams: any = {}): Promise<[SMTP[], number]> {
+    const query = this.smtpRepository
+      .createQueryBuilder('smtp')
+      .orderBy('smtp.createAt', 'DESC');
+
+    const { page = 1, pageSize = 12, pass, ...otherParams } = queryParams;
+
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
+
+    if (otherParams) {
+      Object.keys(otherParams).forEach(key => {
+        query
+          .andWhere(`smtp.${key} LIKE :${key}`)
+          .setParameter(`${key}`, `%${otherParams[key]}%`);
+      });
+    }
+
+    return query.getManyAndCount();
   }
 
   /**

@@ -7,8 +7,8 @@ export class SearchProvider {
     });
   }
 
-  static getRecords(): Promise<ISearch[]> {
-    return httpProvider.get("/search");
+  static getRecords(params): Promise<[ISearch[], number]> {
+    return httpProvider.get("/search", { params });
   }
 
   static deleteRecord(id): Promise<ISearch> {

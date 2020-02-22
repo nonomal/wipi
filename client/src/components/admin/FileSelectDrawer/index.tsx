@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Drawer, Card, List, message } from "antd";
 import { FileProvider } from "@providers/file";
+import { SPTDataTable } from "@components/admin/SPTDataTable";
 import style from "./index.module.scss";
 
 const { Meta } = Card;
@@ -35,20 +36,18 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [files, setFiles] = useState<IFile[]>([]);
+  const [params, setParams] = useState(null);
 
-  const getFiles = useCallback(() => {
-    FileProvider.getFiles()
-      .then(files => {
-        setFiles(files);
+  const getFiles = useCallback(params => {
+    return FileProvider.getFiles(params)
+      .then(res => {
+        setFiles(res[0]);
         setLoading(false);
+        return res;
       })
       .catch(err => {
         setLoading(false);
       });
-  }, []);
-
-  useEffect(() => {
-    getFiles();
   }, []);
 
   return (
@@ -61,37 +60,58 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
       visible={visible}
     >
       {isCopy && <p>点击图片即可复制</p>}
-      <List
-        grid={{
-          gutter: 16,
-          sm: 3
-        }}
-        dataSource={files}
-        pagination={{ pageSize: 9 }}
-        renderItem={file => (
-          <List.Item>
-            <Card
-              hoverable
-              cover={
-                <div className={style.preview}>
-                  <img alt={file.originalname} src={file.url} />
-                </div>
-              }
-              onClick={() => {
-                isCopy && copy(file.url);
-                onChange && onChange(file.url);
-                closeAfterClick && onClose();
-              }}
-            >
-              <Meta
-                title={file.originalname}
-                // description={
-                //   "上传于 " +
-                //   dayjs.default(file.createAt).format("YYYY-MM-DD HH:mm:ss")
-                // }
-              />
-            </Card>
-          </List.Item>
+
+      <SPTDataTable
+        data={files}
+        defaultTotal={0}
+        columns={[]}
+        searchFields={[
+          {
+            label: "文件名称",
+            field: "originalname",
+            msg: "请输入文件名称"
+          },
+          {
+            label: "文件类型",
+            field: "type",
+            msg: "请输入文件类型"
+          }
+        ]}
+        onSearch={getFiles}
+        customDataTable={data => (
+          <List
+            grid={{
+              gutter: 16,
+              sm: 3
+            }}
+            dataSource={files}
+            pagination={{ pageSize: 9 }}
+            renderItem={(file: IFile) => (
+              <List.Item>
+                <Card
+                  hoverable
+                  cover={
+                    <div className={style.preview}>
+                      <img alt={file.originalname} src={file.url} />
+                    </div>
+                  }
+                  onClick={() => {
+                    isCopy && copy(file.url);
+                    onChange && onChange(file.url);
+                    closeAfterClick && onClose();
+                  }}
+                >
+                  <Meta
+                    title={file.originalname}
+                    // description={
+                    //   "上传于 " +
+                    //   dayjs.default(file.createAt).format("YYYY-MM-DD HH:mm:ss")
+                    // }
+                  />
+                </Card>
+              </List.Item>
+            )}
+          />
         )}
       />
     </Drawer>

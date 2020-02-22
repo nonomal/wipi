@@ -14,7 +14,6 @@ import {
 } from "antd";
 import cls from "classnames";
 import { AdminLayout } from "@/layout/AdminLayout";
-import { FileSelectDrawer } from "@/components/admin/FileSelectDrawer";
 import { TagProvider } from "@providers/tag";
 import style from "./index.module.scss";
 
@@ -23,13 +22,11 @@ interface ITagProps {
 }
 
 const TagPage: NextPage<ITagProps> = ({ tags: defaultTags = [] }) => {
-  const [visible, setVisible] = useState(false);
   const [tags, setTags] = useState(defaultTags);
   const [mode, setMode] = useState("create");
   const [currentTag, setCurrentTag] = useState(null);
   const [label, setLabel] = useState(null);
   const [value, setValue] = useState(null);
-  const [icon, setIcon] = useState(null);
 
   const isCreateMode = useMemo(() => mode === "create", [mode]);
 
@@ -42,7 +39,6 @@ const TagPage: NextPage<ITagProps> = ({ tags: defaultTags = [] }) => {
   const reset = useCallback(() => {
     setMode("create");
     setCurrentTag(null);
-    setIcon(null);
     setLabel(null);
     setValue(null);
   }, []);
@@ -84,11 +80,6 @@ const TagPage: NextPage<ITagProps> = ({ tags: defaultTags = [] }) => {
       <Row gutter={16} className={style.wrapper}>
         <Col xs={24} sm={24} md={9}>
           <Card title={isCreateMode ? "添加标签" : "管理标签"} bordered={true}>
-            <Form.Item style={{ textAlign: "center" }}>
-              <div onClick={() => setVisible(true)}>
-                <Avatar style={{ cursor: "pointer" }} size={32} src={icon} />
-              </div>
-            </Form.Item>
             <Form.Item>
               <Input
                 value={label}
@@ -107,19 +98,11 @@ const TagPage: NextPage<ITagProps> = ({ tags: defaultTags = [] }) => {
                 }}
               ></Input>
             </Form.Item>
-            <FileSelectDrawer
-              visible={visible}
-              onChange={icon => setIcon(icon)}
-              onClose={() => setVisible(false)}
-            />
             <div
               className={cls(style.btns, isCreateMode ? false : style.isEdit)}
             >
               {isCreateMode ? (
-                <Button
-                  type="primary"
-                  onClick={() => addTag({ label, value, icon })}
-                >
+                <Button type="primary" onClick={() => addTag({ label, value })}>
                   保存
                 </Button>
               ) : (
@@ -130,8 +113,7 @@ const TagPage: NextPage<ITagProps> = ({ tags: defaultTags = [] }) => {
                       onClick={() =>
                         updateTag(currentTag.id, {
                           label,
-                          value,
-                          icon
+                          value
                         })
                       }
                     >
@@ -156,37 +138,24 @@ const TagPage: NextPage<ITagProps> = ({ tags: defaultTags = [] }) => {
         </Col>
         <Col xs={24} sm={24} md={15}>
           <Card title="所有标签" bordered={true}>
-            <List
-              grid={{
-                gutter: 16,
-                sm: 3,
-                md: 4
-              }}
-              dataSource={tags}
-              renderItem={tag => (
-                <List.Item>
-                  <a
-                    className={style.tag}
-                    onClick={() => {
-                      setMode("edit");
-                      setCurrentTag(tag);
-                      setLabel(tag.label);
-                      setValue(tag.value);
-                      setIcon(tag.icon);
-                    }}
-                  >
-                    <span>
-                      {tag.icon && (
-                        <span className={style.icon}>
-                          <img src={tag.icon} alt={tag.label} />
-                        </span>
-                      )}
-                      <span>{tag.label}</span>
-                    </span>
+            <ul className={style.list}>
+              {tags.map(d => (
+                <li
+                  key={d.id}
+                  className={cls(style.item)}
+                  onClick={() => {
+                    setMode("edit");
+                    setCurrentTag(d);
+                    setLabel(d.label);
+                    setValue(d.value);
+                  }}
+                >
+                  <a key={d.id} className={style.tag}>
+                    <span>{d.label}</span>
                   </a>
-                </List.Item>
-              )}
-            />
+                </li>
+              ))}
+            </ul>
           </Card>
         </Col>
       </Row>

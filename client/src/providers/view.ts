@@ -4,8 +4,8 @@ export class ViewProvider {
   /**
    * 获取所有访问
    */
-  static async getViews(): Promise<IView[]> {
-    return httpProvider.get("/view");
+  static async getViews(params): Promise<[IView[], number]> {
+    return httpProvider.get("/view", { params });
   }
 
   /**

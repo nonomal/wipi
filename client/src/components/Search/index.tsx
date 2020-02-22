@@ -40,6 +40,7 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
 
   useEffect(() => {
     if (!visible || !ref.current) {
+      setKeyword("");
       return;
     }
 
@@ -72,7 +73,7 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
           />
           <button
             onClick={() => {
-              setKeyword(null);
+              setKeyword("");
               setHasSearch(false);
               onClose && onClose();
             }}
@@ -89,7 +90,7 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
         {hasSearch && !loading && (
           <div className={cls(style.ret, hasSearch ? style.active : false)}>
             {articles && articles.length ? (
-              <ArticleList articles={articles} />
+              <ArticleList articles={articles} bordered />
             ) : (
               <p className={style.none}>未搜索到数据</p>
             )}

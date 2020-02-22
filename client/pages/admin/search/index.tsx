@@ -1,47 +1,46 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { NextPage } from "next";
-import { Row, Col, Table, Badge, Button, Popconfirm, message } from "antd";
+import { Badge, Popconfirm, message } from "antd";
 import * as dayjs from "dayjs";
 import { AdminLayout } from "@/layout/AdminLayout";
 import { SearchProvider } from "@/providers/search";
+import { SPTDataTable } from "@components/admin/SPTDataTable";
 import style from "./index.module.scss";
 
 const Search: NextPage = () => {
   const [data, setData] = useState<ISearch[]>([]);
   const [loading, setLoaidng] = useState(false);
+  const [params, setParams] = useState(null);
 
   // 获取
-  const getData = useCallback(() => {
+  const getData = useCallback(params => {
     if (loading) {
       return;
     }
 
     setLoaidng(true);
-    SearchProvider.getRecords()
+    return SearchProvider.getRecords(params)
       .then(res => {
-        setData(res);
+        setParams(params);
+        setData(res[0]);
         setLoaidng(false);
+        return res;
       })
       .catch(() => setLoaidng(false));
   }, []);
 
   // 删除
-  const deleteItem = useCallback(id => {
-    SearchProvider.deleteRecord(id).then(() => {
-      message.success("搜索记录删除成功");
-      getData();
-    });
-  }, []);
-
-  useEffect(() => {
-    getData();
-  }, []);
-  const columns = [
-    {
-      title: "类型",
-      dataIndex: "type",
-      key: "type"
+  const deleteItem = useCallback(
+    id => {
+      SearchProvider.deleteRecord(id).then(() => {
+        message.success("搜索记录删除成功");
+        getData(params);
+      });
     },
+    [params]
+  );
+
+  const columns = [
     {
       title: "搜索词",
       dataIndex: "keyword",
@@ -88,18 +87,28 @@ const Search: NextPage = () => {
   return (
     <AdminLayout>
       <div className={style.wrapper}>
-        <Row style={{ marginBottom: 16 }}>
-          <Col xs={24} span={24} className={style.btns}>
-            <Button loading={loading} icon="reload" onClick={getData}>
-              刷新
-            </Button>
-          </Col>
-        </Row>
-
-        <Table
+        <SPTDataTable
+          data={data}
+          defaultTotal={0}
           columns={[...columns, actionColumn]}
-          dataSource={data}
-          rowKey={"id"}
+          searchFields={[
+            {
+              label: "类型",
+              field: "type",
+              msg: "请输入搜索类型"
+            },
+            {
+              label: "搜索词",
+              field: "keyword",
+              msg: "请输入搜索词"
+            },
+            {
+              label: "搜索量",
+              field: "count",
+              msg: "请输入搜索量"
+            }
+          ]}
+          onSearch={getData}
         />
       </div>
     </AdminLayout>

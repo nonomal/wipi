@@ -7,10 +7,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard, Roles } from '../auth/roles.guard';
 // import { client } from './elasticsearch.client';
 import { SearchService } from './search.service';
 
 @Controller('search')
+@UseGuards(RolesGuard)
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 
@@ -29,8 +31,8 @@ export class SearchController {
    */
   @Get('/')
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    return this.searchService.findAll();
+  async findAll(@Query() queryParam) {
+    return this.searchService.findAll(queryParam);
   }
 
   /**
@@ -38,6 +40,7 @@ export class SearchController {
    * @param id
    */
   @Delete(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   deleteById(@Param('id') id) {
     return this.searchService.deleteById(id);

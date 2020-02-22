@@ -1,36 +1,15 @@
 @import "../../theme/var.scss";
 
-@media (min-width: 768px) {
-  .wrapper {
-    width: 768px;
-  }
-}
-
-@media (min-width: 992px) {
-  .wrapper {
-    width: 970px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .wrapper {
-    width: 1140px;
-  }
-}
-
 $height: 64px;
 
 header {
-  padding: 16px 0;
+  position: relative;
+  width: 100%;
+  z-index: 100;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .wrapper {
-  position: relative;
-  margin-right: auto;
-  margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;

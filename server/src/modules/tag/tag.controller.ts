@@ -10,10 +10,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard, Roles } from '../auth/roles.guard';
 import { TagService } from './tag.service';
 import { Tag } from './tag.entity';
 
 @Controller('tag')
+@UseGuards(RolesGuard)
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 
@@ -22,6 +24,7 @@ export class TagController {
    * @param tag
    */
   @Post()
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   create(@Body() tag) {
     return this.tagService.create(tag);
@@ -59,6 +62,7 @@ export class TagController {
    * @param tag
    */
   @Patch(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   updateById(@Param('id') id, @Body() tag) {
     return this.tagService.updateById(id, tag);
@@ -69,6 +73,7 @@ export class TagController {
    * @param id
    */
   @Delete(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   deleteById(@Param('id') id) {
     return this.tagService.deleteById(id);

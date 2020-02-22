@@ -12,10 +12,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard, Roles } from '../auth/roles.guard';
 import { PageService } from './page.service';
 import { Page } from './page.entity';
 
 @Controller('page')
+@UseGuards(RolesGuard)
 export class PageController {
   constructor(private readonly pageService: PageService) {}
 
@@ -24,6 +26,7 @@ export class PageController {
    * @param page
    */
   @Post()
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   create(@Body() page) {
     return this.pageService.create(page);
@@ -33,8 +36,8 @@ export class PageController {
    * 获取所有文章
    */
   @Get()
-  findAll(@Query('status') status): Promise<Page[]> {
-    return this.pageService.findAll(status);
+  findAll(@Query() queryParams) {
+    return this.pageService.findAll(queryParams);
   }
 
   /**
@@ -52,6 +55,7 @@ export class PageController {
    * @param page
    */
   @Patch(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   updateById(@Param('id') id, @Body() page) {
     return this.pageService.updateById(id, page);
@@ -62,6 +66,7 @@ export class PageController {
    * @param id
    */
   @Delete(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   deleteById(@Param('id') id) {
     return this.pageService.deleteById(id);

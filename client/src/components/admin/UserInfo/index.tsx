@@ -7,7 +7,7 @@ export const UserInfo = () => {
   const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
-    let info = window.sessionStorage.getItem("userInfo");
+    let info = window.localStorage.getItem("user");
     try {
       info = JSON.parse(info);
       setUser(info as any);

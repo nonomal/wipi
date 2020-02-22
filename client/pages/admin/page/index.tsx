@@ -3,13 +3,13 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import {
-  Table,
   Button,
   Modal,
   Divider,
   Badge,
   Popconfirm,
   Spin,
+  Select,
   message
 } from "antd";
 import * as dayjs from "dayjs";
@@ -19,6 +19,7 @@ import { ViewProvider } from "@/providers/view";
 import { ViewChart } from "@components/admin/ViewChart";
 import style from "./index.module.scss";
 import { useSetting } from "@/hooks/useSetting";
+import { SPTDataTable } from "@components/admin/SPTDataTable";
 const url = require("url");
 
 const columns = [
@@ -61,15 +62,20 @@ const columns = [
 
 interface IProps {
   pages: IPage[];
+  total: number;
 }
 
-const Page: NextPage<IProps> = ({ pages: defaultPages = [] }) => {
+const Page: NextPage<IProps> = ({
+  pages: defaultPages = [],
+  total: defaultTotal = 0
+}) => {
   const router = useRouter();
   const setting = useSetting();
   const [pages, setPages] = useState<IPage[]>(defaultPages);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [views, setViews] = useState<IView[]>([]);
+  const [params, setParams] = useState(null);
 
   const getViews = useCallback(url => {
     setLoading(true);
@@ -81,25 +87,33 @@ const Page: NextPage<IProps> = ({ pages: defaultPages = [] }) => {
     });
   }, []);
 
-  const getPages = useCallback(() => {
-    PageProvider.getPages().then(pages => {
-      setPages(pages);
+  const getPages = useCallback((params = {}) => {
+    return PageProvider.getPages(params).then(res => {
+      setParams(params);
+      setPages(res[0]);
+      return res;
     });
   }, []);
 
-  const deleteArticle = useCallback(id => {
-    PageProvider.deletePage(id).then(() => {
-      message.success("页面删除成功");
-      getPages();
-    });
-  }, []);
+  const deleteArticle = useCallback(
+    id => {
+      PageProvider.deletePage(id).then(() => {
+        message.success("页面删除成功");
+        getPages(params);
+      });
+    },
+    [params]
+  );
 
-  const editPage = useCallback((id, data) => {
-    PageProvider.updatePage(id, data).then(() => {
-      message.success("操作成功");
-      getPages();
-    });
-  }, []);
+  const editPage = useCallback(
+    (id, data) => {
+      PageProvider.updatePage(id, data).then(() => {
+        message.success("操作成功");
+        getPages(params);
+      });
+    },
+    [params]
+  );
 
   const actionColumn = {
     title: "操作",
@@ -157,10 +171,41 @@ const Page: NextPage<IProps> = ({ pages: defaultPages = [] }) => {
         >
           新建页面
         </Button>
-        <Table
+        <SPTDataTable
+          data={pages}
+          defaultTotal={defaultTotal}
           columns={[...columns, actionColumn]}
-          dataSource={pages}
-          rowKey={"id"}
+          searchFields={[
+            {
+              label: "名称",
+              field: "name",
+              msg: "请输入页面名称"
+            },
+            {
+              label: "路径",
+              field: "path",
+              msg: "请输入页面路径"
+            },
+            {
+              label: "状态",
+              field: "status",
+              children: (
+                <Select style={{ width: 180 }}>
+                  {[
+                    { label: "已发布", value: "publish" },
+                    { label: "草稿", value: "draft" }
+                  ].map(t => {
+                    return (
+                      <Select.Option key={t.label} value={t.value}>
+                        {t.label}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+              )
+            }
+          ]}
+          onSearch={getPages}
         />
         <Modal
           title="访问统计"
@@ -187,8 +232,8 @@ const Page: NextPage<IProps> = ({ pages: defaultPages = [] }) => {
 };
 
 Page.getInitialProps = async () => {
-  const pages = await PageProvider.getPages();
-  return { pages };
+  const pages = await PageProvider.getPages({ page: 1, pageSize: 12 });
+  return { pages: pages[0], total: pages[1] };
 };
 
 export default Page;

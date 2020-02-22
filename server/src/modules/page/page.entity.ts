@@ -26,7 +26,7 @@ export class Page {
   @Column({ type: 'mediumtext', default: null, charset: 'utf8mb4' })
   html: string; // 格式化内容，自动生成
 
-  @Column({ type: 'text', default: null })
+  @Column({ type: 'mediumtext', default: null })
   toc: string; // 格式化内容索引，自动生成
 
   @Column('simple-enum', { enum: ['draft', 'publish'] })

@@ -4,14 +4,14 @@ export class PageProvider {
   /**
    * 获取所有页面
    */
-  static async getPages(): Promise<IPage[]> {
-    return httpProvider.get("/page");
+  static async getPages(params): Promise<[IPage[], number]> {
+    return httpProvider.get("/page", { params: params });
   }
 
   /**
    * 获取所有已发布页面
    */
-  static async getAllPublisedPages(): Promise<IPage[]> {
+  static async getAllPublisedPages(): Promise<[IPage[], number]> {
     return httpProvider.get("/page", { params: { status: "publish" } });
   }
 

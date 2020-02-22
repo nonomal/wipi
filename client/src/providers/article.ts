@@ -4,15 +4,37 @@ export class ArticleProvider {
   /**
    * 获取所有文章
    */
-  static async getArticles(needFilter = false): Promise<IArticle[]> {
-    return httpProvider.get(
-      "/article",
-      needFilter
-        ? {
-            params: { status: "publish" }
-          }
-        : {}
-    );
+  static async getArticles(params): Promise<[IArticle[], number]> {
+    return httpProvider.get("/article", { params });
+  }
+
+  /**
+   * 获取分类所有文章
+   * @param category
+   * @param params
+   */
+  static async getArticlesByCategory(
+    category,
+    params
+  ): Promise<[IArticle[], number]> {
+    return httpProvider.get("/article/category/" + category, { params });
+  }
+
+  /**
+   * 获取标签所有文章
+   * @param tag
+   * @param params
+   */
+  static async getArticlesByTag(tag, params): Promise<[IArticle[], number]> {
+    return httpProvider.get("/article/tag/" + tag, { params });
+  }
+
+  /**
+   * 获取推荐文章
+   * @param articleId
+   */
+  static async getRecommend(articleId = null): Promise<IArticle[]> {
+    return httpProvider.get("/article/recommend", { params: { articleId } });
   }
 
   /**
@@ -26,15 +48,8 @@ export class ArticleProvider {
    * 获取指定文章
    * @param id
    */
-  static async getArticle(id, needFilter = false): Promise<IArticle> {
-    return httpProvider.get(
-      `/article/${id}`,
-      needFilter
-        ? {
-            params: { status: "publish" }
-          }
-        : {}
-    );
+  static async getArticle(id): Promise<IArticle> {
+    return httpProvider.get(`/article/${id}`);
   }
 
   /**

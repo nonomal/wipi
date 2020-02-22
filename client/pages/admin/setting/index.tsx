@@ -21,7 +21,7 @@ const Setting: NextPage<IProps> = ({ type: defaultType }) => {
   const [setting, setSetting] = useState(null);
 
   useEffect(() => {
-    let info = window.sessionStorage.getItem("userInfo");
+    let info = window.localStorage.getItem("user");
     try {
       info = JSON.parse(info);
       SettingProvider.getSetting(info).then(res => {

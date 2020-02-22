@@ -5,14 +5,17 @@ import {
   Patch,
   Delete,
   Param,
+  Query,
   Body,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard, Roles } from '../auth/roles.guard';
 import { CommentService } from './comment.service';
 import { Comment } from './comment.entity';
 
 @Controller('comment')
+@UseGuards(RolesGuard)
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
@@ -29,8 +32,8 @@ export class CommentController {
    * 获取所有评论
    */
   @Get()
-  findAll(): Promise<Comment[]> {
-    return this.commentService.findAll();
+  findAll(@Query() queryParams) {
+    return this.commentService.findAll(queryParams);
   }
 
   /**
@@ -47,8 +50,8 @@ export class CommentController {
    * @param articleId
    */
   @Get('article/:articleId')
-  getArticleComments(@Param('articleId') articleId) {
-    return this.commentService.getArticleComments(articleId);
+  getArticleComments(@Param('articleId') articleId, @Query() qurey) {
+    return this.commentService.getArticleComments(articleId, qurey);
   }
 
   /**
@@ -57,6 +60,7 @@ export class CommentController {
    * @param tag
    */
   @Patch(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   updateById(@Param('id') id, @Body() data) {
     return this.commentService.updateById(id, data);
@@ -67,6 +71,7 @@ export class CommentController {
    * @param id
    */
   @Delete(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   deleteById(@Param('id') id) {
     return this.commentService.deleteById(id);

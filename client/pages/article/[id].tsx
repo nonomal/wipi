@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import Router from "next/router";
 import Link from "next/link";
 import cls from "classnames";
-import { Row, Anchor, Modal, Form, Input, message } from "antd";
+import { Anchor, Modal, Form, Input, message } from "antd";
 import * as dayjs from "dayjs";
 import hljs from "highlight.js";
 import "highlight.js/styles/atelier-dune-dark.css";
@@ -129,11 +129,11 @@ const Article: NextPage<IProps> = ({ article }) => {
           <p>请输入文章密码</p>
         </>
       ) : (
-        <Row gutter={16}>
+        <div>
           <Helmet>
             <title>{article.title + " - " + setting.systemTitle}</title>
           </Helmet>
-          <article className="container">
+          <article className={cls("container", style.container)}>
             {setting.systemUrl && (
               <meta
                 itemProp="url"
@@ -180,31 +180,33 @@ const Article: NextPage<IProps> = ({ article }) => {
                   className={cls("markdown", style.markdown)}
                   dangerouslySetInnerHTML={{ __html: article.html }}
                 ></div>
-                <div className={style.tags}>
-                  <div>
-                    <span>标签：</span>
-                    {article.tags.map(tag => {
-                      return (
-                        <div className={style.tag} key={tag.id}>
-                          <Link href={"/[tag]"} as={"/" + tag.value}>
-                            <a>
-                              <span>{tag.label}</span>
-                            </a>
-                          </Link>
-                        </div>
-                      );
-                    })}
+                {article.tags && article.tags.length ? (
+                  <div className={style.tags}>
+                    <div>
+                      <span>标签：</span>
+                      {article.tags.map(tag => {
+                        return (
+                          <div className={style.tag} key={tag.id}>
+                            <Link href={"/tag/[tag]"} as={"/tag/" + tag.value}>
+                              <a>
+                                <span>{tag.label}</span>
+                              </a>
+                            </Link>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </div>
               {/* S 文章目录 */}
               {Array.isArray(tocs) && (
                 <div className={style.anchorWidget}>
                   <Anchor targetOffset={32} offsetTop={32} affix={affix}>
-                    {tocs.map(toc => {
+                    {tocs.map((toc, i) => {
                       return (
                         <Anchor.Link
-                          key={toc[2]}
+                          key={i + "-" + toc[2]}
                           href={"#" + toc[1]}
                           title={toc[2]}
                         ></Anchor.Link>
@@ -216,8 +218,11 @@ const Article: NextPage<IProps> = ({ article }) => {
               {/* E 文章目录 */}
             </div>
           </article>
-          <CommentAndRecommendArticles article={article} />
-        </Row>
+          <CommentAndRecommendArticles
+            articleId={article.id}
+            isCommentable={article.isCommentable}
+          />
+        </div>
       )}
     </Layout>
   );

@@ -43,8 +43,25 @@ export class SearchService {
   /**
    * 获取所有搜索记录
    */
-  async findAll(): Promise<Search[]> {
-    return this.searchRepository.find({ order: { updateAt: 'ASC' } });
+  async findAll(queryParams: any = {}): Promise<[Search[], number]> {
+    const query = this.searchRepository
+      .createQueryBuilder('search')
+      .orderBy('search.updateAt', 'DESC');
+
+    const { page = 1, pageSize = 12, pass, ...otherParams } = queryParams;
+
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
+
+    if (otherParams) {
+      Object.keys(otherParams).forEach(key => {
+        query
+          .andWhere(`search.${key} LIKE :${key}`)
+          .setParameter(`${key}`, `%${otherParams[key]}%`);
+      });
+    }
+
+    return query.getManyAndCount();
   }
 
   /**

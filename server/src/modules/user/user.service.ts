@@ -11,7 +11,7 @@ export class UserService {
     private readonly userRepository: Repository<User>
   ) {
     const { name, password } = config.admin;
-    this.createUser({ name, password })
+    this.createUser({ name, password, role: 'admin' })
       .then(_ => {
         console.log();
         console.log(
@@ -28,8 +28,29 @@ export class UserService {
       });
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find();
+  async findAll(queryParams: any = {}): Promise<[User[], number]> {
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .orderBy('user.createAt', 'DESC');
+
+    const { page = 1, pageSize = 12, status, ...otherParams } = queryParams;
+
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
+
+    if (status) {
+      query.andWhere('user.status=:status').setParameter('status', status);
+    }
+
+    if (otherParams) {
+      Object.keys(otherParams).forEach(key => {
+        query
+          .andWhere(`user.${key} LIKE :${key}`)
+          .setParameter(`${key}`, `%${otherParams[key]}%`);
+      });
+    }
+
+    return query.getManyAndCount();
   }
 
   /**
@@ -63,6 +84,14 @@ export class UserService {
     ) {
       throw new HttpException(
         '用户名或密码错误',
+        // tslint:disable-next-line: trailing-comma
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    if (existUser.status === 'locked') {
+      throw new HttpException(
+        '用户已锁定，无法登录',
         // tslint:disable-next-line: trailing-comma
         HttpStatus.BAD_REQUEST
       );

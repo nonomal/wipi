@@ -1,44 +1,36 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { NextPage } from "next";
-import {
-  Row,
-  Col,
-  Table,
-  Select,
-  Badge,
-  Button,
-  Form,
-  Modal,
-  Popconfirm,
-  message
-} from "antd";
+import { Button, Modal, Popconfirm, message } from "antd";
 import * as dayjs from "dayjs";
 import { AdminLayout } from "@/layout/AdminLayout";
 import { MailProvider } from "@/providers/mail";
+import { SPTDataTable } from "@components/admin/SPTDataTable";
 import style from "./index.module.scss";
 
 const Mail: NextPage = () => {
   const [mails, setMails] = useState<IMail[]>([]);
   const [selectedMail, setSelectedMail] = useState(null);
+  const [params, setParams] = useState(null);
 
   // 获取邮件
-  const getMails = useCallback(() => {
-    MailProvider.getMails().then(res => {
-      setMails(res);
+  const getMails = useCallback(params => {
+    return MailProvider.getMails(params).then(res => {
+      setParams(params);
+      setMails(res[0]);
+      return res;
     });
   }, []);
 
-  useEffect(() => {
-    getMails();
-  }, []);
-
-  // 删除评论
-  const deleteView = useCallback(id => {
-    MailProvider.deleteMail(id).then(() => {
-      message.success("邮件删除成功");
-      getMails();
-    });
-  }, []);
+  // 删除邮件
+  const deleteMail = useCallback(
+    id => {
+      MailProvider.deleteMail(id).then(() => {
+        message.success("邮件删除成功");
+        getMails(params);
+      });
+    },
+    [params]
+  );
 
   const columns = [
     {
@@ -87,7 +79,7 @@ const Mail: NextPage = () => {
       <span className={style.action}>
         <Popconfirm
           title="确认删除这个邮件？"
-          onConfirm={() => deleteView(record.id)}
+          onConfirm={() => deleteMail(record.id)}
           okText="确认"
           cancelText="取消"
         >
@@ -100,17 +92,28 @@ const Mail: NextPage = () => {
   return (
     <AdminLayout>
       <div className={style.wrapper}>
-        <Row style={{ marginBottom: 16 }}>
-          <Col sm={24} style={{ textAlign: "right" }}>
-            <Button onClick={getMails} icon="reload">
-              刷新
-            </Button>
-          </Col>
-        </Row>
-        <Table
+        <SPTDataTable
+          data={mails}
+          defaultTotal={0}
           columns={[...columns, actionColumn]}
-          dataSource={mails}
-          rowKey={"id"}
+          searchFields={[
+            {
+              label: "发件人",
+              field: "from",
+              msg: "请输入发件人"
+            },
+            {
+              label: "收件人",
+              field: "to",
+              msg: "请输入收件人"
+            },
+            {
+              label: "主题",
+              field: "subject",
+              msg: "请输入主题"
+            }
+          ]}
+          onSearch={getMails}
         />
         <Modal
           title={"发送内容"}

@@ -1,9 +1,12 @@
 import React from "react";
 import { NextPage } from "next";
 import Link from "next/link";
+import cls from "classnames";
 import { Row, Col, Timeline } from "antd";
 import { Layout } from "@/layout/Layout";
 import { ArticleProvider } from "@providers/article";
+import { RecommendArticles } from "@components/RecommendArticles";
+import { Tags } from "@components/Tags";
 import style from "./index.module.scss";
 
 interface IProps {
@@ -29,10 +32,10 @@ const ArchiveItem = ({ year, articles = [] }) => {
 
 const Archives: NextPage<IProps> = ({ articles }) => {
   return (
-    <Layout backgroundColor="#fff">
-      <div className="container">
+    <Layout>
+      <div className={cls("container", style.container)}>
         <Row>
-          <Col sm={24}>
+          <Col sm={16} className={style.main}>
             <div className={style.content}>
               {Object.keys(articles).map(year => {
                 return (
@@ -44,6 +47,10 @@ const Archives: NextPage<IProps> = ({ articles }) => {
                 );
               })}
             </div>
+          </Col>
+          <Col sm={8} className={style.aside}>
+            <RecommendArticles mode="inline" />
+            <Tags />
           </Col>
         </Row>
       </div>

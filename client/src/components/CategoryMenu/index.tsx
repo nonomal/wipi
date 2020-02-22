@@ -2,21 +2,25 @@ import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import cls from "classnames";
-import { useTags } from "@/hooks/useTags";
+import { useCategory } from "@/hooks/useCategory";
 import style from "./index.module.scss";
 
-export const TagMenus = () => {
-  const tags = useTags();
+export const CategoryMenu = () => {
+  const categories = useCategory();
   const router = useRouter();
-  const { tag: routerTag } = router.query;
+  const { category: routerCategory } = router.query;
 
   return (
     <div className={style.tagList}>
-      {/* S 标签列表 */}
       <ul>
         <li
           key={"all"}
-          className={cls(style.tagItem, !routerTag ? style.active : false)}
+          className={cls(
+            style.tagItem,
+            !routerCategory && !/tag/.test(router.pathname)
+              ? style.active
+              : false
+          )}
         >
           <Link href="/">
             <a>
@@ -24,25 +28,24 @@ export const TagMenus = () => {
             </a>
           </Link>
         </li>
-        {tags.map(tag => {
+        {categories.map(t => {
           return (
             <li
-              key={tag.id}
+              key={t.id}
               className={cls(
                 style.tagItem,
-                routerTag === tag.value ? style.active : false
+                routerCategory === t.value ? style.active : false
               )}
             >
-              <Link href="/[tag]" as={`/` + tag.value}>
+              <Link href="/[category]" as={`/` + t.value} shallow={false}>
                 <a>
-                  <span>{tag.label}</span>
+                  <span>{t.label}</span>
                 </a>
               </Link>
             </li>
           );
         })}
       </ul>
-      {/* E 标签列表 */}
     </div>
   );
 };

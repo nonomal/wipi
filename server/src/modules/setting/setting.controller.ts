@@ -11,8 +11,10 @@ import { JwtService } from '@nestjs/jwt';
 import { SettingService } from './setting.service';
 import { Setting } from './setting.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard, Roles } from '../auth/roles.guard';
 
 @Controller('setting')
+@UseGuards(RolesGuard)
 export class SettingController {
   constructor(
     private readonly settingService: SettingService,
@@ -24,6 +26,7 @@ export class SettingController {
    * @param tag
    */
   @Post()
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   update(@Body() setting) {
     return this.settingService.update(setting);

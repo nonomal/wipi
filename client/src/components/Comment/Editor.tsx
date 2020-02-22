@@ -36,7 +36,7 @@ export const Editor = ({
   const [preview, setPreview] = useState(false);
 
   useEffect(() => {
-    let userInfo: any = window.localStorage.getItem("commentUser");
+    let userInfo: any = window.localStorage.getItem("user");
 
     try {
       userInfo = JSON.parse(userInfo);
@@ -66,10 +66,7 @@ export const Editor = ({
       setName("");
       setEmail("");
       setContent("");
-      window.localStorage.setItem(
-        "commentUser",
-        JSON.stringify({ name, email })
-      );
+      window.localStorage.setItem("user", JSON.stringify({ name, email }));
       onSuccess();
     });
   };

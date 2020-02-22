@@ -20,9 +20,6 @@ export class Tag {
   @Column()
   value: string;
 
-  @Column({ default: null }) // icon 是一个图片链接
-  icon: string;
-
   @ManyToMany(
     () => Article,
     article => article.tags

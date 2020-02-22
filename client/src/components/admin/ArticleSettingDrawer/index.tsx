@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Drawer, Button, Input, Switch, Select } from "antd";
 import { FileSelectDrawer } from "@/components/admin/FileSelectDrawer";
+import { CategoryProvider } from "@/providers/category";
 import { TagProvider } from "@/providers/tag";
 import style from "./index.module.scss";
 
@@ -27,10 +28,14 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
   onChange
 }) => {
   const [fileVisible, setFileVisible] = useState(false);
+  const [categorys, setCategorys] = useState<Array<ICategory>>([]);
   const [tags, setTags] = useState<Array<ITag>>([]);
   const [password, setPassWord] = useState(article.password || null);
   const [isCommentable, setCommentable] = useState(
     article.isCommentable || true
+  );
+  const [selectedCategory, setSelectedCategory] = useState(
+    (article.category && article.category.id) || null
   );
   const [selectedTags, setSelectedTags] = useState(
     (article.tags && article.tags.map(tag => tag.id)) || []
@@ -38,6 +43,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
   const [cover, setCover] = useState(article.cover || null);
 
   useEffect(() => {
+    CategoryProvider.getCategory().then(res => setCategorys(res));
     TagProvider.getTags().then(tags => setTags(tags));
   }, []);
 
@@ -45,6 +51,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
     onChange({
       password,
       isCommentable,
+      category: selectedCategory,
       tags: selectedTags.join(","),
       cover,
       status: "draft"
@@ -56,6 +63,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
       password,
       isCommentable,
       tags: selectedTags.join(","),
+      category: selectedCategory,
       cover,
       status: "publish"
     });
@@ -85,6 +93,23 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
       <FormItem
         label="开启评论"
         content={<Switch checked={isCommentable} onChange={setCommentable} />}
+      />
+
+      <FormItem
+        label="选择分类"
+        content={
+          <Select
+            value={selectedCategory}
+            onChange={setSelectedCategory}
+            style={{ width: "100%" }}
+          >
+            {categorys.map(t => (
+              <Select.Option key={t.id} value={t.id}>
+                {t.label}
+              </Select.Option>
+            ))}
+          </Select>
+        }
       />
       <FormItem
         label="选择标签"

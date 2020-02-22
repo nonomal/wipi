@@ -1,23 +1,11 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { NextPage } from "next";
-import {
-  Row,
-  Col,
-  Table,
-  Select,
-  Badge,
-  Button,
-  Form,
-  Popconfirm,
-  Divider,
-  Modal,
-  Descriptions,
-  message
-} from "antd";
+import { Badge, Popconfirm, Divider, Modal, Descriptions, message } from "antd";
 import * as dayjs from "dayjs";
 import UAParser from "ua-parser-js";
 import { AdminLayout } from "@/layout/AdminLayout";
 import { ViewProvider } from "@/providers/view";
+import { SPTDataTable } from "@components/admin/SPTDataTable";
 import style from "./index.module.scss";
 
 function showInfo({ title, content }) {
@@ -87,61 +75,34 @@ const parseIp = (ip, userAgent) => {
 const Views: NextPage = () => {
   const [views, setViews] = useState<IView[]>([]);
   const [loading, setLoaidng] = useState(false);
-  const [urls, setURLs] = useState([]);
-  const [url, setURL] = useState("");
+  const [params, setParams] = useState(null);
 
-  const getViews = useCallback(() => {
+  const getViews = useCallback(params => {
     if (loading) {
       return;
     }
 
     setLoaidng(true);
-    ViewProvider.getViews()
+    return ViewProvider.getViews(params)
       .then(res => {
-        setViews(res);
-        setURLs(Array.from(new Set(res.map(r => r.url))));
+        setParams(params);
+        setViews(res[0]);
         setLoaidng(false);
+        return res;
       })
       .catch(() => setLoaidng(false));
   }, []);
 
-  const getViewsByUrl = useCallback(url => {
-    if (!url || loading) {
-      return;
-    }
-
-    setLoaidng(true);
-    ViewProvider.getViewsByUrl(url)
-      .then(res => {
-        setViews(res);
-
-        setLoaidng(false);
-      })
-      .catch(() => setLoaidng(false));
-  }, []);
-
-  // 删除评论
-  const deleteView = useCallback(id => {
-    ViewProvider.deleteView(id).then(() => {
-      message.success("访问删除成功");
-      url ? getViewsByUrl(url) : getViews();
-    });
-  }, []);
-
-  useEffect(() => {
-    getViews();
-  }, []);
-
-  useEffect(() => {
-    getViewsByUrl(url);
-  }, [url]);
-
-  const uvs = useMemo(() => {
-    return Array.from(new Set(views.map(view => view.userAgent))).length;
-  }, [views]);
-  const pvs = useMemo(() => {
-    return views.length;
-  }, [views]);
+  // 删除
+  const deleteView = useCallback(
+    id => {
+      ViewProvider.deleteView(id).then(() => {
+        message.success("访问删除成功");
+        getViews(params);
+      });
+    },
+    [params]
+  );
 
   const columns = [
     {
@@ -170,7 +131,7 @@ const Views: NextPage = () => {
         <Badge
           count={views}
           showZero={true}
-          overflowCount={999}
+          overflowCount={Infinity}
           style={{ backgroundColor: "#52c41a" }}
         />
       )
@@ -208,81 +169,31 @@ const Views: NextPage = () => {
     )
   };
 
-  const VPV = () => {
-    return (
-      <Form layout="inline">
-        <Form.Item label={"UV"}>
-          <Badge
-            count={uvs}
-            showZero={true}
-            overflowCount={Infinity}
-            style={{ backgroundColor: "#f50" }}
-          />
-        </Form.Item>
-        <Form.Item label={"PV"}>
-          <Badge
-            count={pvs}
-            showZero={true}
-            overflowCount={Infinity}
-            style={{ backgroundColor: "#2db7f5" }}
-          />
-        </Form.Item>
-      </Form>
-    );
-  };
-
   return (
     <AdminLayout>
       <div className={style.wrapper}>
-        <Row style={{ marginBottom: 16 }}>
-          <Col xs={24} sm={18}>
-            <Select
-              style={{ width: "100%" }}
-              placeholder="查看指定页面统计"
-              onChange={setURL}
-              value={url}
-            >
-              {urls.map(url => {
-                return (
-                  <Select.Option key={url} value={url}>
-                    {url}
-                  </Select.Option>
-                );
-              })}
-            </Select>
-          </Col>
-          <Col xs={24} sm={6} className={style.btns}>
-            <Button.Group>
-              <Button
-                loading={loading}
-                icon="reload"
-                onClick={() => {
-                  url ? getViewsByUrl(url) : getViews();
-                }}
-              >
-                刷新
-              </Button>
-              <Button
-                icon="rollback"
-                onClick={() => {
-                  setURL("");
-                  getViews();
-                }}
-                disabled={loading}
-              >
-                重置
-              </Button>
-            </Button.Group>
-          </Col>
-        </Row>
-        <div className={style.upv}>
-          <VPV />
-        </div>
-        <Table
+        <SPTDataTable
+          data={views}
+          defaultTotal={0}
           columns={[...columns, actionColumn]}
-          dataSource={views}
-          rowKey={"id"}
-          footer={() => <VPV />}
+          searchFields={[
+            {
+              label: "IP",
+              field: "ip",
+              msg: "请输入 IP 地址"
+            },
+            {
+              label: "User Agent",
+              field: "userAgent",
+              msg: "请输入 User Agent"
+            },
+            {
+              label: "URL",
+              field: "url",
+              msg: "请输入 URL"
+            }
+          ]}
+          onSearch={getViews}
         />
       </div>
     </AdminLayout>

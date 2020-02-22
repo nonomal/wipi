@@ -4,24 +4,28 @@ import {
   HttpStatus,
   HttpCode,
   Post,
+  Query,
   Body,
   UseGuards,
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard, Roles } from '../auth/roles.guard';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 
 @Controller('user')
+@UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
-  findAll(): Promise<User[]> {
-    return this.userService.findAll();
+  findAll(@Query() query) {
+    return this.userService.findAll(query);
   }
 
   /**
@@ -31,7 +35,6 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  @UseGuards(JwtAuthGuard)
   async register(@Body() user: Partial<User>): Promise<User> {
     return await this.userService.createUser(user);
   }
@@ -43,6 +46,7 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('update')
   @HttpCode(HttpStatus.CREATED)
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   async update(@Body() user: Partial<User>): Promise<User> {
     return await this.userService.updateById(user.id, user);

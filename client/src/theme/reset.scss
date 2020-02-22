@@ -51,6 +51,14 @@ body {
       transform 0.25s linear, border-color 0.25s linear;
   }
 
+  @media (max-width: 768px) {
+    .container {
+      width: 100%;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+
   @media (min-width: 768px) {
     .container {
       width: 768px;
@@ -72,10 +80,7 @@ body {
   .container {
     margin-right: auto;
     margin-left: auto;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 48px;
-    min-height: calc(100vh - 64px - 153px);
+    // min-height: calc(100vh - 64px - 153px);
   }
 
   .ant-breadcrumb,

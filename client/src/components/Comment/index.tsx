@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Row, Col, Comment, Button, Input, Icon, message } from "antd";
+import {
+  Row,
+  Col,
+  Comment,
+  Button,
+  Input,
+  Icon,
+  Pagination,
+  message
+} from "antd";
 import { format } from "timeago.js";
 import cls from "classnames";
 import { CommentProvider } from "@providers/comment";
@@ -161,16 +170,23 @@ export const MyComment: React.FC<IProps> = ({
   articleId,
   isInPage = false
 }) => {
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(6);
   const [comments, setComments] = useState<IComment[]>([]);
 
-  const getComments = () => {
-    CommentProvider.getArticleComments(articleId).then(res => {
-      setComments(res);
+  const getComments = useCallback((page, pageSize) => {
+    CommentProvider.getArticleComments(articleId, {
+      page,
+      pageSize
+    }).then(res => {
+      setComments(res[0]);
+      setTotal(res[1]);
     });
-  };
+  }, []);
 
   useEffect(() => {
-    getComments();
+    getComments(page, pageSize);
   }, [articleId]);
 
   return (
@@ -183,11 +199,25 @@ export const MyComment: React.FC<IProps> = ({
             isInPage={isInPage}
             parentCommentId={null}
             parentComment={null}
-            onSuccess={getComments}
+            onSuccess={() => {}} // 因为要审核，所以不必重新拉取数据
           />
         }
       />
       {renderCommentList(articleId, comments, getComments, isInPage)}
+      <div className={style.pagination}>
+        <Pagination
+          simple
+          total={total}
+          current={page}
+          pageSize={pageSize}
+          hideOnSinglePage={true}
+          onChange={(page, pageSize) => {
+            setPage(page);
+            setPageSize(pageSize);
+            getComments(page, pageSize);
+          }}
+        />
+      </div>
     </div>
   );
 };

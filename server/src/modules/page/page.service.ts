@@ -37,16 +37,27 @@ export class PageService {
   /**
    * 获取所有页面
    */
-  async findAll(status = null): Promise<Page[]> {
+  async findAll(queryParams: any = {}): Promise<[Page[], number]> {
     const query = this.pageRepository
       .createQueryBuilder('page')
       .orderBy('publishAt', 'DESC');
 
+    const { page = 1, pageSize = 12, status, ...otherParams } = queryParams;
+    query.skip((+page - 1) * +pageSize);
+    query.take(+pageSize);
+
     if (status) {
       query.andWhere('page.status=:status').setParameter('status', status);
     }
+    if (otherParams) {
+      Object.keys(otherParams).forEach(key => {
+        query
+          .andWhere(`page.${key} LIKE :${key}`)
+          .setParameter(`${key}`, `%${otherParams[key]}%`);
+      });
+    }
 
-    return query.getMany();
+    return query.getManyAndCount();
   }
 
   /**

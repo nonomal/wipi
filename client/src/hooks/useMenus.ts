@@ -23,7 +23,10 @@ export const useMenus = () => {
   useEffect(() => {
     if (!cache) {
       PageProvider.getAllPublisedPages().then(res => {
-        const arr = res.map(r => ({ path: `/page/` + r.path, label: r.name }));
+        const arr = res[0].map(r => ({
+          path: `/page/` + r.path,
+          label: r.name
+        }));
         value.current = arr;
         cache = arr;
         setMounted(true);

@@ -8,12 +8,16 @@ import { User } from './modules/user/user.entity';
 // 文件模块
 import { FileModule } from './modules/file/file.module';
 import { File } from './modules/file/file.entity';
-// 标签模块
-import { TagModule } from './modules/tag/tag.module';
-import { Tag } from './modules/tag/tag.entity';
+
 // 文章模块
 import { ArticleModule } from './modules/article/article.module';
 import { Article } from './modules/article/article.entity';
+// 分类模块
+import { CategoryModule } from './modules/category/category.module';
+import { Category } from './modules/category/category.entity';
+// 标签模块
+import { TagModule } from './modules/tag/tag.module';
+import { Tag } from './modules/tag/tag.entity';
 // 评论模块
 import { CommentModule } from './modules/comment/comment.module';
 import { Comment } from './modules/comment/comment.entity';
@@ -45,6 +49,7 @@ import { config } from './config';
         File,
         Tag,
         Article,
+        Category,
         Comment,
         Setting,
         SMTP,
@@ -58,6 +63,7 @@ import { config } from './config';
     FileModule,
     TagModule,
     ArticleModule,
+    CategoryModule,
     CommentModule,
     SettingModule,
     SMTPModule,

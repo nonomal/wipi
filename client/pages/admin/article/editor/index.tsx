@@ -9,11 +9,7 @@ import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import style from "./index.module.scss";
 
-interface IProps {
-  articles: IArticle[];
-}
-
-const Editor: NextPage<IProps> = ({ articles = [] }) => {
+const Editor: NextPage = () => {
   const [mounted, setMounted] = useState(false);
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
@@ -162,11 +158,6 @@ const Editor: NextPage<IProps> = ({ articles = [] }) => {
       </div>
     </AdminLayout>
   );
-};
-
-Editor.getInitialProps = async () => {
-  const articles = await ArticleProvider.getArticles();
-  return { articles };
 };
 
 export default Editor;

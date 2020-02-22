@@ -31,6 +31,10 @@ const menus = [
         dynamicPath: "/admin/article/editor/[id]"
       },
       {
+        label: "分类管理",
+        path: "/admin/article/category"
+      },
+      {
         label: "标签管理",
         path: "/admin/article/tags"
       }
@@ -81,6 +85,12 @@ const menus = [
     icon: "mail",
     label: "邮件管理",
     path: "/admin/mail"
+  },
+
+  {
+    icon: "user",
+    label: "用户管理",
+    path: "/admin/user"
   },
 
   {

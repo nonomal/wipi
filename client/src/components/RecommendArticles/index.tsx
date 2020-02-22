@@ -1,29 +1,57 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArticleProvider } from "@providers/article";
 import { ArticleList } from "@components/ArticleList";
+import { format } from "timeago.js";
+import style from "./index.module.scss";
 
-let cache = null;
+interface IProps {
+  articleId?: string;
+  mode?: "inline" | "vertical";
+  needTitle?: boolean;
+  asCard?: boolean;
+}
 
-export const RecommendArticles = () => {
-  const articles = useRef(cache || []);
-  const [, setUpdate] = useState(false);
+export const RecommendArticles: React.FC<IProps> = ({
+  mode = "vertical",
+  articleId = null,
+  needTitle = true,
+  asCard = false
+}) => {
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    if (cache) {
-      return;
-    }
-
-    ArticleProvider.getArticles(true).then(res => {
-      articles.current = res.slice(0, 6);
-      cache = res.slice(0, 6);
-      setUpdate(true);
+    ArticleProvider.getRecommend(articleId).then(res => {
+      setArticles(res);
     });
-  }, []);
+  }, [articleId]);
 
   return (
-    <div>
-      <ArticleList articles={articles.current} />
+    <div className={style.wrapper}>
+      {needTitle && <div className={style.title}>推荐文章</div>}
+      {mode === "inline" ? (
+        <ul>
+          {articles.map(article => {
+            return (
+              <li key={article.id}>
+                <div>
+                  <Link href={`/article/[id]`} as={`/article/${article.id}`}>
+                    <a>
+                      <p className={style.articleTitle}>
+                        <strong>{article.title}</strong>
+                        {" · "}
+                        <span>{format(article.updateAt, "zh_CN")}</span>
+                      </p>
+                    </a>
+                  </Link>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <ArticleList articles={articles} asCard={asCard} />
+      )}
     </div>
   );
 };

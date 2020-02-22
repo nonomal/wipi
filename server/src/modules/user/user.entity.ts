@@ -40,6 +40,12 @@ export class User {
   @Column({ length: 500, default: null })
   mail: string; // 邮箱
 
+  @Column('simple-enum', { enum: ['admin', 'visitor'], default: 'visitor' })
+  role: string; // 用户角色
+
+  @Column('simple-enum', { enum: ['locked', 'active'], default: 'active' })
+  status: string; // 用户状态
+
   @CreateDateColumn({
     type: 'datetime',
     comment: '创建时间',

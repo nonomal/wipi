@@ -1,12 +1,49 @@
 @import "../src/theme/var.scss";
 
-.loader {
-  text-align: center;
-  padding-bottom: 1.5rem;
-}
+.container {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 
-.articleList {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
+  .content {
+    position: relative;
+    padding-right: 21.5rem;
+    padding-bottom: 2rem;
+
+    .loading {
+      padding: 2rem 0 1rem;
+      text-align: center;
+    }
+
+    .aside {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 21.5rem;
+      padding: 0 0 0 1.5rem;
+
+      > div {
+        &.isFixed {
+          position: fixed;
+          top: 1rem;
+          width: 20.5rem;
+        }
+      }
+
+      .footer {
+        border-top: 1px solid #e5e5e5;
+        background-color: transparent;
+        color: #8e8787;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .content {
+      padding-right: 0;
+    }
+
+    .aside {
+      display: none;
+    }
+  }
 }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NextPage } from "next";
-import { Row, Col } from "antd";
 import hljs from "highlight.js";
 import "highlight.js/styles/monokai-sublime.css";
 import { Layout } from "@/layout/Layout";
@@ -56,32 +55,23 @@ const Page: NextPage<IProps> = ({ page }) => {
           <p>页面不存在</p>
         </div>
       ) : (
-        <Row gutter={16}>
-          <Col sm={24} className={style.container}>
-            <div className="container">
+        <div className={style.container}>
+          <div className="container">
+            {page.cover && (
               <div className={style.meta}>
-                {page.cover && (
-                  <img
-                    className={style.cover}
-                    src={page.cover}
-                    alt="文章封面"
-                  />
-                )}
+                <img className={style.cover} src={page.cover} alt="文章封面" />
               </div>
-              <div className={style.content}>
-                <div
-                  ref={ref}
-                  className={"markdown"}
-                  dangerouslySetInnerHTML={{ __html: page.html }}
-                ></div>
-              </div>
+            )}
+            <div className={style.content}>
+              <div
+                ref={ref}
+                className={"markdown"}
+                dangerouslySetInnerHTML={{ __html: page.html }}
+              ></div>
             </div>
-
-            <CommentAndRecommendArticles
-              article={{ isCommentable: true, id: page.id } as any}
-            />
-          </Col>
-        </Row>
+          </div>
+          <CommentAndRecommendArticles pageId={page.id} isCommentable={true} />
+        </div>
       )}
     </Layout>
   );

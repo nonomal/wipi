@@ -24,6 +24,7 @@ interface IArticle {
   html: string;
   toc: string;
   views: number;
+  category: any;
   tags?: [any];
   status: string;
   password?: string; // 访问密码
@@ -38,8 +39,12 @@ interface ITag {
   id: string;
   label: string;
   value: string;
-  icon: string;
-  articles?: IArticle[];
+}
+
+interface ICategory {
+  id: string;
+  label: string;
+  value: string;
 }
 
 interface IPage {

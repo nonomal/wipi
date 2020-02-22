@@ -12,10 +12,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard, Roles } from '../auth/roles.guard';
 import { ArticleService } from './article.service';
 import { Article } from './article.entity';
 
 @Controller('article')
+@UseGuards(RolesGuard)
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
@@ -24,6 +26,7 @@ export class ArticleController {
    * @param article
    */
   @Post()
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   create(@Body() article) {
     return this.articleService.create(article);
@@ -33,8 +36,24 @@ export class ArticleController {
    * 获取所有文章
    */
   @Get()
-  findAll(@Query('status') status): Promise<Article[]> {
-    return this.articleService.findAll(status);
+  findAll(@Query() queryParams) {
+    return this.articleService.findAll(queryParams);
+  }
+
+  /**
+   * 获取标签下所有文章
+   */
+  @Get('/category/:id')
+  findArticlesByCategory(@Param('id') category, @Query() queryParams) {
+    return this.articleService.findArticlesByCategory(category, queryParams);
+  }
+
+  /**
+   * 获取标签下所有文章
+   */
+  @Get('/tag/:id')
+  findArticlesByTag(@Param('id') tag, @Query() queryParams) {
+    return this.articleService.findArticlesByTag(tag, queryParams);
   }
 
   /**
@@ -43,6 +62,14 @@ export class ArticleController {
   @Get('/archives')
   getArchives(): Promise<{ [key: string]: Article[] }> {
     return this.articleService.getArchives();
+  }
+
+  /**
+   * 推荐文章
+   */
+  @Get('/recommend')
+  recommend(@Query('articleId') articleId) {
+    return this.articleService.recommend(articleId);
   }
 
   /**
@@ -65,6 +92,9 @@ export class ArticleController {
     return this.articleService.checkPassword(id, article);
   }
 
+  /**
+   * 文章访问量 +1
+   */
   @Post(':id/views')
   @HttpCode(HttpStatus.OK)
   updateViewsById(@Param('id') id) {
@@ -77,6 +107,7 @@ export class ArticleController {
    * @param article
    */
   @Patch(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   updateById(@Param('id') id, @Body() article) {
     return this.articleService.updateById(id, article);
@@ -87,6 +118,7 @@ export class ArticleController {
    * @param id
    */
   @Delete(':id')
+  @Roles('admin')
   @UseGuards(JwtAuthGuard)
   deleteById(@Param('id') id) {
     return this.articleService.deleteById(id);

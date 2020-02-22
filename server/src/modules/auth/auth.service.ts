@@ -10,14 +10,18 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  createToken(id: number | string) {
-    const accessToken = this.jwtService.sign({ id });
+  createToken(user: Partial<User>) {
+    const accessToken = this.jwtService.sign(user);
     return accessToken;
   }
 
   async login(user: Partial<User>) {
     const data = await this.userService.login(user);
-    const token = this.createToken(data.id);
+    const token = this.createToken({
+      name: data.name,
+      mail: data.mail,
+      role: data.role,
+    });
     return Object.assign(data, { token });
   }
 

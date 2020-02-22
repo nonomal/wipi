@@ -14,9 +14,9 @@ export const SearchKeyWordChart = () => {
     }
 
     setLoaidng(true);
-    SearchProvider.getRecords()
+    SearchProvider.getRecords({ page: 1, pageSize: 500 })
       .then(res => {
-        setData(res);
+        setData(res[0].reverse());
         setLoaidng(false);
       })
       .catch(() => setLoaidng(false));

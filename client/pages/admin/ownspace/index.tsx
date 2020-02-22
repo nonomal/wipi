@@ -19,29 +19,33 @@ import { FileSelectDrawer } from "@components/admin/FileSelectDrawer";
 import { ArticleProvider } from "@providers/article";
 import { CommentProvider } from "@providers/comment";
 import { TagProvider } from "@/providers/tag";
+import { CategoryProvider } from "@/providers/category";
 import { FileProvider } from "@/providers/file";
 import { UserProvider } from "@providers/user";
 
 interface IOwnspaceProps {
-  articles: IArticle[];
-  tags: ITag[];
-  files: IFile[];
-  comments: IComment[];
+  articlesCount: number;
+  tagsCount: number;
+  categoryCount: number;
+  filesCount: number;
+  commentsCount: number;
 }
 
 const { TabPane } = Tabs;
 
 const Ownspace: NextPage<IOwnspaceProps> = ({
-  articles = [],
-  tags = [],
-  files = [],
-  comments = []
+  articlesCount = 0,
+  tagsCount = 0,
+  categoryCount = 0,
+  filesCount = 0,
+  commentsCount = 0
 }) => {
   const data = [
-    `累计发表了 ` + articles.length + " 篇文章",
-    `累计创建了 ` + tags.length + " 个标签",
-    `累计上传了 ` + files.length + " 个文件",
-    `累计获得了 ` + comments.length + " 个评论"
+    `累计发表了 ` + articlesCount + " 篇文章",
+    `累计创建了 ` + categoryCount + " 个分类",
+    `累计创建了 ` + tagsCount + " 个标签",
+    `累计上传了 ` + filesCount + " 个文件",
+    `累计获得了 ` + commentsCount + " 个评论"
   ];
   const [visible, setVisible] = useState<boolean>(false);
   const [user, setUser] = useState<IUser | null>(null);
@@ -50,7 +54,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
   const [newPassword2, setNewPassword2] = useState(null);
 
   useEffect(() => {
-    let info = window.sessionStorage.getItem("userInfo");
+    let info = window.localStorage.getItem("user");
     try {
       info = JSON.parse(info);
       setUser(info as any);
@@ -212,14 +216,21 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
 };
 
 Ownspace.getInitialProps = async () => {
-  const [articles, tags, files, comments] = await Promise.all([
-    ArticleProvider.getArticles(),
+  const [articles, tags, category, files, comments] = await Promise.all([
+    ArticleProvider.getArticles({ page: 1, pageSize: 6 }),
     TagProvider.getTags(),
-    FileProvider.getFiles(),
-    CommentProvider.getComments()
+    CategoryProvider.getCategory(),
+    FileProvider.getFiles({ page: 1, pageSize: 6 }),
+    CommentProvider.getComments({ page: 1, pageSize: 6 })
   ]);
 
-  return { articles, tags, files, comments };
+  return {
+    articlesCount: articles[1],
+    tagsCount: tags.length,
+    categoryCount: category.length,
+    filesCount: files[1],
+    commentsCount: comments[1]
+  };
 };
 
 export default Ownspace;
