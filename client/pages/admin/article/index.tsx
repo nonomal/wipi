@@ -98,8 +98,8 @@ const columns = [
   },
   {
     title: "发布时间",
-    dataIndex: "updateAt",
-    key: "updateAt",
+    dataIndex: "createAt",
+    key: "createAt",
     render: date => dayjs.default(date).format("YYYY-MM-DD HH:mm:ss")
   }
 ];

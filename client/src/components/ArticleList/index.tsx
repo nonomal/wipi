@@ -46,7 +46,7 @@ export const ArticleList: React.FC<IProps> = ({
                     <p className={style.desc}>{article.summary}</p>
                     <p className={style.meta}>
                       {dayjs
-                        .default(article.updateAt)
+                        .default(article.createAt)
                         .format("YYYY-MM-DD HH:mm:ss")}
                     </p>
                   </div>

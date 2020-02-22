@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { ArticleProvider } from "@providers/article";
 import { ArticleList } from "@components/ArticleList";
@@ -12,26 +12,52 @@ interface IProps {
   asCard?: boolean;
 }
 
+let cache = null;
+
+function isEqual(a, b) {
+  if (a.length === 0 && b.lenth === 0) {
+    return true;
+  }
+
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  return a.every((c, i) => c === b[i]);
+}
+
 export const RecommendArticles: React.FC<IProps> = ({
   mode = "vertical",
   articleId = null,
   needTitle = true,
   asCard = false
 }) => {
-  const [articles, setArticles] = useState([]);
+  const articles = useRef(cache);
+  const [, setUpdate] = useState(false);
 
   useEffect(() => {
     ArticleProvider.getRecommend(articleId).then(res => {
-      setArticles(res);
+      const isSame = isEqual(
+        (res || []).map(t => t.id),
+        (cache || []).map(t => t.id)
+      );
+
+      if (isSame) {
+        return;
+      }
+
+      articles.current = res;
+      cache = res;
+      setUpdate(true);
     });
-  }, [articleId]);
+  }, [articleId, cache]);
 
   return (
     <div className={style.wrapper}>
       {needTitle && <div className={style.title}>推荐文章</div>}
       {mode === "inline" ? (
         <ul>
-          {articles.map(article => {
+          {(articles.current || []).map(article => {
             return (
               <li key={article.id}>
                 <div>
@@ -40,7 +66,7 @@ export const RecommendArticles: React.FC<IProps> = ({
                       <p className={style.articleTitle}>
                         <strong>{article.title}</strong>
                         {" · "}
-                        <span>{format(article.updateAt, "zh_CN")}</span>
+                        <span>{format(article.createAt, "zh_CN")}</span>
                       </p>
                     </a>
                   </Link>
@@ -50,7 +76,7 @@ export const RecommendArticles: React.FC<IProps> = ({
           })}
         </ul>
       ) : (
-        <ArticleList articles={articles} asCard={asCard} />
+        <ArticleList articles={articles.current || []} asCard={asCard} />
       )}
     </div>
   );
