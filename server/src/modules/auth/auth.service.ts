@@ -19,7 +19,7 @@ export class AuthService {
     const data = await this.userService.login(user);
     const token = this.createToken({
       name: data.name,
-      mail: data.mail,
+      email: data.email,
       role: data.role,
     });
     return Object.assign(data, { token });

@@ -38,7 +38,7 @@ export class User {
   avatar: string; // 头像
 
   @Column({ length: 500, default: null })
-  mail: string; // 邮箱
+  email: string; // 邮箱
 
   @Column('simple-enum', { enum: ['admin', 'visitor'], default: 'visitor' })
   role: string; // 用户角色

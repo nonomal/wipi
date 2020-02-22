@@ -84,8 +84,8 @@ export class CommentService {
       // 管理用户应当只存在一个
       // TODO:也可能存在多个
       const [user] = await this.userService.findAll({ role: 'admin' });
-      if (user && user[0] && user[0].mail) {
-        to = user[0].mail;
+      if (user && user[0] && user[0].email) {
+        to = user[0].email;
       } else {
         to = from;
       }
