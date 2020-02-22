@@ -8,7 +8,6 @@ import { User } from './modules/user/user.entity';
 // 文件模块
 import { FileModule } from './modules/file/file.module';
 import { File } from './modules/file/file.entity';
-
 // 文章模块
 import { ArticleModule } from './modules/article/article.module';
 import { Article } from './modules/article/article.entity';
