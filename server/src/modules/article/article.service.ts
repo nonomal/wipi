@@ -267,6 +267,7 @@ export class ArticleService {
       .leftJoinAndSelect('article.tags', 'tags');
 
     if (!articleId) {
+      query.where('article.status=:status').setParameter('status', 'publish');
       return query.take(6).getMany();
     } else {
       const sub = this.articleRepository
@@ -307,7 +308,7 @@ export class ArticleService {
       });
 
       const data = await query.getMany();
-      return data.filter(d => d.id !== articleId);
+      return data.filter(d => d.id !== articleId && d.status === 'publish');
     }
   }
 }
