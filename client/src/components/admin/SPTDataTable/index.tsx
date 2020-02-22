@@ -23,7 +23,7 @@ export const SPTDataTable: React.FC<IProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(6);
+  const [pageSize, setPageSize] = useState(8);
   const [total, setTotal] = useState(defaultTotal);
   const [searchParams, updateSearchParams] = useState({});
 

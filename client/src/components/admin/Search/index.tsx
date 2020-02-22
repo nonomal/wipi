@@ -24,19 +24,19 @@ const _Search: React.FC<IProps> = ({ form, fields = [], onSearch }) => {
     const children = [];
     for (let field of fields) {
       children.push(
-        <Col span={8} xs={24} sm={6} key={field.field}>
-          <Form.Item label={field.label}>
-            {getFieldDecorator(field.field, {
-              rules: field.rules
-            })(
-              field.children ? (
-                field.children
-              ) : (
-                <Input width={180} placeholder={field.msg || "placeholder"} />
-              )
-            )}
-          </Form.Item>
-        </Col>
+        // <Col span={8} xs={24} sm={6} key={field.field}>
+        <Form.Item label={field.label}>
+          {getFieldDecorator(field.field, {
+            rules: field.rules
+          })(
+            field.children ? (
+              field.children
+            ) : (
+              <Input width={180} placeholder={field.msg || "placeholder"} />
+            )
+          )}
+        </Form.Item>
+        // </Col>
       );
     }
     return children;
@@ -57,15 +57,16 @@ const _Search: React.FC<IProps> = ({ form, fields = [], onSearch }) => {
     <Form className={style.wrapper} layout="inline" onSubmit={handleSearch}>
       <Row className={style.content}>
         {getFields()}
-
-        <Col span={8} xs={24} sm={6} key={"btns"}>
+        {/* <Col span={8} xs={24} sm={6} key={"btns"}> */}
+        <Form.Item>
           <Button type="primary" htmlType="submit">
             搜索
           </Button>
           <Button style={{ marginLeft: 8 }} onClick={handleReset}>
             重置
           </Button>
-        </Col>
+        </Form.Item>
+        {/* </Col> */}
       </Row>
     </Form>
   );

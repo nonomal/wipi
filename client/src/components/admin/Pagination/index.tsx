@@ -13,7 +13,7 @@ interface IProps {
 
 export const usePagination = ({
   page: defaultPage = 1,
-  pageSize: defaultPageSize = 12
+  pageSize: defaultPageSize = 8
 }): [{ page: number; pageSize: number }, (arg: any, arg1: any) => void] => {
   const [page, setPage] = useState(defaultPage);
   const [pageSize, setPageSize] = useState(defaultPageSize);
@@ -37,7 +37,7 @@ export const Pagination: React.FC<IProps> = ({
     <div className={style.wrapper}>
       {total > 0 ? (
         <APagination
-          pageSizeOptions={["6", "12", "24", "36"]}
+          pageSizeOptions={["8", "12", "24", "36"]}
           showSizeChanger
           total={total}
           current={page}

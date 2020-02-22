@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Drawer, Card, List, message } from "antd";
+import { Alert, Drawer, Card, List, message } from "antd";
 import { FileProvider } from "@providers/file";
 import { SPTDataTable } from "@components/admin/SPTDataTable";
 import style from "./index.module.scss";
@@ -52,15 +52,14 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
 
   return (
     <Drawer
-      width={640}
+      width={760}
       placement="right"
       title={"文件选择"}
       closable={true}
       onClose={onClose}
       visible={visible}
     >
-      {isCopy && <p>点击图片即可复制</p>}
-
+      {isCopy && <Alert message="点击图片即可复制" type="info" />}
       <SPTDataTable
         data={files}
         defaultTotal={0}
@@ -85,7 +84,6 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
               sm: 3
             }}
             dataSource={files}
-            pagination={{ pageSize: 9 }}
             renderItem={(file: IFile) => (
               <List.Item>
                 <Card
