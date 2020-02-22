@@ -160,6 +160,12 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
                       defaultValue={user.email}
                       onChange={e => {
                         let value = e.target.value;
+                        let regexp = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+
+                        if (!regexp.test(value)) {
+                          return;
+                        }
+
                         setUser(user => {
                           user.email = value;
                           return user;
