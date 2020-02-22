@@ -55,9 +55,9 @@ const _Register: React.FC<IProps> = ({ form }) => {
   return (
     <div className={style.wrapper}>
       <div className={style.container}>
-        <h2>用户注册</h2>
+        <h2>访客注册</h2>
         <Form onSubmit={submit}>
-          <Form.Item hasFeedback>
+          <Form.Item hasFeedback label="账户">
             {getFieldDecorator("name", {
               rules: [{ required: true, message: "请输入用户名！" }]
             })(
@@ -71,7 +71,7 @@ const _Register: React.FC<IProps> = ({ form }) => {
               />
             )}
           </Form.Item>
-          <Form.Item hasFeedback>
+          <Form.Item hasFeedback label="密码">
             {getFieldDecorator("password", {
               rules: [
                 { required: true, message: "请输入密码！" },
@@ -92,7 +92,7 @@ const _Register: React.FC<IProps> = ({ form }) => {
               />
             )}
           </Form.Item>
-          <Form.Item hasFeedback>
+          <Form.Item hasFeedback label="确认密码">
             {getFieldDecorator("confirm", {
               rules: [
                 { required: true, message: "请再次输入密码！" },

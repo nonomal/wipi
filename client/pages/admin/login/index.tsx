@@ -34,7 +34,7 @@ const _Login: React.FC<ILoginProps> = ({ form }) => {
       <div className={style.container}>
         <h2>系统登录</h2>
         <Form onSubmit={submit}>
-          <Form.Item>
+          <Form.Item label="账户">
             {getFieldDecorator("name", {
               rules: [{ required: true, message: "请输入用户名！" }]
             })(
@@ -47,7 +47,7 @@ const _Login: React.FC<ILoginProps> = ({ form }) => {
               />
             )}
           </Form.Item>
-          <Form.Item>
+          <Form.Item label="密码">
             {getFieldDecorator("password", {
               rules: [{ required: true, message: "请输入密码！" }]
             })(
