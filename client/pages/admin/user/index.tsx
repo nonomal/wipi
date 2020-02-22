@@ -38,7 +38,7 @@ const Page: NextPage = () => {
     },
     {
       title: "邮箱",
-      dataIndex: "mail",
+      dataIndex: "email",
       key: "mail",
       width: "20%"
     },
@@ -118,7 +118,7 @@ const Page: NextPage = () => {
             },
             {
               label: "邮箱",
-              field: "mail",
+              field: "email",
               msg: "请输入账户邮箱"
             },
             {

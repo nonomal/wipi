@@ -1,7 +1,7 @@
 interface IUser {
   name: string;
   avatar: string;
-  mail: string;
+  email: string;
   token: string;
 }
 

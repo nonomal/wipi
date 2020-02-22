@@ -17,7 +17,7 @@ const _Login: React.FC<ILoginProps> = ({ form, visible, onLogin, onClose }) => {
     form.validateFields((err, values) => {
       if (!err) {
         UserProvider.login(values).then(userInfo => {
-          sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+          localStorage.setItem("user", JSON.stringify(userInfo));
           sessionStorage.setItem("token", userInfo.token);
           onLogin(userInfo);
         });

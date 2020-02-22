@@ -63,10 +63,16 @@ export const Editor = ({
     CommentProvider.addComment(data).then(() => {
       message.success("评论成功，已提交审核");
       setLoading(false);
-      setName("");
-      setEmail("");
       setContent("");
-      window.localStorage.setItem("user", JSON.stringify({ name, email }));
+      let userInfo: any = window.localStorage.getItem("user");
+      try {
+        userInfo = JSON.parse(userInfo);
+        window.localStorage.setItem(
+          "user",
+          JSON.stringify(Object.assign(userInfo, { name, email }))
+        );
+      } catch (err) {}
+
       onSuccess();
     });
   };

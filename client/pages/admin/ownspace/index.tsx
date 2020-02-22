@@ -64,7 +64,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
   const save = useCallback(() => {
     UserProvider.update(user).then(res => {
       setUser(res);
-      window.sessionStorage.setItem("userInfo", JSON.stringify(res));
+      window.localStorage.setItem("user", JSON.stringify(res));
       message.success("用户信息已保存");
     });
   }, [user]);
@@ -87,7 +87,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
     const data = { ...user, oldPassword, newPassword: newPassword2 };
     UserProvider.updatePassword(data).then(() => {
       message.success("密码已更新，请重新登录");
-      window.sessionStorage.clear();
+      window.localStorage.clear();
       Router.replace("/admin/login");
     });
   };
@@ -157,11 +157,11 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
                   <Form.Item label="邮箱">
                     <Input
                       placeholder="请输入邮箱"
-                      defaultValue={user.mail}
+                      defaultValue={user.email}
                       onChange={e => {
                         let value = e.target.value;
                         setUser(user => {
-                          user.mail = value;
+                          user.email = value;
                           return user;
                         });
                       }}
