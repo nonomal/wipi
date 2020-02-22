@@ -70,7 +70,7 @@ export class ArticleService {
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.tags', 'tag')
       .leftJoinAndSelect('article.category', 'category')
-      .orderBy('article.updateAt', 'DESC');
+      .orderBy('article.createAt', 'DESC');
 
     const { page = 1, pageSize = 12, status, ...otherParams } = queryParams;
 
@@ -102,7 +102,7 @@ export class ArticleService {
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.category', 'category')
       .where('category.value=:value', { value: category })
-      .orderBy('article.updateAt', 'DESC');
+      .orderBy('article.createAt', 'DESC');
 
     const { page, pageSize, status } = queryParams;
     query.skip((+page - 1) * +pageSize);
@@ -125,7 +125,7 @@ export class ArticleService {
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.tags', 'tag')
       .where('tag.value=:value', { value: tag })
-      .orderBy('article.updateAt', 'DESC');
+      .orderBy('article.createAt', 'DESC');
 
     const { page, pageSize, status } = queryParams;
     query.skip((+page - 1) * +pageSize);
@@ -262,7 +262,7 @@ export class ArticleService {
   async recommend(articleId = null) {
     const query = this.articleRepository
       .createQueryBuilder('article')
-      .orderBy('article.updateAt', 'DESC')
+      .orderBy('article.createAt', 'DESC')
       .leftJoinAndSelect('article.category', 'category')
       .leftJoinAndSelect('article.tags', 'tags');
 
@@ -271,7 +271,7 @@ export class ArticleService {
     } else {
       const sub = this.articleRepository
         .createQueryBuilder('article')
-        .orderBy('article.updateAt', 'DESC')
+        .orderBy('article.createAt', 'DESC')
         .leftJoinAndSelect('article.category', 'category')
         .leftJoinAndSelect('article.tags', 'tags')
         .where('article.id=:id')
