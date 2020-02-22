@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import RSS from "@/rss/index.js";
 import { ArticleProvider } from "@providers/article";
 import { SettingProvider } from "@providers/setting";
-import { TagProvider } from "@providers/tag";
+import { CategoryProvider } from "@providers/category";
 const url = require("url");
 
 const Rss: NextPage = () => {
@@ -13,14 +13,14 @@ const Rss: NextPage = () => {
 // 服务端预取数据
 Rss.getInitialProps = async ctx => {
   const { res } = ctx;
-
   res.setHeader("Content-Type", "text/xml");
 
-  const [articles, setting, tags] = await Promise.all([
-    ArticleProvider.getArticles(true),
+  let [articles, setting, categories] = await Promise.all([
+    ArticleProvider.getArticles({ page: 1, pageSize: 99, status: "publish" }),
     SettingProvider.getSetting(),
-    TagProvider.getTags()
+    CategoryProvider.getCategory()
   ]);
+  articles = articles[0];
 
   const feed = new RSS({
     title: setting.systemTitle,
@@ -28,7 +28,7 @@ Rss.getInitialProps = async ctx => {
     feed_url: url.resolve(setting.systemUrl, "rss"),
     site_url: setting.systemUrl,
     author: "https://github.com/zhxuc",
-    categories: tags.map(tag => tag.label)
+    categories: categories.map(c => c.label)
   });
 
   articles.forEach(article => {
@@ -37,7 +37,7 @@ Rss.getInitialProps = async ctx => {
       description: article.summary,
       url: url.resolve(setting.systemUrl, "article/" + article.id),
       date: article.updateAt,
-      categories: (article.tags || []).map(tag => tag.label)
+      categories: [(article.category || {}).label]
     });
   });
 
