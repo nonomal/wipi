@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import Router from "next/router";
 import Link from "next/link";
 import cls from "classnames";
-import { Anchor, Modal, Form, Input, message } from "antd";
+import { Anchor, Modal, Form, Input, message, Tooltip } from "antd";
 import * as dayjs from "dayjs";
 import hljs from "highlight.js";
 import "highlight.js/styles/atelier-dune-dark.css";
@@ -18,6 +18,54 @@ const url = require("url");
 interface IProps {
   article: IArticle;
 }
+
+const buildTocTree = tocs => {
+  let tree: any = [];
+
+  for (let toc of tocs) {
+    let level = toc[0];
+
+    if (!tree.length) {
+      tree.push({ node: toc, children: [] });
+    } else {
+      let pre = tree[tree.length - 1];
+      let nodes = [pre, ...pre.children];
+      nodes.reverse();
+      let target = nodes.find(node => node.node[0] === level - 1);
+
+      if (target) {
+        target.children = target.children || [];
+        target.children.push({ node: toc, children: [] });
+      } else {
+        tree.push({ node: toc, children: [] });
+      }
+    }
+  }
+  return tree;
+};
+
+const renderTocTree = tocs => {
+  return (
+    <>
+      {tocs.filter(Boolean).map(toc => {
+        const node = toc.node;
+        return node && node.length === 3 ? (
+          <Anchor.Link
+            key={node[2]}
+            href={"#" + node[1]}
+            title={
+              <Tooltip title={node[2]} placement={"left"}>
+                {node[2]}
+              </Tooltip>
+            }
+          >
+            {toc.children ? renderTocTree(toc.children) : null}
+          </Anchor.Link>
+        ) : null;
+      })}
+    </>
+  );
+};
 
 const Article: NextPage<IProps> = ({ article }) => {
   const setting = useSetting();
@@ -64,8 +112,8 @@ const Article: NextPage<IProps> = ({ article }) => {
     };
 
     handle();
-    setTocs(tocs);
-  }, []);
+    setTocs(buildTocTree(tocs));
+  }, [article.id]);
 
   // 更新阅读量
   useEffect(() => {
@@ -125,9 +173,9 @@ const Article: NextPage<IProps> = ({ article }) => {
       {/* E 密码检验 */}
 
       {shouldCheckPassWord ? (
-        <>
-          <p>请输入文章密码</p>
-        </>
+        <div className="container">
+          <p style={{ margin: "16px 0" }}>请输入文章密码</p>
+        </div>
       ) : (
         <div>
           <Helmet>
@@ -180,38 +228,44 @@ const Article: NextPage<IProps> = ({ article }) => {
                   className={cls("markdown", style.markdown)}
                   dangerouslySetInnerHTML={{ __html: article.html }}
                 ></div>
-                {article.tags && article.tags.length ? (
-                  <div className={style.tags}>
-                    <div>
-                      <span>标签：</span>
-                      {article.tags.map(tag => {
-                        return (
-                          <div className={style.tag} key={tag.id}>
-                            <Link href={"/tag/[tag]"} as={"/tag/" + tag.value}>
-                              <a>
-                                <span>{tag.label}</span>
-                              </a>
-                            </Link>
-                          </div>
-                        );
-                      })}
+                <div className={style.articleFooter}>
+                  {article.tags && article.tags.length ? (
+                    <div className={style.tags}>
+                      <div>
+                        <span>标签：</span>
+                        {article.tags.map(tag => {
+                          return (
+                            <div className={style.tag} key={tag.id}>
+                              <Link
+                                href={"/tag/[tag]"}
+                                as={"/tag/" + tag.value}
+                              >
+                                <a>
+                                  <span>{tag.label}</span>
+                                </a>
+                              </Link>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
+                  ) : null}
+                  <div>
+                    版权信息：
+                    <a
+                      href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+                      target="_blank"
+                    >
+                      非商用-署名-自由转载
+                    </a>
                   </div>
-                ) : null}
+                </div>
               </div>
               {/* S 文章目录 */}
               {Array.isArray(tocs) && (
                 <div className={style.anchorWidget}>
                   <Anchor targetOffset={32} offsetTop={32} affix={affix}>
-                    {tocs.map((toc, i) => {
-                      return (
-                        <Anchor.Link
-                          key={i + "-" + toc[2]}
-                          href={"#" + toc[1]}
-                          title={toc[2]}
-                        ></Anchor.Link>
-                      );
-                    })}
+                    {renderTocTree(tocs)}
                   </Anchor>
                 </div>
               )}
