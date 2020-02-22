@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import cls from "classnames";
+import Router from "next/router";
 import { Spin } from "antd";
 import { SearchProvider } from "@providers/search";
 import { ArticleList } from "@components/ArticleList";
@@ -33,8 +34,16 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
   }, []);
 
   useEffect(() => {
+    const handle = () => {
+      setKeyword("");
+      onClose();
+    };
+
+    Router.events.on("routeChangeStart", handle);
+
     return () => {
       clearTimeout(timer);
+      Router.events.off("routeChangeStart", handle);
     };
   }, []);
 
