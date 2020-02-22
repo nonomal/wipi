@@ -1,6 +1,7 @@
 import App from "next/app";
 import { ViewProvider } from "@providers/view";
 import { NProgress } from "@components/NProgress";
+import "highlight.js/styles/github-gist.css";
 import "@/theme/antd.less";
 import "@/theme/reset.scss";
 import "@/theme/markdown.scss";

@@ -1,7 +1,6 @@
 import React from "react";
 import { NextPage } from "next";
 import cls from "classnames";
-import "highlight.js/styles/atelier-dune-dark.css";
 import { MyComment } from "@/components/Comment";
 import { RecommendArticles } from "@components/RecommendArticles";
 import style from "./index.module.scss";
@@ -33,11 +32,13 @@ export const CommentAndRecommendArticles: NextPage<IProps> = ({
       {/* S 推荐阅读 */}
       <div className={style.recmmendArticles}>
         <p className={style.title}>推荐阅读</p>
-        <RecommendArticles
-          articleId={articleId}
-          needTitle={false}
-          asCard={false}
-        />
+        <div className={style.articleContainer}>
+          <RecommendArticles
+            articleId={articleId}
+            needTitle={false}
+            asCard={false}
+          />
+        </div>
       </div>
       {/* E 推荐阅读 */}
     </div>

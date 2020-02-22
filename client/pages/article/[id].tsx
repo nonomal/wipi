@@ -7,7 +7,6 @@ import cls from "classnames";
 import { Anchor, Modal, Form, Input, message } from "antd";
 import * as dayjs from "dayjs";
 import hljs from "highlight.js";
-import "highlight.js/styles/atelier-dune-dark.css";
 import { useSetting } from "@/hooks/useSetting";
 import { Layout } from "@/layout/Layout";
 import { ArticleProvider } from "@providers/article";

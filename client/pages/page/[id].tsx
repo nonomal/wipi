@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NextPage } from "next";
 import hljs from "highlight.js";
-import "highlight.js/styles/monokai-sublime.css";
 import { Layout } from "@/layout/Layout";
 import { CommentAndRecommendArticles } from "@components/CommentAndRecommendArticles";
 import { PageProvider } from "@providers/page";

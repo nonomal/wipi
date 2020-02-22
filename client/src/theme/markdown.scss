@@ -212,8 +212,10 @@
         display: block;
         overflow-x: auto;
         padding: 1.4em;
-        color: #abb2bf;
-        background: #282c34;
+        color: #333;
+        line-height: 1.45;
+        background-color: #f6f8fa;
+        border-radius: 3px;
       }
 
       code.language-go:before,
@@ -237,7 +239,7 @@
         position: absolute;
         top: 0;
         right: 0;
-        color: #fff;
+        color: hsla(0, 0%, 54.9%, 0.8);
         text-align: right;
         font-size: 0.75em;
         padding: 5px 10px 0;
