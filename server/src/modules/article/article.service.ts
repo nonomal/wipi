@@ -287,21 +287,23 @@ export class ArticleService {
       const kw2 = nodejieba.extract(summary, topN);
 
       kw1.forEach((kw, i) => {
+        let paramKey = `title_` + i;
         if (i === 0) {
-          query.where('article.title LIKE :title');
+          query.where(`article.title LIKE :${paramKey}`);
         } else {
-          query.orWhere('article.title LIKE :title');
+          query.orWhere(`article.title LIKE :${paramKey}`);
         }
-        query.setParameter('title', `%${kw.word}%`);
+        query.setParameter(paramKey, `%${kw.word}%`);
       });
 
-      kw2.forEach(kw => {
+      kw2.forEach((kw, i) => {
+        let paramKey = `summary_` + i;
         if (!kw1.length) {
-          query.where('article.summary LIKE :summary');
+          query.where(`article.summary LIKE :${paramKey}`);
         } else {
-          query.orWhere('article.summary LIKE :summary');
+          query.orWhere(`article.summary LIKE :${paramKey}`);
         }
-        query.setParameter('summary', `%${kw.word}%`);
+        query.setParameter(paramKey, `%${kw.word}%`);
       });
 
       const data = await query.getMany();
