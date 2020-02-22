@@ -1,8 +1,4 @@
-# wipi
-
-A blog system write by nestjs, nextjs, and MySQL.
-
-前后端分离，服务端渲染的博客系统。支持特性：
+最近疫情比较紧张，在家调休，闲着无聊便写了个前后端分离，服务端渲染的博客系统。支持特性：
 
 - 文章创建、编辑、发布
 - 文章及页面评论
@@ -13,11 +9,10 @@ A blog system write by nestjs, nextjs, and MySQL.
 - 动态系统设置（系统标题、Logo、favicon、页脚及 SEO 配置等）
 - 系统访问统计（ip + user-agent）
 
-## 线上预览
+使用技术：react.js typescript nextjs nestjs mysql。
+GitHub 地址：https://github.com/zhxuc/wipi （欢迎 star）。
 
-- 首页：https://custw.qifengle1412.cn/
-- 后台：https://custw.qifengle1412.cn/admin/login
-- 账户：wipi，密码：wipi123456（请不要随便删数据哦）
+## 线上预览
 
 ### 前台页面
 
@@ -25,43 +20,43 @@ A blog system write by nestjs, nextjs, and MySQL.
 
 ### 后台页面
 
-<ul style="display: flex; flex-wrap: no-wrap; list-style: none; padding: 0">
-  <li><img style="width: 180px; height: 120px" src="https://user-gold-cdn.xitu.io/2020/2/13/1703f19269e0161c?w=2976&h=1426&f=png&s=118268" alt="登录页面" /></li>
-  <li><img style="width: 180px; height: 120px; margin-left: 10px" src="https://user-gold-cdn.xitu.io/2020/2/13/1703f19269d3eb83?w=3334&h=1682&f=png&s=216969" alt="后台首页" /></li>
-  <li  ><img style="width: 180px; height: 120px; margin-left: 10px" src="https://user-gold-cdn.xitu.io/2020/2/13/1703f1926b951133?w=3346&h=1570&f=png&s=333153" alt="文章管理" /></li>
-  <li  ><img style="width: 180px; height: 120px; margin-left: 10px" src="https://user-gold-cdn.xitu.io/2020/2/13/1703f1926bca5113?w=3338&h=1378&f=png&s=185996" alt="页面管理" /></li>
-</ul>
+地址：https://custw.qifengle1412.cn/admin/login （账户：`wipi`，密码：`wipi123456`）。
 
-更多页面及特性可以本地启动使用。
+![登录页面](https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZW0/wipi-login.png)
+![后台首页](https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZR2/wipi-admin-index.png)
+![文章管理](https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZOL/wipi-admin-article.png)
+![页面管理](https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZTJ/wipi-admin-page.png)
+
+地址：https://custw.qifengle1412.cn/admin/login （账户：`wipi`，密码：`wipi123456`）。
 
 ## 本地启动
 
-### clone 本项目。
+- clone 本项目。
 
-```shell
+```bash
 git clone --depth=1 https://github.com/zhxuc/wipi.git your-project-name
 ```
 
-### 安装依赖
+-  安装依赖
 
 首先安装 `MySQL`，推荐使用 docker 进行安装。
 
-```shell
+```bash
 docker run -d --restart=always --name wipi-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root mysql
 ```
 
 然后安装项目 node 依赖。
 
-```shell
+```bash
 cd client && yarn
 cd server && yarn
 ```
 
-### 启动项目
+- 启动项目
 
 分别启动前台页面和服务端。
 
-```shell
+```bash
 cd client && yarn dev
 cd server && yarn start:dev
 ```
@@ -70,14 +65,20 @@ cd server && yarn start:dev
 
 服务端接口运行在 `http://localhost:4000`。
 
-首次启动，默认创建用户：wipi，密码：wipi（可在 `server/src/config` 文件中进行修改）。
+首次启动，默认创建管理员用户：admin，密码：admin（可在 `server/src/config` 文件中进行修改）。
 
 [PS] 如服务端配置启动失败，请先确认 MySQL 的配置是否正确，配置文件在 `server/src/config`。
 
 ## 项目部署
 
-在服务器使用 pm2 进行部署即可，可以查看[`deploy.sh`](./deploy.sh)文件。
+在服务器使用 pm2 进行部署即可，可以查看 `deploy.sh` 文件。
 
 ## 搜索服务
 
 该项目使用了 MySQL 模糊查询提供搜索接口。如果服务器配置较高，或想体验更强大的搜索服务（elasticsearch），可以参考 `elasticsearch` 文件下 `deploy.sh` 文件。
+
+最后说一句：
+
+1. 首页：https://custw.qifengle1412.cn/
+2. 后台：https://custw.qifengle1412.cn/admin/login （账户：<code>wipi</code>，密码：<code>wipi123456</code>）
+4. 源码：https://github.com/zhxuc/wipi （欢迎 star）
