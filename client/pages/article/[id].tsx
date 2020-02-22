@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import Router from "next/router";
 import Link from "next/link";
 import cls from "classnames";
-import { Anchor, Modal, Form, Input, message, Tooltip } from "antd";
+import { Anchor, Modal, Form, Input, message } from "antd";
 import * as dayjs from "dayjs";
 import hljs from "highlight.js";
 import "highlight.js/styles/atelier-dune-dark.css";
@@ -54,9 +54,9 @@ const renderTocTree = tocs => {
             key={node[2]}
             href={"#" + node[1]}
             title={
-              <Tooltip title={node[2]} placement={"left"}>
-                {node[2]}
-              </Tooltip>
+              // <Tooltip title={node[2]} placement={"left"}>
+              node[2]
+              // </Tooltip>
             }
           >
             {toc.children ? renderTocTree(toc.children) : null}
