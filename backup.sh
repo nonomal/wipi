@@ -5,9 +5,9 @@ backup_dir=/home/apps/wipi/backup  # 备份路径
 dd=`date +%Y-%m-%d-%H-%M-%S` # 日期
 tool=mysqldump # 备份工具
 host=0.0.0.0  # mysql 地址
-port=33721 # mysql 端口
+port=3306 # mysql 端口
 username=root # 用户名
-password=KBen2020?!@pdd # 密码
+password=root # 密码
 database_name=wipi # 备份数据库名
 
 if [ ! -d $backup_dir ];
