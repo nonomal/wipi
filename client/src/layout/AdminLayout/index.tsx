@@ -20,6 +20,7 @@ const menus = [
   {
     icon: "form",
     label: "文章管理",
+    path: "/admin/article",
     children: [
       {
         label: "所有文章",
@@ -27,8 +28,12 @@ const menus = [
       },
       {
         label: "新建文章",
-        path: "/admin/article/editor",
-        dynamicPath: "/admin/article/editor/[id]"
+        path: "/admin/article/editor"
+      },
+      {
+        label: "编辑文章",
+        path: "/admin/article/editor/[id]",
+        ignore: true
       },
       {
         label: "分类管理",
@@ -44,6 +49,7 @@ const menus = [
   {
     icon: "file-add",
     label: "页面管理",
+    path: "/admin/page",
     children: [
       {
         label: "所有页面",
@@ -51,8 +57,12 @@ const menus = [
       },
       {
         label: "新建页面",
-        path: "/admin/page/editor",
-        dynamicPath: "/admin/page/editor/[id]"
+        path: "/admin/page/editor"
+      },
+      {
+        label: "编辑页面",
+        path: "/admin/page/editor/[id]",
+        ignore: true
       }
     ]
   },
@@ -111,11 +121,7 @@ const resolveBreadcrumbs = pathname => {
 
   for (let menu of menus) {
     if (menu.children) {
-      let idx = menu.children.findIndex(
-        item =>
-          item.path === pathname ||
-          (item.dynamicPath && item.dynamicPath === pathname)
-      );
+      let idx = menu.children.findIndex(item => item.path === pathname);
       if (idx > -1) {
         breadcrumbs.push(menu);
         breadcrumbs.push(menu.children[idx]);
@@ -174,7 +180,9 @@ export const AdminLayout: React.FC<IAdminLayoutProps> = ({
         breakpoint="xs"
         onBreakpoint={broken => {
           setCollapsedWith(broken ? 0 : 80);
-          setCollapsed(broken);
+          if (broken !== collapsed) {
+            setCollapsed(broken);
+          }
         }}
       >
         <div className={style.logo}>管理后台</div>
@@ -184,46 +192,50 @@ export const AdminLayout: React.FC<IAdminLayoutProps> = ({
           selectedKeys={[pathname]}
           style={{ lineHeight: "64px" }}
         >
-          {menus.map(menu => {
-            if (menu.children) {
-              return (
-                <SubMenu
-                  key={menu.label}
-                  title={
-                    <>
-                      <Icon type={menu.icon} />
-                      <span>{menu.label}</span>
-                    </>
-                  }
-                >
-                  {menu.children.map(subMenu => {
-                    return (
-                      <Menu.Item
-                        key={subMenu.path}
-                        onClick={() => {
-                          router.push(subMenu.path);
-                        }}
-                      >
-                        <span>{subMenu.label}</span>
-                      </Menu.Item>
-                    );
-                  })}
-                </SubMenu>
-              );
-            } else {
-              return (
-                <Menu.Item
-                  key={menu.path}
-                  onClick={() => {
-                    router.push(menu.path);
-                  }}
-                >
-                  <Icon type={menu.icon} />
-                  <span>{menu.label}</span>
-                </Menu.Item>
-              );
-            }
-          })}
+          {menus
+            .filter((m: any) => !m.ignore)
+            .map(menu => {
+              if (menu.children) {
+                return (
+                  <SubMenu
+                    key={menu.label}
+                    title={
+                      <>
+                        <Icon type={menu.icon} />
+                        <span>{menu.label}</span>
+                      </>
+                    }
+                  >
+                    {menu.children
+                      .filter((m: any) => !m.ignore)
+                      .map(subMenu => {
+                        return (
+                          <Menu.Item
+                            key={subMenu.path}
+                            onClick={() => {
+                              router.push(subMenu.path);
+                            }}
+                          >
+                            <span>{subMenu.label}</span>
+                          </Menu.Item>
+                        );
+                      })}
+                  </SubMenu>
+                );
+              } else {
+                return (
+                  <Menu.Item
+                    key={menu.path}
+                    onClick={() => {
+                      router.push(menu.path);
+                    }}
+                  >
+                    <Icon type={menu.icon} />
+                    <span>{menu.label}</span>
+                  </Menu.Item>
+                );
+              }
+            })}
         </Menu>
       </Sider>
       <Layout
