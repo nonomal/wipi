@@ -97,7 +97,7 @@ const CommentItem: React.FC<ICommemtItemProps> = ({
                         submit();
                       }}
                     >
-                      评论
+                      回复
                     </Button>
                   </>
                 );

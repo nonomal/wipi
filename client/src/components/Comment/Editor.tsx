@@ -159,7 +159,7 @@ export const Editor = ({
             type="primary"
             disabled={!name || !email || !content}
           >
-            回复
+            评论
           </Button>
         )}
       </div>
