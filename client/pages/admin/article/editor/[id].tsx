@@ -34,6 +34,14 @@ const Editor: NextPage<IProps> = ({ article: defaultArticle = {} }) => {
       return;
     }
 
+    if (article.tags) {
+      try {
+        article.tags = article.tags.map(t => t.id).join(",");
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     if (id) {
       ArticleProvider.updateArticle(id, article).then(res => {
         setId(res.id);

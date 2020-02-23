@@ -32,6 +32,14 @@ const Editor: NextPage = () => {
 
     article.status = "draft";
 
+    if (article.tags) {
+      try {
+        article.tags = article.tags.map(t => t.id).join(",");
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     if (id) {
       return ArticleProvider.updateArticle(id, article).then(res => {
         setId(res.id);
