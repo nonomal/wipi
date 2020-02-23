@@ -175,15 +175,18 @@ export const MyComment: React.FC<IProps> = ({
   const [pageSize, setPageSize] = useState(6);
   const [comments, setComments] = useState<IComment[]>([]);
 
-  const getComments = useCallback((page, pageSize) => {
-    CommentProvider.getArticleComments(articleId, {
-      page,
-      pageSize
-    }).then(res => {
-      setComments(res[0]);
-      setTotal(res[1]);
-    });
-  }, []);
+  const getComments = useCallback(
+    (page, pageSize) => {
+      CommentProvider.getArticleComments(articleId, {
+        page,
+        pageSize
+      }).then(res => {
+        setComments(res[0]);
+        setTotal(res[1]);
+      });
+    },
+    [articleId]
+  );
 
   useEffect(() => {
     getComments(page, pageSize);

@@ -23,7 +23,10 @@ export const CommentAndRecommendArticles: NextPage<IProps> = ({
         <div className={style.comments}>
           <p className={style.title}>评论</p>
           <div className={style.commentContainer}>
-            <MyComment articleId={articleId || pageId} />
+            <MyComment
+              articleId={articleId || pageId}
+              isInPage={!articleId && !!pageId}
+            />
           </div>
         </div>
       )}
