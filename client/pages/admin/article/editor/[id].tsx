@@ -34,17 +34,19 @@ const Editor: NextPage<IProps> = ({ article: defaultArticle = {} }) => {
       return;
     }
 
-    article.status = "draft";
-
     if (id) {
       ArticleProvider.updateArticle(id, article).then(res => {
         setId(res.id);
-        message.success("文章已保存");
+        message.success(
+          res.status === "draft" ? "文章已保存为草稿" : "文章已发布"
+        );
       });
     } else {
       ArticleProvider.addArticle(article).then(res => {
         setId(res.id);
-        message.success("文章已保存");
+        message.success(
+          res.status === "draft" ? "文章已保存为草稿" : "文章已发布"
+        );
       });
     }
   }, [article, id]);
@@ -155,7 +157,7 @@ const Editor: NextPage<IProps> = ({ article: defaultArticle = {} }) => {
           >
             文件库
           </Button>
-          <Button onClick={save}>保存</Button>
+          <Button onClick={save}>更新</Button>
           <Button onClick={preview}>预览</Button>
           <Button type="primary" onClick={publish}>
             发布

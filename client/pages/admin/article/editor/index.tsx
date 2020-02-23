@@ -35,12 +35,12 @@ const Editor: NextPage = () => {
     if (id) {
       return ArticleProvider.updateArticle(id, article).then(res => {
         setId(res.id);
-        message.success("文章已保存");
+        message.success("文章已保存为草稿");
       });
     } else {
       return ArticleProvider.addArticle(article).then(res => {
         setId(res.id);
-        message.success("文章已保存");
+        message.success("文章已保存为草稿");
       });
     }
   }, [article, id]);
@@ -78,7 +78,9 @@ const Editor: NextPage = () => {
 
     const handle = res => {
       setId(res.id);
-      message.success(data.status === "draft" ? "文章已保存" : "文章已发布");
+      message.success(
+        data.status === "draft" ? "文章已保存为草稿" : "文章已发布"
+      );
     };
 
     if (id) {
@@ -149,7 +151,7 @@ const Editor: NextPage = () => {
           >
             文件库
           </Button>
-          <Button onClick={save}>保存</Button>
+          <Button onClick={save}>保存草稿</Button>
           <Button onClick={preview}>预览</Button>
           <Button type="primary" onClick={publish}>
             发布
