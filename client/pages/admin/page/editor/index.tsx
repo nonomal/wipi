@@ -33,12 +33,12 @@ const Editor: NextPage = () => {
     if (id) {
       return PageProvider.updatePage(id, page).then(res => {
         setId(res.id);
-        message.success("页面已保存");
+        message.success("页面已保存为草稿");
       });
     } else {
       return PageProvider.addPage(page).then(res => {
         setId(res.id);
-        message.success("页面已保存");
+        message.success("页面已保存为草稿");
       });
     }
   }, [page, id]);
@@ -73,12 +73,12 @@ const Editor: NextPage = () => {
     if (id) {
       return PageProvider.updatePage(id, page).then(res => {
         setId(res.id);
-        message.success("页面已保存");
+        message.success("页面已发布");
       });
     } else {
       return PageProvider.addPage(page).then(res => {
         setId(res.id);
-        message.success("页面已保存");
+        message.success("页面已发布");
       });
     }
   }, [page, id]);
@@ -158,7 +158,7 @@ const Editor: NextPage = () => {
           >
             文件库
           </Button>
-          <Button onClick={save}>保存</Button>
+          <Button onClick={save}>保存草稿</Button>
           <Button onClick={preview}>预览</Button>
           <Button type="primary" onClick={publish}>
             发布
