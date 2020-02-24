@@ -8,8 +8,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+
 import { SettingService } from './setting.service';
 import { Setting } from './setting.entity';
+import { UserService } from '../user/user.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard, Roles } from '../auth/roles.guard';
 
@@ -18,7 +20,8 @@ import { RolesGuard, Roles } from '../auth/roles.guard';
 export class SettingController {
   constructor(
     private readonly settingService: SettingService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService
   ) {}
 
   /**
@@ -37,7 +40,7 @@ export class SettingController {
    */
   @Post('/get')
   @HttpCode(HttpStatus.OK)
-  findAll(@Request() req): Promise<Setting> {
+  async findAll(@Request() req): Promise<Setting> {
     let token = req.headers.authorization;
 
     if (/Bearer/.test(token)) {
@@ -46,8 +49,11 @@ export class SettingController {
     }
 
     try {
-      this.jwtService.verify(token);
-      return this.settingService.findAll(false, true);
+      const tokenUser = this.jwtService.decode(token) as any;
+      const id = tokenUser.id;
+      const exist = await this.userService.findById(id);
+      const isAdmin = id && exist.role === 'admin';
+      return this.settingService.findAll(false, isAdmin);
     } catch (e) {
       return this.settingService.findAll(false, false);
     }

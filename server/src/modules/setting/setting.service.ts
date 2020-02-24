@@ -18,9 +18,9 @@ export class SettingService {
    * 获取系统设置
    * @param user
    * @param innerInvoke
-   * @param isTokenValid
+   * @param isAdmin
    */
-  async findAll(innerInvoke = false, isTokenValid = false): Promise<Setting> {
+  async findAll(innerInvoke = false, isAdmin = false): Promise<Setting> {
     const data = await this.settingRepository.find();
     const res = data[0];
 
@@ -28,7 +28,7 @@ export class SettingService {
       return {} as Setting;
     }
 
-    if (innerInvoke) {
+    if (innerInvoke || isAdmin) {
       return res;
     }
 
@@ -45,11 +45,7 @@ export class SettingService {
       return a;
     }, {}) as Setting;
 
-    if (isTokenValid) {
-      return res;
-    } else {
-      return filterRes;
-    }
+    return filterRes;
   }
 
   /**
