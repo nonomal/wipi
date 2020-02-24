@@ -75,64 +75,60 @@ export class CommentService {
       true
     );
 
-    let to = null;
-
-    if (reply) {
-      // 回复邮件
-      to = reply;
-    } else {
-      // 管理用户应当只存在一个
-      // TODO:也可能存在多个
-      const [user] = await this.userService.findAll({ role: 'admin' });
-      if (user && user[0] && user[0].email) {
-        to = user[0].email;
-      } else {
-        to = from;
-      }
-    }
-
-    const emailMessage = {
-      from,
-      to,
-      ...(reply
-        ? {
-            subject: '评论回复通知',
-            html: `
-        <div style="padding: 15px; background: rgb(246, 246, 246);">
-          <div style="width: 640px; background: '#fff;">
-            <p style="color: #009a61; ">您的评论已被回复，点击链接前往查看：</p>
-            <div>
-              <p><a href="${url.resolve(
+    const sendEmail = (to, isReply = false) => {
+      const emailMessage = {
+        from,
+        to,
+        ...(isReply
+          ? {
+              subject: '评论回复通知',
+              html: `
+          <div style="box-sizing: border-box; width: 100%; padding: 15px; background: rgb(246, 246, 246);">
+            <div style="box-sizing: border-box; width: 100%; background: '#fff;">
+              <p style="color: #009a61; ">您的评论已被回复，点击链接前往查看：</p>
+              <div>
+                <p><a href="${url.resolve(
+                  systemUrl,
+                  `/${isInPage ? 'page' : 'article'}/` + articleId
+                )}">${url.resolve(
                 systemUrl,
                 `/${isInPage ? 'page' : 'article'}/` + articleId
-              )}">${url.resolve(
-              systemUrl,
-              `/${isInPage ? 'page' : 'article'}/` + articleId
-            )}</a></p>
+              )}</a></p>
+              </div>
             </div>
           </div>
-        </div>
-      `,
-          }
-        : {
-            subject: '新评论通知',
-            html: `
-        <div style="padding: 16px; background: rgb(246, 246, 246);">
-          <div style="width: 640px; background: '#fff;">
-            <p>评论人：${comment.name}</p>
-            <p>评论内容：${comment.content}</p>
-            <p><a href="${url.resolve(
-              systemUrl,
-              'admin/comment'
-            )}" target="_blank">前往审核</a></p>
+        `,
+            }
+          : {
+              subject: '新评论通知',
+              html: `
+          <div style="box-sizing: border-box; width: 100%; padding: 16px; background: rgb(246, 246, 246);">
+            <div style="box-sizing: border-box; width: 100%; background: '#fff;">
+              <p>评论人：${comment.name}</p>
+              <p>评论内容：${comment.content}</p>
+              <p><a href="${url.resolve(
+                systemUrl,
+                'admin/comment'
+              )}" target="_blank">前往审核</a></p>
+            </div>
           </div>
-        </div>
-      `,
-          }),
+        `,
+            }),
+      };
+
+      this.smtpService.create(emailMessage).catch(() => {
+        console.log('收到新评论，但发送邮件通知失败');
+      });
     };
 
-    this.smtpService.create(emailMessage).catch(() => {
-      console.log('收到新评论，但发送邮件通知失败');
+    // 回复邮件
+    !!reply && sendEmail(reply, true);
+    // 向所有管理员发送邮件通知
+    const [users] = await this.userService.findAll({ role: 'admin' });
+    users.forEach(user => {
+      if (user.email) {
+        sendEmail(user.email);
+      }
     });
 
     return newComment;
