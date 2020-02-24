@@ -4,8 +4,8 @@ export class SettingProvider {
   /**
    * 获取设置
    */
-  static async getSetting(data = null): Promise<any> {
-    return httpProvider.post("/setting/get", data);
+  static async getSetting(): Promise<any> {
+    return httpProvider.post("/setting/get");
   }
 
   /**

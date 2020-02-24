@@ -21,17 +21,9 @@ const Setting: NextPage<IProps> = ({ type: defaultType }) => {
   const [setting, setSetting] = useState(null);
 
   useEffect(() => {
-    let info = window.localStorage.getItem("user");
-    try {
-      info = JSON.parse(info);
-      SettingProvider.getSetting(info).then(res => {
-        setSetting(res);
-      });
-    } catch (e) {
-      SettingProvider.getSetting().then(res => {
-        setSetting(res);
-      });
-    }
+    SettingProvider.getSetting().then(res => {
+      setSetting(res);
+    });
   }, []);
 
   const tabs = [
