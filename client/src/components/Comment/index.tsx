@@ -1,21 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  Row,
-  Col,
-  Comment,
-  Button,
-  Input,
-  Icon,
-  Pagination,
-  message
-} from "antd";
+import { Comment, Button, Input, Icon, Pagination, Avatar } from "antd";
 import { format } from "timeago.js";
 import cls from "classnames";
 import { CommentProvider } from "@providers/comment";
 import { Editor } from "./Editor";
 import style from "./index.module.scss";
-
-const { TextArea } = Input;
 
 interface ICommemtItemProps {
   articleId: string;
@@ -25,6 +14,28 @@ interface ICommemtItemProps {
   depth?: number; // 第几层嵌套
   parentComment?: IComment | null; // 父级评论
 }
+
+const colors = [
+  "#52c41a",
+  "#f5222d",
+  "#1890ff",
+  "#faad14",
+  "#ff0064",
+  "#722ed1"
+];
+const getRandomColor = (() => {
+  let cache = {};
+
+  return (key): string => {
+    if (!cache[key]) {
+      let color = colors[Math.floor(Math.random() * colors.length)];
+      cache[key] = color;
+      return color;
+    } else {
+      return cache[key];
+    }
+  };
+})();
 
 const CommentItem: React.FC<ICommemtItemProps> = ({
   children,
@@ -42,7 +53,7 @@ const CommentItem: React.FC<ICommemtItemProps> = ({
       style={depth > 1 ? { marginLeft: -44 } : {}}
       actions={null}
       author={
-        <a>
+        <a className={style.commentTitle}>
           <strong>{comment.name}</strong>
           {parentComment ? (
             <>
@@ -54,7 +65,15 @@ const CommentItem: React.FC<ICommemtItemProps> = ({
           <span>{format(comment.createAt, "zh_CN")}</span>
         </a>
       }
-      avatar={null}
+      avatar={
+        <Avatar
+          size={20}
+          shape="square"
+          style={{ backgroundColor: getRandomColor(comment.name) }}
+        >
+          {("" + comment.name).charAt(0).toUpperCase()}
+        </Avatar>
+      }
       content={
         <div
           className={cls(
@@ -172,7 +191,7 @@ export const MyComment: React.FC<IProps> = ({
 }) => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(6);
+  const [pageSize, setPageSize] = useState(12);
   const [comments, setComments] = useState<IComment[]>([]);
 
   const getComments = useCallback(

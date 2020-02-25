@@ -76,8 +76,22 @@
   }
 }
 
+.commentTitle {
+  color: #8590a6;
+
+  strong {
+    color: #1a1a1a;
+    font-size: 1.2em;
+  }
+}
+
 .commentActions {
   cursor: pointer;
+  color: #8590a6;
+
+  &:hover {
+    color: #1a1a1a;
+  }
 
   span {
     margin-left: 8px;
