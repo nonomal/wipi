@@ -9,9 +9,9 @@ import "@/theme/markdown.scss";
 let lastUrl;
 
 const addView = url => {
-  if (/admin/.test(url)) {
-    return;
-  }
+  // if (/admin/.test(url)) {
+  //   return;
+  // }
 
   ViewProvider.addView({ url });
 };
@@ -23,13 +23,13 @@ class MyApp extends App {
       el.parentNode.removeChild(el);
     } catch (e) {}
 
-    const url = window.location.pathname;
+    const url = window.location.href;
     lastUrl = url;
     addView(url);
   }
 
   componentDidUpdate() {
-    const url = window.location.pathname;
+    const url = window.location.href;
 
     if (url === lastUrl) {
       return;
