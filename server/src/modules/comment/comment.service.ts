@@ -9,6 +9,7 @@ import { marked } from '../article/markdown.util';
 import { Comment } from './comment.entity';
 
 const url = require('url');
+const ArticleCommentsCache: { [articleId: string]: Array<Comment> } = {};
 
 /**
  * 扁平接口评论转为树形评论
@@ -176,11 +177,31 @@ export class CommentService {
    * @param articleId
    */
   async getArticleComments(articleId, queryParams) {
+    // let data = [];
+
+    // if (ArticleCommentsCache[articleId]) {
+    //   data = ArticleCommentsCache[articleId];
+    // } else {
+    //   const query = this.commentRepository
+    //     .createQueryBuilder('comment')
+    //     .where('comment.articleId=:articleId')
+    //     .andWhere('comment.pass=:pass')
+    //     .orderBy('comment.createAt', 'ASC')
+    //     .setParameter('articleId', articleId)
+    //     .setParameter('pass', true);
+    //   const res = await query.getManyAndCount();
+    //   data = buildTree(res[0]);
+    //   ArticleCommentsCache[articleId] = data;
+    // }
+
+    // const { page = 1, pageSize = 12 } = queryParams;
+    // return [data.slice((page - 1) * pageSize, page * pageSize), data.length];
+
     const query = this.commentRepository
       .createQueryBuilder('comment')
       .where('comment.articleId=:articleId')
       .andWhere('comment.pass=:pass')
-      .orderBy('comment.createAt', 'DESC')
+      .orderBy('comment.createAt', 'ASC')
       .setParameter('articleId', articleId)
       .setParameter('pass', true);
 
@@ -189,8 +210,17 @@ export class CommentService {
     query.take(+pageSize);
 
     const res = await query.getManyAndCount();
-    const data = buildTree(res[0]);
-    return [data, res[1]];
+
+    for (let comment of res[0]) {
+      if (comment.parentCommentId) {
+        const parentComment = await this.commentRepository.findOne(
+          comment.parentCommentId
+        );
+        Object.assign(comment, { parentComment });
+      }
+    }
+
+    return res;
   }
 
   async findByIds(ids): Promise<Array<Comment>> {
