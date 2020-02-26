@@ -87,7 +87,7 @@ export const MyComment: React.FC<IProps> = ({
   const [replyComment, setReplyComment] = useState(null);
 
   const getComments = useCallback(
-    (page, pageSize) => {
+    (page, pageSize, loadMore = false) => {
       setLoading(true);
       CommentProvider.getArticleComments(articleId, {
         page,
@@ -95,7 +95,13 @@ export const MyComment: React.FC<IProps> = ({
       })
         .then(res => {
           setLoading(false);
-          setComments(comments => [...comments, ...res[0]]);
+
+          if (!loadMore) {
+            setComments(res[0]);
+          } else {
+            setComments(comments => [...comments, ...res[0]]);
+          }
+
           setTotal(res[1]);
         })
         .catch(err => {
@@ -107,11 +113,12 @@ export const MyComment: React.FC<IProps> = ({
 
   const loadMore = () => {
     setPage(page + 1);
-    getComments(page + 1, pageSize);
+    getComments(page + 1, pageSize, true);
   };
 
   useEffect(() => {
-    getComments(page, pageSize);
+    setPage(1);
+    getComments(1, pageSize, false);
   }, [articleId]);
 
   return (
