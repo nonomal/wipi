@@ -38,9 +38,12 @@
   }
 
   .markdown {
-    margin-top: 1rem;
+    margin-bottom: 1rem;
     overflow: auto;
     padding: 4px 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    cursor: not-allowed;
   }
 
   .footer {

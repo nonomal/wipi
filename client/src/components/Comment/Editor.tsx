@@ -87,14 +87,7 @@ export const Editor = ({
   return (
     <div className={cls(style.editor)}>
       <div className={style.avatar}>
-        <Avatar
-          size={32}
-          shape="square"
-          icon={"user"}
-          // style={{ backgroundColor: getRandomColor(comment.name) }}
-        >
-          {/* {("" + comment.name).charAt(0).toUpperCase()} */}
-        </Avatar>
+        <Avatar size={32} shape="square" icon={"user"}></Avatar>
       </div>
       <div>
         <Tabs
