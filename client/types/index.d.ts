@@ -72,6 +72,7 @@ interface IComment {
   createAt: string;
   article?: IArticle;
   isInPage: boolean;
+  parentComment?: IComment;
 }
 
 interface IView {
