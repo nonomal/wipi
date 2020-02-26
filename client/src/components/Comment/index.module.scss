@@ -110,6 +110,7 @@
 
         display: flex;
         justify-content: space-between;
+        color: #8590a6;
 
         &::before {
           content: "";
@@ -129,6 +130,7 @@
         }
 
         strong {
+          color: #1a1a1a;
           font-weight: 500;
         }
 
@@ -146,7 +148,7 @@
 
         &:hover {
           > div:last-of-type {
-            color: inherit;
+            color: #1a1a1a;
           }
         }
       }
