@@ -1,39 +1,26 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Row, Col, Comment, Button, Input, Icon, Divider, message } from "antd";
-import { format } from "timeago.js";
+import React, { useState, useEffect, useRef } from "react";
+import { Button, Input, message, Popover, Tabs, Avatar } from "antd";
 import cls from "classnames";
 import { CommentProvider } from "@providers/comment";
-import style from "./index.module.scss";
-
 import { marked } from "./mark";
 import emojis from "./emojis.json";
+import style from "./index.module.scss";
 
 const { TextArea } = Input;
-
-interface ICommemtItemProps {
-  articleId: string;
-  comment: IComment;
-  getComments: () => void;
-  isInPage?: boolean; // 为 true 时，评论组件在动态页面而非文章
-  depth?: number; // 第几层嵌套
-  parentComment?: IComment | null; // 父级评论
-}
+const { TabPane } = Tabs;
 
 export const Editor = ({
   articleId,
   isInPage = false,
-  parentCommentId,
   parentComment,
-  onSuccess = () => {},
-  renderFooter = null
+  renderFooter = null,
+  onSuccess = () => {}
 }) => {
+  const textarea = useRef(null);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [content, setContent] = useState("");
-
-  const [showEmoji, toggleEmoji] = useState(false);
-  const [preview, setPreview] = useState(false);
 
   useEffect(() => {
     let userInfo: any = window.localStorage.getItem("user");
@@ -45,6 +32,15 @@ export const Editor = ({
     } catch (err) {}
   }, [loading]);
 
+  useEffect(() => {
+    if (parentComment) {
+      setContent(
+        `<blockquote>${parentComment.html}</blockquote>\r\n @${parentComment.name} `
+      );
+      textarea.current.focus();
+    }
+  }, [parentComment]);
+
   const submit = () => {
     let regexp = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
 
@@ -53,10 +49,22 @@ export const Editor = ({
       return;
     }
 
-    const data = { articleId, name, email, content, parentCommentId, isInPage };
+    const data = {
+      articleId,
+      name,
+      email,
+      content,
+      isInPage
+    };
 
-    if (parentComment && parentComment.email) {
-      Object.assign(data, { reply: parentComment.email });
+    if (parentComment) {
+      if (parentComment.id) {
+        Object.assign(data, { parentCommentId: parentComment.id });
+      }
+
+      if (parentComment.email) {
+        Object.assign(data, { reply: parentComment.email });
+      }
     }
 
     setLoading(true);
@@ -72,78 +80,90 @@ export const Editor = ({
           JSON.stringify(Object.assign(userInfo, { name, email }))
         );
       } catch (err) {}
-
       onSuccess();
     });
   };
 
   return (
-    <div
-      className={cls(style.editor, parentCommentId ? style.isChildren : false)}
-    >
-      <div>
-        <Input
-          value={name}
-          onChange={e => {
-            setName(e.target.value);
-          }}
-          placeholder="请输入您的称呼"
-        />
-        <Input
-          value={email}
-          onChange={e => {
-            setEmail(e.target.value);
-          }}
-          placeholder="请输入您的邮箱（不会公开）"
-        />
-        <TextArea
-          style={{ marginBottom: 16 }}
-          placeholder={"请输入评论，支持 Markdown"}
-          rows={4}
-          onChange={e => {
-            setContent(e.target.value);
-          }}
-          value={content}
-        />
-      </div>
-      <div className={style.controls}>
-        <span onClick={() => toggleEmoji(!showEmoji)}>表情</span>
-        <span className={style.divider}>|</span>
-        <span
-          onClick={() => {
-            if (!content) {
-              return;
-            }
-
-            setPreview(!preview);
-          }}
+    <div className={cls(style.editor)}>
+      <div className={style.avatar}>
+        <Avatar
+          size={32}
+          shape="square"
+          icon={"user"}
+          // style={{ backgroundColor: getRandomColor(comment.name) }}
         >
-          预览
-        </span>
+          {/* {("" + comment.name).charAt(0).toUpperCase()} */}
+        </Avatar>
       </div>
-
-      {showEmoji ? (
-        <div className={style.emojis}>
-          {Object.keys(emojis).map(type => {
-            return (
-              <i
-                key={type}
-                onClick={() => {
-                  setContent("" + content + emojis[type]);
-                }}
+      <div>
+        <Tabs
+          type="card"
+          tabBarExtraContent={
+            <div className={style.controls}>
+              <Popover
+                content={
+                  <div className={style.emojis}>
+                    {Object.keys(emojis).map(type => {
+                      return (
+                        <i
+                          key={type}
+                          onClick={() => {
+                            setContent("" + content + emojis[type]);
+                          }}
+                        >
+                          {emojis[type]}
+                        </i>
+                      );
+                    })}
+                  </div>
+                }
+                title={null}
+                trigger="click"
+                placement="topLeft"
               >
-                {emojis[type]}
-              </i>
-            );
-          })}
+                <span>表情</span>
+              </Popover>
+            </div>
+          }
+        >
+          <TabPane tab="编辑" key="edit">
+            <TextArea
+              ref={textarea}
+              style={{ marginBottom: 16 }}
+              placeholder={"请输入评论，支持 Markdown"}
+              rows={8}
+              onChange={e => {
+                setContent(e.target.value);
+              }}
+              value={content}
+            />
+          </TabPane>
+          <TabPane tab="预览" key="preview">
+            <div
+              className={cls(style.markdown, "markdown")}
+              dangerouslySetInnerHTML={{ __html: marked(content) }}
+            ></div>
+          </TabPane>
+        </Tabs>
+
+        <div className={style.nameAndMail}>
+          <Input
+            value={name}
+            onChange={e => {
+              setName(e.target.value);
+            }}
+            placeholder="请输入您的称呼"
+          />
+          <Input
+            value={email}
+            onChange={e => {
+              setEmail(e.target.value);
+            }}
+            placeholder="请输入您的邮箱（不会公开）"
+          />
         </div>
-      ) : null}
-      {preview ? (
-        <div
-          className={cls(style.markdown, "markdown")}
-          dangerouslySetInnerHTML={{ __html: marked(content) }}
-        ></div>
-      ) : null}
+      </div>
 
       <div className={style.footer}>
         {renderFooter ? (
