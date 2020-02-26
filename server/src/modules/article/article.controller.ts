@@ -36,6 +36,7 @@ export class ArticleController {
    * 获取所有文章
    */
   @Get()
+  @HttpCode(HttpStatus.OK)
   findAll(@Query() queryParams) {
     return this.articleService.findAll(queryParams);
   }
@@ -44,6 +45,7 @@ export class ArticleController {
    * 获取标签下所有文章
    */
   @Get('/category/:id')
+  @HttpCode(HttpStatus.OK)
   findArticlesByCategory(@Param('id') category, @Query() queryParams) {
     return this.articleService.findArticlesByCategory(category, queryParams);
   }
@@ -52,6 +54,7 @@ export class ArticleController {
    * 获取标签下所有文章
    */
   @Get('/tag/:id')
+  @HttpCode(HttpStatus.OK)
   findArticlesByTag(@Param('id') tag, @Query() queryParams) {
     return this.articleService.findArticlesByTag(tag, queryParams);
   }
@@ -60,6 +63,7 @@ export class ArticleController {
    * 获取所有文章归档
    */
   @Get('/archives')
+  @HttpCode(HttpStatus.OK)
   getArchives(): Promise<{ [key: string]: Article[] }> {
     return this.articleService.getArchives();
   }
@@ -68,6 +72,7 @@ export class ArticleController {
    * 推荐文章
    */
   @Get('/recommend')
+  @HttpCode(HttpStatus.OK)
   recommend(@Query('articleId') articleId) {
     return this.articleService.recommend(articleId);
   }
@@ -109,6 +114,7 @@ export class ArticleController {
   @Patch(':id')
   @Roles('admin')
   @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
   updateById(@Param('id') id, @Body() article) {
     return this.articleService.updateById(id, article);
   }
