@@ -52,6 +52,15 @@
   }
 }
 
+@media (max-width: 768px) {
+  .editor {
+    margin-left: 0;
+    .avatar {
+      display: none;
+    }
+  }
+}
+
 .emojis {
   font-size: 18px;
   text-align: justify;
@@ -97,6 +106,7 @@
         position: absolute;
         left: -48px;
         top: 8px;
+        z-index: 1000;
       }
 
       header {
@@ -163,6 +173,34 @@
 
         p {
           margin-bottom: 0;
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      .commentItem {
+        margin-left: 0;
+
+        .avatar {
+          left: 8px;
+
+          > span {
+            width: 24px !important;
+            height: 24px !important;
+            line-height: 24px !important;
+
+            > span {
+              line-height: 24px !important;
+            }
+          }
+        }
+
+        header {
+          padding-left: 40px;
+
+          &::before {
+            display: none;
+          }
         }
       }
     }
