@@ -13,7 +13,7 @@ export const _Header = ({ setting, menus }) => {
   const [showSearch, setShowSearch] = useState(false);
 
   return (
-    <header>
+    <header className={style.header}>
       <div className={cls("container", style.wrapper)}>
         <div className={style.logo}>
           {/^http/.test(setting.systemLogo) ? (
