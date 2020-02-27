@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NextPage } from "next";
 import hljs from "highlight.js";
 import { Layout } from "@/layout/Layout";
+import Viewer from "viewerjs";
 import { CommentAndRecommendArticles } from "@components/CommentAndRecommendArticles";
 import { PageProvider } from "@providers/page";
 import style from "./index.module.scss";
@@ -45,6 +46,11 @@ const Page: NextPage<IProps> = ({ page }) => {
       hljs.initHighlightingOnLoad();
       hljs.highlightBlock(ref.current);
     }
+  }, []);
+
+  // 大图插件
+  useEffect(() => {
+    new Viewer(ref.current, { inline: false });
   }, []);
 
   return (

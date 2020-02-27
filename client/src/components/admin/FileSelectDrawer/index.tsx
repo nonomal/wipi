@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Alert, Drawer, Card, List, message } from "antd";
+import Viewer from "viewerjs";
 import { FileProvider } from "@providers/file";
 import { SPTDataTable } from "@components/admin/SPTDataTable";
 import style from "./index.module.scss";
@@ -27,6 +28,8 @@ const copy = value => {
   message.success("链接已复制到剪切板");
 };
 
+let viewer: any = null;
+
 export const FileSelectDrawer: React.FC<IFileProps> = ({
   visible,
   isCopy = false,
@@ -34,6 +37,7 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
   onClose,
   onChange
 }) => {
+  const ref = useRef();
   const [loading, setLoading] = useState<boolean>(false);
   const [files, setFiles] = useState<IFile[]>([]);
   const [params, setParams] = useState(null);
@@ -43,6 +47,11 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
       .then(res => {
         setFiles(res[0]);
         setLoading(false);
+        if (!viewer) {
+          viewer = new Viewer(ref.current, { inline: false });
+        } else {
+          viewer.update();
+        }
         return res;
       })
       .catch(err => {
@@ -59,59 +68,70 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
       onClose={onClose}
       visible={visible}
     >
-      {isCopy && <Alert message="点击图片即可复制" type="info" />}
-      <SPTDataTable
-        data={files}
-        defaultTotal={0}
-        columns={[]}
-        searchFields={[
-          {
-            label: "文件名称",
-            field: "originalname",
-            msg: "请输入文件名称"
-          },
-          {
-            label: "文件类型",
-            field: "type",
-            msg: "请输入文件类型"
-          }
-        ]}
-        onSearch={getFiles}
-        customDataTable={data => (
-          <List
-            grid={{
-              gutter: 16,
-              sm: 3
-            }}
-            dataSource={files}
-            renderItem={(file: IFile) => (
-              <List.Item>
-                <Card
-                  hoverable
-                  cover={
-                    <div className={style.preview}>
-                      <img alt={file.originalname} src={file.url} />
-                    </div>
-                  }
-                  onClick={() => {
-                    isCopy && copy(file.url);
-                    onChange && onChange(file.url);
-                    closeAfterClick && onClose();
-                  }}
-                >
-                  <Meta
-                    title={file.originalname}
-                    // description={
-                    //   "上传于 " +
-                    //   dayjs.default(file.createAt).format("YYYY-MM-DD HH:mm:ss")
-                    // }
-                  />
-                </Card>
-              </List.Item>
-            )}
-          />
-        )}
-      />
+      {isCopy && (
+        <Alert message="点击卡片复制链接，点击图片查看大图" type="info" />
+      )}
+      <div ref={ref}>
+        <SPTDataTable
+          data={files}
+          defaultTotal={0}
+          columns={[]}
+          searchFields={[
+            {
+              label: "文件名称",
+              field: "originalname",
+              msg: "请输入文件名称"
+            },
+            {
+              label: "文件类型",
+              field: "type",
+              msg: "请输入文件类型"
+            }
+          ]}
+          onSearch={getFiles}
+          customDataTable={data => (
+            <List
+              grid={{
+                gutter: 16,
+                sm: 3
+              }}
+              dataSource={files}
+              renderItem={(file: IFile) => (
+                <List.Item>
+                  <Card
+                    hoverable
+                    cover={
+                      <div className={style.preview}>
+                        <img
+                          alt={file.originalname}
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          src={file.url}
+                        />
+                      </div>
+                    }
+                    onClick={() => {
+                      isCopy && copy(file.url);
+                      onChange && onChange(file.url);
+                      closeAfterClick && onClose();
+                    }}
+                  >
+                    <Meta
+                      title={file.originalname}
+                      // description={
+                      //   "上传于 " +
+                      //   dayjs.default(file.createAt).format("YYYY-MM-DD HH:mm:ss")
+                      // }
+                    />
+                  </Card>
+                </List.Item>
+              )}
+            />
+          )}
+        />
+      </div>
     </Drawer>
   );
 };

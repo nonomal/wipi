@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Button, Icon, Avatar } from "antd";
 import { format } from "timeago.js";
 import cls from "classnames";
+import Viewer from "viewerjs";
 import { CommentProvider } from "@providers/comment";
 import { Editor } from "./Editor";
 import style from "./index.module.scss";
@@ -75,10 +76,13 @@ interface IProps {
   isInPage?: boolean;
 }
 
+let viewer: any = null;
+
 export const MyComment: React.FC<IProps> = ({
   articleId,
   isInPage = false
 }) => {
+  const ref = useRef(null);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(8);
@@ -103,6 +107,12 @@ export const MyComment: React.FC<IProps> = ({
           }
 
           setTotal(res[1]);
+
+          if (!viewer) {
+            viewer = new Viewer(ref.current, { inline: false });
+          } else {
+            viewer.update();
+          }
         })
         .catch(err => {
           setLoading(false);
@@ -122,7 +132,7 @@ export const MyComment: React.FC<IProps> = ({
   }, [articleId]);
 
   return (
-    <div className={style.commentWrapper}>
+    <div className={style.commentWrapper} ref={ref}>
       <div className={style.commentContainer}>
         {comments.map(comment => {
           return (

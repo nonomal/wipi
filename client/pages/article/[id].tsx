@@ -4,6 +4,7 @@ import { NextPage } from "next";
 import Router from "next/router";
 import Link from "next/link";
 import cls from "classnames";
+import Viewer from "viewerjs";
 import { Anchor, Modal, Form, Input, message } from "antd";
 import * as dayjs from "dayjs";
 import hljs from "highlight.js";
@@ -126,6 +127,13 @@ const Article: NextPage<IProps> = ({ article }) => {
     if (!shouldCheckPassWord) {
       hljs.initHighlightingOnLoad();
       hljs.highlightBlock(ref.current);
+    }
+  }, [shouldCheckPassWord]);
+
+  // 大图插件
+  useEffect(() => {
+    if (!shouldCheckPassWord) {
+      new Viewer(ref.current, { inline: false });
     }
   }, [shouldCheckPassWord]);
 

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { NextPage } from "next";
 import {
   Row,
@@ -14,6 +14,7 @@ import {
   Popconfirm
 } from "antd";
 import * as dayjs from "dayjs";
+import Viewer from "viewerjs";
 import { AdminLayout } from "@/layout/AdminLayout";
 import { FileProvider } from "@providers/file";
 import { SPTDataTable } from "@components/admin/SPTDataTable";
@@ -47,7 +48,10 @@ const copy = value => {
   message.success("链接已复制到剪切板");
 };
 
+let viewer: any = null;
+
 const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
+  const ref = useRef();
   const [loading, setLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [files, setFiles] = useState<IFile[]>(defaultFiles);
@@ -158,6 +162,13 @@ const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
                     onClick={() => {
                       setCurrentFile(file);
                       setVisible(true);
+                      Promise.resolve().then(() => {
+                        if (!viewer) {
+                          viewer = new Viewer(ref.current, { inline: false });
+                        } else {
+                          viewer.update();
+                        }
+                      });
                     }}
                   >
                     <Meta
@@ -184,7 +195,7 @@ const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
           onClose={() => setVisible(false)}
           visible={visible}
         >
-          <div className={style.previewContainer}>
+          <div ref={ref} className={style.previewContainer}>
             <img
               alt={currentFile && currentFile.originalname}
               src={currentFile && currentFile.url}
