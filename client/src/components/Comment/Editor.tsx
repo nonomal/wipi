@@ -59,7 +59,7 @@ export const Editor = ({
       hostId,
       name,
       email,
-      content: placeholder ? `${placeholder} ${content}` : content,
+      content,
       isHostInPage
     };
 
