@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Button, Icon, Avatar } from "antd";
-import { format } from "timeago.js";
+import { format, render } from "timeago.js";
 import cls from "classnames";
 import Viewer from "viewerjs";
 import { CommentProvider } from "@providers/comment";
@@ -29,44 +29,117 @@ const getRandomColor = (() => {
   };
 })();
 
-export const CommentItem = ({ comment, parentComment, onReply = d => d }) => {
+export const CommentItem = ({
+  comment,
+  parentComment,
+  hostId,
+  isHostInPage,
+  onReply = () => {},
+  subComments = [],
+  isChildren = false
+}) => {
+  const [visible, setVisible] = useState(false);
+  const [replyComment, setReplyComment] = useState(null);
+
   return (
     <div className={style.commentItem}>
-      <div className={style.avatar}>
+      <header>
         <Avatar
-          size={32}
-          shape="square"
+          size={isChildren ? 24 : 32}
           style={{ backgroundColor: getRandomColor(comment.name) }}
         >
           {("" + comment.name).charAt(0).toUpperCase()}
         </Avatar>
-      </div>
-      <header>
-        <div className={style.commentTitle}>
+        <span className={style.info}>
           <strong>{comment.name}</strong>
-          {parentComment ? (
+          {comment.replyUserName ? (
             <>
-              {" reply "}
-              <strong>{parentComment.name}</strong>
+              <span>回复</span>
+              <strong className={style.replyUser}>
+                {comment.replyUserName}
+              </strong>
             </>
           ) : null}
-          {"  "}
+        </span>
+      </header>
+      <main style={{ paddingLeft: isChildren ? 24 + 10 : 32 + 10 }}>
+        <div
+          className={(cls("markdown"), style.content)}
+          dangerouslySetInnerHTML={{ __html: comment.html }}
+        ></div>
+        <div className={style.meta}>
+          {comment.userAgent ? <span>{comment.userAgent}</span> : null}
           <span>{format(comment.createAt, "zh_CN")}</span>
-        </div>
+          <span
+            className={style.reply}
+            onClick={() => {
+              if (isChildren) {
+                onReply();
+              } else {
+                setReplyComment(comment);
+              }
 
-        <div>
-          <span onClick={() => onReply(comment)}>
+              setVisible(true);
+            }}
+          >
             <Icon type="message" />
             回复
           </span>
         </div>
-      </header>
-      <main>
-        <div
-          className={cls("markdown")}
-          dangerouslySetInnerHTML={{ __html: comment.html }}
-        ></div>
+        {subComments && subComments.length ? (
+          <div className={style.subComments}>
+            {subComments.map(subComment => (
+              <CommentItem
+                key={subComment.id}
+                comment={subComment}
+                parentComment={comment}
+                hostId={hostId}
+                isHostInPage={isHostInPage}
+                onReply={() => {
+                  setReplyComment(subComment);
+                  setVisible(true);
+                }}
+                isChildren={true}
+              />
+            ))}
+          </div>
+        ) : null}
       </main>
+      {isChildren ? null : (
+        <div
+          className={cls(
+            style.editorContainer,
+            visible ? style.isActive : false
+          )}
+          style={{ paddingLeft: isChildren ? 24 + 10 : 32 + 10 }}
+        >
+          <Editor
+            hostId={hostId}
+            isHostInPage={isHostInPage}
+            parentComment={comment}
+            replyComment={replyComment}
+            onSuccess={() => setReplyComment(null)}
+            renderFooter={({ loading, disabled, submit }) => {
+              return [
+                <Button
+                  style={{ marginRight: 16 }}
+                  onClick={() => setVisible(false)}
+                >
+                  收起
+                </Button>,
+                <Button
+                  loading={loading}
+                  onClick={submit}
+                  type="primary"
+                  disabled={disabled}
+                >
+                  评论
+                </Button>
+              ];
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
@@ -85,10 +158,9 @@ export const MyComment: React.FC<IProps> = ({
   const ref = useRef(null);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(8);
+  const [pageSize] = useState(12);
   const [comments, setComments] = useState<IComment[]>([]);
   const [loading, setLoading] = useState(false);
-  const [replyComment, setReplyComment] = useState(null);
 
   const getComments = useCallback(
     (page, pageSize, loadMore = false) => {
@@ -133,16 +205,22 @@ export const MyComment: React.FC<IProps> = ({
 
   return (
     <div className={style.commentWrapper} ref={ref}>
+      <Editor
+        hostId={articleId}
+        isHostInPage={isInPage}
+        parentComment={null}
+        replyComment={null}
+      />
       <div className={style.commentContainer}>
         {comments.map(comment => {
           return (
             <CommentItem
               key={comment.id}
               comment={comment}
-              parentComment={comment.parentComment}
-              onReply={comment => {
-                setReplyComment(comment);
-              }}
+              parentComment={[]}
+              subComments={comment.children}
+              hostId={articleId}
+              isHostInPage={isInPage}
             />
           );
         })}
@@ -161,12 +239,6 @@ export const MyComment: React.FC<IProps> = ({
           <span>共 {total} 条</span>
         )}
       </div>
-      <Editor
-        articleId={articleId}
-        isInPage={isInPage}
-        parentComment={replyComment}
-        onSuccess={() => setReplyComment(null)}
-      />
     </div>
   );
 };

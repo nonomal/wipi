@@ -10,9 +10,10 @@ const { TextArea } = Input;
 const { TabPane } = Tabs;
 
 export const Editor = ({
-  articleId,
-  isInPage = false,
+  hostId,
+  isHostInPage = false,
   parentComment,
+  replyComment,
   renderFooter = null,
   onSuccess = () => {}
 }) => {
@@ -20,6 +21,7 @@ export const Editor = ({
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [placeholder, setPlaceholder] = useState("");
   const [content, setContent] = useState("");
 
   useEffect(() => {
@@ -33,13 +35,17 @@ export const Editor = ({
   }, [loading]);
 
   useEffect(() => {
-    if (parentComment) {
-      setContent(
-        `<blockquote>${parentComment.html}</blockquote>\r\n @${parentComment.name} `
-      );
-      textarea.current.focus();
+    if (!parentComment) {
+      return;
     }
-  }, [parentComment]);
+
+    if (replyComment) {
+      setPlaceholder(`回复 @${replyComment.name} ：`);
+      textarea.current.focus();
+    } else {
+      setPlaceholder("");
+    }
+  }, [replyComment, parentComment]);
 
   const submit = () => {
     let regexp = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
@@ -50,21 +56,26 @@ export const Editor = ({
     }
 
     const data = {
-      articleId,
+      hostId,
       name,
       email,
-      content,
-      isInPage
+      content: placeholder ? `${placeholder} ${content}` : content,
+      isHostInPage
     };
 
+    // 父级评论 id
     if (parentComment) {
       if (parentComment.id) {
         Object.assign(data, { parentCommentId: parentComment.id });
       }
+    }
 
-      if (parentComment.email) {
-        Object.assign(data, { reply: parentComment.email });
-      }
+    // 回复评论信息
+    if (replyComment) {
+      Object.assign(data, {
+        replyUserName: replyComment.name,
+        replyUserEmail: replyComment.email
+      });
     }
 
     setLoading(true);
@@ -86,12 +97,12 @@ export const Editor = ({
 
   return (
     <div className={cls(style.editor)}>
-      <div className={style.avatar}>
+      {/* <div className={style.avatar}>
         <Avatar size={32} shape="square" icon={"user"}></Avatar>
-      </div>
+      </div> */}
       <div>
         <Tabs
-          type="card"
+          // type="card"
           tabBarExtraContent={
             <div className={style.controls}>
               <Popover
@@ -124,7 +135,7 @@ export const Editor = ({
             <TextArea
               ref={textarea}
               style={{ marginBottom: 16 }}
-              placeholder={"请输入评论，支持 Markdown"}
+              placeholder={placeholder || "请输入评论，支持 Markdown"}
               rows={8}
               onChange={e => {
                 setContent(e.target.value);
@@ -134,7 +145,7 @@ export const Editor = ({
           </TabPane>
           <TabPane tab="预览" key="preview">
             <div
-              className={cls(style.markdown, "markdown")}
+              className={cls("markdown", style.markdown)}
               dangerouslySetInnerHTML={{ __html: marked(content) }}
             ></div>
           </TabPane>

@@ -62,17 +62,20 @@ interface IPage {
 
 interface IComment {
   id: string;
-  articleId: string;
-  parentCommentId: string;
   name: string;
   email: string;
   content: string;
   html: string;
   pass: boolean;
   createAt: string;
+  userAgent: string;
   article?: IArticle;
-  isInPage: boolean;
-  parentComment?: IComment;
+  parentCommentId: string;
+  hostId: string;
+  isHostInPage: boolean;
+  replyUserName?: string;
+  replyUserEmail?: string;
+  children?: [IComment];
 }
 
 interface IView {

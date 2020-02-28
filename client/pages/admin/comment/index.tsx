@@ -80,16 +80,17 @@ const Comment: NextPage<IProps> = ({
     };
 
     const handle = email => {
-      const reply = selectedComment.email;
       const data = {
-        reply,
-        isInPage: selectedComment.isInPage,
-        parentCommentId: selectedComment.id,
-        articleId: selectedComment.articleId,
         name: userInfo.name,
         email,
-        content: replyContent
+        content: replyContent,
+        parentCommentId: selectedComment.parentCommentId,
+        hostId: selectedComment.hostId,
+        isHostInPage: selectedComment.isHostInPage,
+        replyUserName: selectedComment.name,
+        replyUserEmail: selectedComment.email
       };
+
       CommentProvider.addComment(data)
         .then(() => {
           setSelectedComment(null);
@@ -166,13 +167,13 @@ const Comment: NextPage<IProps> = ({
     },
     {
       title: "评论文章",
-      dataIndex: "articleId",
-      key: "articleId",
-      render: (articleId, record) => {
-        return articleId ? (
+      dataIndex: "hostId",
+      key: "hostId",
+      render: (hostId, record) => {
+        return hostId ? (
           <Link
-            href={`/${record.isInPage ? "page" : "article"}/[id]`}
-            as={`/${record.isInPage ? "page" : "article"}/` + articleId}
+            href={`/${record.isHostInPage ? "page" : "article"}/[id]`}
+            as={`/${record.isHostInPage ? "page" : "article"}/` + hostId}
           >
             <a target="_blank">前往查看</a>
           </Link>

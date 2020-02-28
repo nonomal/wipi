@@ -74,6 +74,12 @@ const menus = [
   },
 
   {
+    icon: "mail",
+    label: "邮件管理",
+    path: "/admin/mail"
+  },
+
+  {
     icon: "folder-open",
     label: "文件管理",
     path: "/admin/file"
@@ -89,12 +95,6 @@ const menus = [
     icon: "project",
     label: "访问统计",
     path: "/admin/view"
-  },
-
-  {
-    icon: "mail",
-    label: "邮件管理",
-    path: "/admin/mail"
   },
 
   {
