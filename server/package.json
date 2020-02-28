@@ -51,7 +51,8 @@
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",
     "trim-html": "^0.1.9",
-    "typeorm": "^0.2.22"
+    "typeorm": "^0.2.22",
+    "ua-parser-js": "^0.7.21"
   },
   "devDependencies": {
     "@nestjs/cli": "^6.9.0",

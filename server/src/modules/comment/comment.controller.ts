@@ -8,6 +8,7 @@ import {
   Query,
   Body,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard, Roles } from '../auth/roles.guard';
@@ -24,8 +25,9 @@ export class CommentController {
    * @param comment
    */
   @Post()
-  create(@Body() comment) {
-    return this.commentService.create(comment);
+  create(@Request() req, @Body() comment) {
+    const userAgent = req.headers['user-agent'];
+    return this.commentService.create(userAgent, comment);
   }
 
   /**

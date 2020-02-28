@@ -12,12 +12,6 @@ export class Comment {
   id: string;
 
   @Column()
-  articleId: string; // 关联文章 id
-
-  @Column({ default: null })
-  parentCommentId: string; // 父级评论 id
-
-  @Column()
   name: string; // 联系方式
 
   @Column()
@@ -32,8 +26,23 @@ export class Comment {
   @Column({ type: 'boolean', default: false })
   pass: boolean; // 是否审核通过
 
+  @Column({ type: 'mediumtext', default: null, charset: 'utf8mb4' })
+  userAgent: string;
+
+  @Column()
+  hostId: string; // 关联文章或页面 id
+
   @Column({ type: 'boolean', default: false })
-  isInPage: boolean; // 是否评论动态页面
+  isHostInPage: boolean; // 是否评论动态页面
+
+  @Column({ default: null })
+  parentCommentId: string; // 父级评论 id
+
+  @Column({ default: null })
+  replyUserName: string; // 回复评论用户名
+
+  @Column({ default: null })
+  replyUserEmail: string; // 回复评论邮箱
 
   @CreateDateColumn({
     type: 'datetime',
