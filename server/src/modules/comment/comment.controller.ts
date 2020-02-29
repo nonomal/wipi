@@ -48,12 +48,12 @@ export class CommentController {
   }
 
   /**
-   * 获取文章评论
-   * @param articleId
+   * 获取文章或页面评论
+   * @param hostId
    */
-  @Get('article/:articleId')
-  getArticleComments(@Param('articleId') articleId, @Query() qurey) {
-    return this.commentService.getArticleComments(articleId, qurey);
+  @Get('host/:hostId')
+  getArticleComments(@Param('hostId') hostId, @Query() qurey) {
+    return this.commentService.getArticleComments(hostId, qurey);
   }
 
   /**
