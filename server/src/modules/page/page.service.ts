@@ -76,19 +76,33 @@ export class PageService {
   }
 
   /**
+   * 更新指定文章阅读量 + 1
+   * @param id
+   * @param article
+   */
+  async updateViewsById(id): Promise<Page> {
+    const old = await this.pageRepository.findOne(id);
+    const newData = await this.pageRepository.merge(old, {
+      views: old.views + 1,
+    });
+    return this.pageRepository.save(newData);
+  }
+
+  /**
    * 更新指定页面
    * @param id
    * @param article
    */
   async updateById(id, page: Partial<Page>): Promise<Page> {
     const old = await this.pageRepository.findOne(id);
-    let { content } = page;
+    let { content, status } = page;
     const { html, toc } = content ? marked(content) : old;
 
     const newPage = {
       ...page,
       html,
       toc: JSON.stringify(toc),
+      publishAt: status === 'publish' ? new Date() : old.publishAt,
     };
 
     const updatedPage = await this.pageRepository.merge(old, newPage);

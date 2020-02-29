@@ -14,7 +14,6 @@ import {
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard, Roles } from '../auth/roles.guard';
 import { PageService } from './page.service';
-import { Page } from './page.entity';
 
 @Controller('page')
 @UseGuards(RolesGuard)
@@ -59,6 +58,15 @@ export class PageController {
   @UseGuards(JwtAuthGuard)
   updateById(@Param('id') id, @Body() page) {
     return this.pageService.updateById(id, page);
+  }
+
+  /**
+   * 文章访问量 +1
+   */
+  @Post(':id/views')
+  @HttpCode(HttpStatus.OK)
+  updateViewsById(@Param('id') id) {
+    return this.pageService.updateViewsById(id);
   }
 
   /**

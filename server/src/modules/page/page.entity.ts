@@ -35,6 +35,9 @@ export class Page {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   publishAt: Date; // 发布日期
 
+  @Column({ type: 'int', default: 0 })
+  views: number; // 阅读量
+
   @CreateDateColumn({
     type: 'datetime',
     comment: '创建时间',
