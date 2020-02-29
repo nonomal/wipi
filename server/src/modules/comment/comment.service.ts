@@ -104,11 +104,11 @@ export class CommentService {
           subject: '新评论通知',
           html: `
 <div>
-<table cellpadding="0" align="center" style="width: 600px; margin: 0px auto; text-align: left; position: relative; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; font-size: 14px; font-family:微软雅黑, 黑体; line-height: 1.5; box-shadow: rgb(153, 153, 153) 0px 0px 5px; border-collapse: collapse; background-position: initial initial; background-repeat: initial initial;background:#fff;">
+<table cellpadding="0" align="center" style="width: 600px; margin: 0px auto; text-align: left; position: relative; font-size: 14px; font-family:微软雅黑, 黑体; line-height: 1.5; box-shadow: rgb(153, 153, 153) 0px 0px 5px; border-collapse: collapse; background-position: initial initial; background-repeat: initial initial;background:#fff;">
     <tbody>
     <tr>
         <th valign="middle"
-            style="height: 25px; line-height: 25px; padding: 15px 35px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #42a3d3; background-color: #ff0064; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;">
+            style="height: 25px; line-height: 25px; padding: 15px 35px; background-color: #ff0064; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;">
             <font face="微软雅黑" size="5" style="color: rgb(255, 255, 255);">新评论通知</font>
         </th>
     </tr>
@@ -283,7 +283,7 @@ export class CommentService {
       <tbody>
       <tr>
           <th valign="middle"
-              style="height: 25px; line-height: 25px; padding: 15px 35px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #42a3d3; background-color: #ff0064; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;">
+              style="height: 25px; line-height: 25px; padding: 15px 35px; background-color: #ff0064; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;">
               <font face="微软雅黑" size="5" style="color: rgb(255, 255, 255); ">评论回复通知</font>
           </th>
       </tr>
