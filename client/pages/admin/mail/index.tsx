@@ -119,12 +119,14 @@ const Mail: NextPage = () => {
           title={"发送内容"}
           visible={selectedMail}
           footer={null}
+          width={786 + 48}
           onCancel={() => {
             setSelectedMail(null);
           }}
         >
           <div
             className="markdown"
+            style={{ overflow: "auto !important" }}
             dangerouslySetInnerHTML={{
               __html: selectedMail && selectedMail.html
             }}

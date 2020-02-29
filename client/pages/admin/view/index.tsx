@@ -121,7 +121,12 @@ const Views: NextPage = () => {
       title: "URL",
       dataIndex: "url",
       key: "url",
-      width: "20%"
+      width: "20%",
+      render: url => (
+        <a className={style.link} href={url} target="_blank">
+          {url}
+        </a>
+      )
     },
     {
       title: "访问量",

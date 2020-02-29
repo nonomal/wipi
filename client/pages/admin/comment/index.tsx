@@ -176,7 +176,9 @@ const Comment: NextPage<IProps> = ({
             href={`/${record.isHostInPage ? "page" : "article"}/[id]`}
             as={`/${record.isHostInPage ? "page" : "article"}/` + hostId}
           >
-            <a target="_blank">前往查看</a>
+            <a className={style.link} target="_blank">
+              前往查看
+            </a>
           </Link>
         ) : (
           "文章不存在，可能已经被删除"
