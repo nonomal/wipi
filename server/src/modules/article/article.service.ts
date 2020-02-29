@@ -47,22 +47,6 @@ export class ArticleService {
   }
 
   /**
-   * 校验文章密码是否正确
-   * @param id
-   * @param password
-   */
-  async checkPassword(id, { password }): Promise<{ pass: boolean }> {
-    const data = await this.articleRepository
-      .createQueryBuilder('article')
-      .where('article.id=:id')
-      .andWhere('article.password=:password')
-      .setParameter('id', id)
-      .setParameter('password', password)
-      .getOne();
-    return { pass: !!data };
-  }
-
-  /**
    * 获取所有文章
    */
   async findAll(queryParams: any = {}): Promise<[Article[], number]> {
@@ -70,7 +54,7 @@ export class ArticleService {
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.tags', 'tag')
       .leftJoinAndSelect('article.category', 'category')
-      .orderBy('article.createAt', 'DESC');
+      .orderBy('article.publishAt', 'DESC');
 
     const { page = 1, pageSize = 12, status, ...otherParams } = queryParams;
 
@@ -89,7 +73,16 @@ export class ArticleService {
       });
     }
 
-    return query.getManyAndCount();
+    const [data, total] = await query.getManyAndCount();
+
+    data.forEach(d => {
+      if (d.needPassword) {
+        delete d.content;
+        delete d.html;
+      }
+    });
+
+    return [data, total];
   }
 
   /**
@@ -102,7 +95,7 @@ export class ArticleService {
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.category', 'category')
       .where('category.value=:value', { value: category })
-      .orderBy('article.createAt', 'DESC');
+      .orderBy('article.publishAt', 'DESC');
 
     const { page, pageSize, status } = queryParams;
     query.skip((+page - 1) * +pageSize);
@@ -112,7 +105,16 @@ export class ArticleService {
       query.andWhere('article.status=:status').setParameter('status', status);
     }
 
-    return query.getManyAndCount();
+    const [data, total] = await query.getManyAndCount();
+
+    data.forEach(d => {
+      if (d.needPassword) {
+        delete d.content;
+        delete d.html;
+      }
+    });
+
+    return [data, total];
   }
 
   /**
@@ -125,7 +127,7 @@ export class ArticleService {
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.tags', 'tag')
       .where('tag.value=:value', { value: tag })
-      .orderBy('article.createAt', 'DESC');
+      .orderBy('article.publishAt', 'DESC');
 
     const { page, pageSize, status } = queryParams;
     query.skip((+page - 1) * +pageSize);
@@ -135,7 +137,16 @@ export class ArticleService {
       query.andWhere('article.status=:status').setParameter('status', status);
     }
 
-    return query.getManyAndCount();
+    const [data, total] = await query.getManyAndCount();
+
+    data.forEach(d => {
+      if (d.needPassword) {
+        delete d.content;
+        delete d.html;
+      }
+    });
+
+    return [data, total];
   }
 
   /**
@@ -144,12 +155,17 @@ export class ArticleService {
   async getArchives(): Promise<{ [key: string]: Article[] }> {
     const data = await this.articleRepository.find({
       where: { status: 'publish' },
-      order: { createAt: 'DESC' },
+      order: { publishAt: 'DESC' },
     } as any);
     let ret = {};
 
     data.forEach(d => {
-      const year = new Date(d.createAt).getFullYear();
+      const year = new Date(d.publishAt).getFullYear();
+
+      if (d.needPassword) {
+        delete d.content;
+        delete d.html;
+      }
 
       if (!ret[year]) {
         ret[year] = [];
@@ -159,6 +175,24 @@ export class ArticleService {
     });
 
     return ret;
+  }
+
+  /**
+   * 校验文章密码是否正确
+   * @param id
+   * @param password
+   */
+  async checkPassword(id, { password }): Promise<{ pass: boolean }> {
+    const data = await this.articleRepository
+      .createQueryBuilder('article')
+      .where('article.id=:id')
+      .andWhere('article.password=:password')
+      .setParameter('id', id)
+      .setParameter('password', password)
+      .getOne();
+
+    let pass = !!data;
+    return pass ? { pass: !!data, ...data } : { pass: false };
   }
 
   /**
@@ -179,7 +213,14 @@ export class ArticleService {
       query.andWhere('article.status=:status').setParameter('status', status);
     }
 
-    return query.getOne();
+    const data = await query.getOne();
+
+    if (data.needPassword) {
+      delete data.content;
+      delete data.html;
+    }
+
+    return data;
   }
 
   /**
@@ -189,7 +230,7 @@ export class ArticleService {
    */
   async updateById(id, article: Partial<Article>): Promise<Article> {
     const oldArticle = await this.articleRepository.findOne(id);
-    let { content, tags, category } = article;
+    let { content, tags, category, status } = article;
     const { html, toc } = content ? marked(content) : oldArticle;
 
     if (tags) {
@@ -204,6 +245,7 @@ export class ArticleService {
       category: existCategory,
       toc: JSON.stringify(toc),
       needPassword: !!article.password,
+      publishAt: status === 'publish' ? new Date() : oldArticle.publishAt,
     };
 
     if (tags) {
@@ -262,7 +304,7 @@ export class ArticleService {
   async recommend(articleId = null) {
     const query = this.articleRepository
       .createQueryBuilder('article')
-      .orderBy('article.createAt', 'DESC')
+      .orderBy('article.publishAt', 'DESC')
       .leftJoinAndSelect('article.category', 'category')
       .leftJoinAndSelect('article.tags', 'tags');
 
@@ -272,7 +314,7 @@ export class ArticleService {
     } else {
       const sub = this.articleRepository
         .createQueryBuilder('article')
-        .orderBy('article.createAt', 'DESC')
+        .orderBy('article.publishAt', 'DESC')
         .leftJoinAndSelect('article.category', 'category')
         .leftJoinAndSelect('article.tags', 'tags')
         .where('article.id=:id')
