@@ -83,7 +83,10 @@ export class ArticleProvider {
    * @param id
    * @param password
    */
-  static async checkPassword(id, password): Promise<{ pass: boolean }> {
+  static async checkPassword(
+    id,
+    password
+  ): Promise<{ pass: boolean } & IArticle> {
     return httpProvider.post(`/article/${id}/checkPassword`, { password });
   }
 

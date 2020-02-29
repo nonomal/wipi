@@ -75,24 +75,29 @@ const Article: NextPage<IProps> = ({ article }) => {
   const [affix, setAffix] = useState(true);
   const [password, setPassword] = useState(null);
   const [shouldCheckPassWord, setShouldCheckPassword] = useState(
-    article.needPassword
+    article && article.needPassword
   );
 
   // 检查文章密码
   const checkPassWord = useCallback(() => {
     ArticleProvider.checkPassword(article.id, password).then(res => {
       if (res.pass) {
+        Object.assign(article, res);
         setShouldCheckPassword(false);
       } else {
         message.error("密码错误");
         setShouldCheckPassword(true);
       }
     });
-  }, [password]);
+  }, [article.id, password]);
 
   const back = useCallback(() => {
     Router.push("/");
   }, []);
+
+  useEffect(() => {
+    setShouldCheckPassword(article && article.needPassword);
+  }, [article.id]);
 
   useEffect(() => {
     let tocs = JSON.parse(article.toc);
@@ -179,112 +184,93 @@ const Article: NextPage<IProps> = ({ article }) => {
       </Modal>
       {/* E 密码检验 */}
 
-      {shouldCheckPassWord ? (
-        <div className="container">
-          <p style={{ margin: "16px 0" }}>请输入文章密码</p>
-        </div>
-      ) : (
-        <div>
-          <Helmet>
-            <title>{article.title + " - " + setting.systemTitle}</title>
-          </Helmet>
-          <article className={cls("container", style.container)}>
-            {setting.systemUrl && (
-              <meta
-                itemProp="url"
-                content={url.resolve(
-                  setting.systemUrl,
-                  `/article/${article.id}`
-                )}
-              />
+      <div>
+        <Helmet>
+          <title>{article.title + " - " + setting.systemTitle}</title>
+        </Helmet>
+        <article className={cls("container", style.container)}>
+          {setting.systemUrl && (
+            <meta
+              itemProp="url"
+              content={url.resolve(setting.systemUrl, `/article/${article.id}`)}
+            />
+          )}
+          <meta itemProp="headline" content={article.title} />
+          {article.tags && (
+            <meta
+              itemProp="keywords"
+              content={article.tags.map(tag => tag.label).join(" ")}
+            />
+          )}
+          <meta itemProp="dataPublished" content={article.updateAt} />
+          {article.cover && <meta itemProp="image" content={article.cover} />}
+          <div className={style.meta}>
+            {article.cover && (
+              <img className={style.cover} src={article.cover} alt="文章封面" />
             )}
-            <meta itemProp="headline" content={article.title} />
-            {article.tags && (
-              <meta
-                itemProp="keywords"
-                content={article.tags.map(tag => tag.label).join(" ")}
-              />
-            )}
-            <meta itemProp="dataPublished" content={article.updateAt} />
-            {article.cover && <meta itemProp="image" content={article.cover} />}
-            <div className={style.meta}>
-              {article.cover && (
-                <img
-                  className={style.cover}
-                  src={article.cover}
-                  alt="文章封面"
-                />
-              )}
-              <h1 className={style.title}>{article.title}</h1>
-              <p className={style.desc}>
-                <span>
-                  发布于{" "}
-                  {dayjs
-                    .default(article.createAt)
-                    .format("YYYY-MM-DD HH:mm:ss")}
-                </span>
-                <span> • </span>
-                <span>阅读量 {article.views}</span>
-              </p>
-            </div>
-
-            <div className={style.contentWrapper} ref={content}>
-              <div className={style.content}>
-                <div
-                  ref={ref}
-                  className={cls("markdown", style.markdown)}
-                  dangerouslySetInnerHTML={{ __html: article.html }}
-                ></div>
-                <div className={style.articleFooter}>
-                  {article.tags && article.tags.length ? (
-                    <div className={style.tags}>
-                      <div>
-                        <span>标签：</span>
-                        {article.tags.map(tag => {
-                          return (
-                            <div className={style.tag} key={tag.id}>
-                              <Link
-                                href={"/tag/[tag]"}
-                                as={"/tag/" + tag.value}
-                              >
-                                <a>
-                                  <span>{tag.label}</span>
-                                </a>
-                              </Link>
-                            </div>
-                          );
-                        })}
-                      </div>
+            <h1 className={style.title}>{article.title}</h1>
+            <p className={style.desc}>
+              <span>
+                发布于{" "}
+                {dayjs.default(article.publishAt).format("YYYY-MM-DD HH:mm:ss")}
+              </span>
+              <span> • </span>
+              <span>阅读量 {article.views}</span>
+            </p>
+          </div>
+          <div className={style.contentWrapper} ref={content}>
+            <div className={style.content}>
+              <div
+                ref={ref}
+                className={cls("markdown", style.markdown)}
+                dangerouslySetInnerHTML={{ __html: article.html }}
+              ></div>
+              <div className={style.articleFooter}>
+                {article.tags && article.tags.length ? (
+                  <div className={style.tags}>
+                    <div>
+                      <span>标签：</span>
+                      {article.tags.map(tag => {
+                        return (
+                          <div className={style.tag} key={tag.id}>
+                            <Link href={"/tag/[tag]"} as={"/tag/" + tag.value}>
+                              <a>
+                                <span>{tag.label}</span>
+                              </a>
+                            </Link>
+                          </div>
+                        );
+                      })}
                     </div>
-                  ) : null}
-                  <div>
-                    版权信息：
-                    <a
-                      href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
-                      target="_blank"
-                    >
-                      非商用-署名-自由转载
-                    </a>
                   </div>
+                ) : null}
+                <div>
+                  版权信息：
+                  <a
+                    href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+                    target="_blank"
+                  >
+                    非商用-署名-自由转载
+                  </a>
                 </div>
               </div>
-              {/* S 文章目录 */}
-              {Array.isArray(tocs) && (
-                <div className={style.anchorWidget}>
-                  <Anchor targetOffset={32} offsetTop={32} affix={affix}>
-                    {renderTocTree(tocs)}
-                  </Anchor>
-                </div>
-              )}
-              {/* E 文章目录 */}
             </div>
-          </article>
-          <CommentAndRecommendArticles
-            articleId={article.id}
-            isCommentable={article.isCommentable}
-          />
-        </div>
-      )}
+            {/* S 文章目录 */}
+            {Array.isArray(tocs) && (
+              <div className={style.anchorWidget}>
+                <Anchor targetOffset={32} offsetTop={32} affix={affix}>
+                  {renderTocTree(tocs)}
+                </Anchor>
+              </div>
+            )}
+            {/* E 文章目录 */}
+          </div>
+        </article>
+        <CommentAndRecommendArticles
+          articleId={article.id}
+          isCommentable={article.isCommentable}
+        />
+      </div>
     </Layout>
   );
 };
