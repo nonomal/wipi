@@ -10,6 +10,7 @@ import { Comment } from './comment.entity';
 
 const url = require('url');
 const UAParser = require('ua-parser-js');
+const dayjs = require('dayjs');
 
 /**
  * 扁平接口评论转为树形评论
@@ -93,24 +94,62 @@ export class CommentService {
       const {
         smtpFromUser: from,
         systemUrl,
+        systemTitle,
       } = await this.settingService.findAll(true);
+
       const sendEmail = (adminName, adminEmail) => {
         const emailMessage = {
           from,
           to: adminEmail,
           subject: '新评论通知',
           html: `
-          <div style="box-sizing: border-box; width: 100%; padding: 16px; background: rgb(246, 246, 246);">
-            <div style="box-sizing: border-box; width: 100%; background: '#fff;">
-              <p>亲爱的管理员 ${adminName}，站点收到新评论，请审核！</p>
-              <p>评论人：${comment.name}</p>
-              <p>评论内容：${comment.content}</p>
-              <p><a href="${url.resolve(
-                systemUrl,
-                'admin/comment'
-              )}" target="_blank">前往审核</a></p>
+<div>
+<table cellpadding="0" align="center" style="width: 600px; margin: 0px auto; text-align: left; position: relative; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; font-size: 14px; font-family:微软雅黑, 黑体; line-height: 1.5; box-shadow: rgb(153, 153, 153) 0px 0px 5px; border-collapse: collapse; background-position: initial initial; background-repeat: initial initial;background:#fff;">
+    <tbody>
+    <tr>
+        <th valign="middle"
+            style="height: 25px; line-height: 25px; padding: 15px 35px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #42a3d3; background-color: #ff0064; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;">
+            <font face="微软雅黑" size="5" style="color: rgb(255, 255, 255);">新评论通知</font>
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <div style="padding:25px 35px 40px; background-color:#fff;">
+                <h2 style="margin: 5px 0px; ">
+                  <font color="#333333" style="line-height: 20px; ">
+                    <font style="line-height: 22px; " size="4">
+                      亲爱的 ${adminName}
+                    </font>
+                  </font>
+                </h2>
+                <p>站点收到新评论：</p>
+                <p>评论人：<b>${comment.name}</b></p>
+                <p>评论内容：<b>${comment.content}</b></p>
+                <p align="center">
+                  <a href="${url.resolve(
+                    systemUrl,
+                    'admin/comment'
+                  )}" style="display: inline-block; margin: 16px auto; width: 160px; height: 32px; line-height: 32px; color: #ff0064; border: 1px solid #ff0064; background-color: #fff0f6; border-radius: 4px; text-decoration: none;">
+                  前往审核
+                  </a>
+                </p>
+                <p align="right">${systemTitle}</p>
+                <p align="right">${dayjs(new Date()).format(
+                  'YYYY-MM-DD HH:mm:ss'
+                )}</p>
+                <div style="width:700px;margin:0 auto;">
+                    <div style="padding:10px 10px 0;border-top:1px solid #ccc;color:#747474;margin-bottom:20px;line-height:1.3em;font-size:12px;">
+                        <p>此为系统邮件，请勿回复<br>
+                            请保管好您的邮箱，避免账号被他人盗用
+                        </p>
+                    </div>
+                </div>
             </div>
-          </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
         `,
         };
         this.smtpService.create(emailMessage).catch(() => {
@@ -126,7 +165,9 @@ export class CommentService {
             sendEmail(user.name, user.email);
           }
         });
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     return newComment;
@@ -219,47 +260,77 @@ export class CommentService {
     const newData = await this.commentRepository.merge(old, data);
 
     if (newData.pass) {
-      const {
-        name,
-        email,
-        replyUserName,
-        replyUserEmail,
-        hostId,
-        isHostInPage,
-      } = newData;
+      const { replyUserName, replyUserEmail, hostId, isHostInPage } = newData;
 
-      // 发送通知邮件
-      try {
-        const isReply = replyUserName && replyUserEmail;
-        const {
-          smtpFromUser: from,
-          systemUrl,
-        } = await this.settingService.findAll(true);
-        const emailMessage = {
-          from,
-          to: isReply ? replyUserEmail : email,
-          subject: '评论回复通知',
-          html: `
-    <div style="box-sizing: border-box; width: 100%; padding: 15px; background: rgb(246, 246, 246);">
-      <div style="box-sizing: border-box; width: 100%; background: '#fff;">
-        <p style="color: #009a61; ">亲爱的${
-          isReply ? replyUserName : name
-        }，您的评论已被回复，点击链接前往查看：</p>
-        <div>
-          <p><a href="${url.resolve(
+      const isReply = replyUserName && replyUserEmail;
+
+      if (isReply) {
+        // 发送通知邮件
+        try {
+          const {
+            smtpFromUser: from,
             systemUrl,
-            `/${isHostInPage ? 'page' : 'article'}/` + hostId
-          )}">前往查看</a></p>
-        </div>
-      </div>
-    </div>`,
-        };
-        this.smtpService.create(emailMessage).catch(() => {
-          console.log(
-            `通知用户 ${replyUserName}（${replyUserEmail}），但发送邮件通知失败`
-          );
-        });
-      } catch (e) {}
+            systemTitle,
+          } = await this.settingService.findAll(true);
+          const emailMessage = {
+            from,
+            to: replyUserEmail,
+            subject: '评论回复通知',
+            html: `
+<div>
+  <table cellpadding="0" align="center"
+          style="width: 600px; margin: 0px auto; text-align: left; position: relative; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; font-size: 14px; font-family:微软雅黑, 黑体; line-height: 1.5; box-shadow: rgb(153, 153, 153) 0px 0px 5px; border-collapse: collapse; background-position: initial initial; background-repeat: initial initial;background:#fff;">
+      <tbody>
+      <tr>
+          <th valign="middle"
+              style="height: 25px; line-height: 25px; padding: 15px 35px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #42a3d3; background-color: #ff0064; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;">
+              <font face="微软雅黑" size="5" style="color: rgb(255, 255, 255); ">评论回复通知</font>
+          </th>
+      </tr>
+      <tr>
+          <td>
+              <div style="padding:25px 35px 40px; background-color:#fff;">
+                  <h2 style="margin: 5px 0px; ">
+                    <font color="#333333" style="line-height: 20px; ">
+                      <font style="line-height: 22px; " size="4">
+                        亲爱的 ${replyUserName}
+                      </font>
+                    </font>
+                  </h2>
+                  <p>您的评论已经被他人回复。点击下方按钮前往查看。</p>
+                  <p align="center">
+                    <a href="${url.resolve(
+                      systemUrl,
+                      `/${isHostInPage ? 'page' : 'article'}/` + hostId
+                    )}" style="display: inline-block; margin: 16px auto; width: 160px; height: 32px; line-height: 32px; color: #ff0064; border: 1px solid #ff0064; background-color: #fff0f6; border-radius: 4px; text-decoration: none;">
+                    前往查看
+                    </a>
+                  </p>
+                  <p align="right">${systemTitle}</p>
+                  <p align="right">${dayjs(new Date()).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )}</p>
+                  <div style="width:700px;margin:0 auto;">
+                      <div style="padding:10px 10px 0;border-top:1px solid #ccc;color:#747474;margin-bottom:20px;line-height:1.3em;font-size:12px;">
+                          <p>此为系统邮件，请勿回复<br>
+                              请保管好您的邮箱，避免账号被他人盗用
+                          </p>
+                      </div>
+                  </div>
+              </div>
+          </td>
+      </tr>
+      </tbody>
+  </table>
+</div>`,
+          };
+          this.smtpService.create(emailMessage).catch(() => {
+            console.log(
+              `通知用户 ${replyUserName}（${replyUserEmail}），但发送邮件通知失败`
+            );
+          });
+        } catch (e) {}
+      }
     }
 
     return this.commentRepository.save(newData);
