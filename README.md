@@ -20,7 +20,7 @@ GitHub 地址：https://github.com/zhxuc/wipi （欢迎 star）。
 
 ### 后台页面
 
-地址：https://custw.qifengle1412.cn/admin/login （账户：`wipi`，密码：`wipi123456`）。
+地址：https://custw.qifengle1412.cn/admin/register （支持访客注册，也可使用账户：`wipi` `wipi123456`）。
 
 ![登录页面](https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZW0/wipi-login.png)
 ![后台首页](https://wipi.oss-cn-shanghai.aliyuncs.com/2020-02-13/PMHJN7AB7S95TU83JGRZR2/wipi-admin-index.png)
