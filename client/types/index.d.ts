@@ -56,6 +56,7 @@ interface IPage {
   html: string;
   toc: string;
   status: string;
+  views: number;
   createAt: string;
   publishAt: string;
 }
