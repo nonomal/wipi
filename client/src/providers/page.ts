@@ -41,6 +41,15 @@ export class PageProvider {
   }
 
   /**
+   * 更新文章阅读量
+   * @param id
+   * @param data
+   */
+  static async updatePageViews(id): Promise<IPage> {
+    return httpProvider.post(`/page/${id}/views`);
+  }
+
+  /**
    * 删除页面
    * @param id
    */
