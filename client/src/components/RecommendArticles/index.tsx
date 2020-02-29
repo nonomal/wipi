@@ -66,7 +66,7 @@ export const RecommendArticles: React.FC<IProps> = ({
                       <p className={style.articleTitle}>
                         <strong>{article.title}</strong>
                         {" · "}
-                        <span>{format(article.createAt, "zh_CN")}</span>
+                        <span>{format(article.publishAt, "zh_CN")}</span>
                       </p>
                     </a>
                   </Link>
