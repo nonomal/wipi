@@ -18,13 +18,13 @@ export class CommentProvider {
 
   /**
    * 获取指定文章评论
-   * @param articleId
+   * @param hostId
    */
   static async getArticleComments(
-    articleId,
+    hostId,
     params
   ): Promise<[IComment[], number]> {
-    return httpProvider.get(`/comment/article/${articleId}`, { params });
+    return httpProvider.get(`/comment/host/${hostId}`, { params });
   }
 
   /**
