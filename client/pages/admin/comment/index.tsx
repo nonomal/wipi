@@ -84,11 +84,12 @@ const Comment: NextPage<IProps> = ({
         name: userInfo.name,
         email,
         content: replyContent,
-        parentCommentId: selectedComment.parentCommentId,
+        parentCommentId: selectedComment.parentCommentId || selectedComment.id,
         hostId: selectedComment.hostId,
         isHostInPage: selectedComment.isHostInPage,
         replyUserName: selectedComment.name,
-        replyUserEmail: selectedComment.email
+        replyUserEmail: selectedComment.email,
+        createByAdmin: true
       };
 
       CommentProvider.addComment(data)
