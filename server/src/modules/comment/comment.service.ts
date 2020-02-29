@@ -73,9 +73,9 @@ export class CommentService {
    */
   async create(
     userAgent,
-    comment: Partial<Comment> & { reply?: string }
+    comment: Partial<Comment> & { reply?: string; createByAdmin?: boolean }
   ): Promise<Comment> {
-    const { hostId, name, email, content } = comment;
+    const { hostId, name, email, content, createByAdmin = false } = comment;
 
     if (!hostId || !name || !email || !content) {
       throw new HttpException('缺失参数', HttpStatus.BAD_REQUEST);
@@ -88,16 +88,18 @@ export class CommentService {
     const newComment = await this.commentRepository.create(comment);
     await this.commentRepository.save(comment);
 
-    // 发送通知邮件
-    const { smtpFromUser: from, systemUrl } = await this.settingService.findAll(
-      true
-    );
-    const sendEmail = (adminName, adminEmail) => {
-      const emailMessage = {
-        from,
-        to: adminEmail,
-        subject: '新评论通知',
-        html: `
+    if (!createByAdmin) {
+      // 发送通知邮件
+      const {
+        smtpFromUser: from,
+        systemUrl,
+      } = await this.settingService.findAll(true);
+      const sendEmail = (adminName, adminEmail) => {
+        const emailMessage = {
+          from,
+          to: adminEmail,
+          subject: '新评论通知',
+          html: `
           <div style="box-sizing: border-box; width: 100%; padding: 16px; background: rgb(246, 246, 246);">
             <div style="box-sizing: border-box; width: 100%; background: '#fff;">
               <p>亲爱的管理员 ${adminName}，站点收到新评论，请审核！</p>
@@ -110,21 +112,22 @@ export class CommentService {
             </div>
           </div>
         `,
+        };
+        this.smtpService.create(emailMessage).catch(() => {
+          console.log('收到新评论，但发送邮件通知失败');
+        });
       };
-      this.smtpService.create(emailMessage).catch(() => {
-        console.log('收到新评论，但发送邮件通知失败');
-      });
-    };
 
-    try {
-      // 通知所有管理员审核评论
-      const [users] = await this.userService.findAll({ role: 'admin' });
-      users.forEach(user => {
-        if (user.email) {
-          sendEmail(user.name, user.email);
-        }
-      });
-    } catch (e) {}
+      try {
+        // 通知所有管理员审核评论
+        const [users] = await this.userService.findAll({ role: 'admin' });
+        users.forEach(user => {
+          if (user.email) {
+            sendEmail(user.name, user.email);
+          }
+        });
+      } catch (e) {}
+    }
 
     return newComment;
   }
