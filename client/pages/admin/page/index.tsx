@@ -39,6 +39,19 @@ const columns = [
     key: "path"
   },
   {
+    title: "阅读量",
+    dataIndex: "views",
+    key: "views",
+    render: views => (
+      <Badge
+        count={views}
+        showZero={true}
+        overflowCount={Infinity}
+        style={{ backgroundColor: "#52c41a" }}
+      />
+    )
+  },
+  {
     title: "状态",
     dataIndex: "status",
     key: "status",

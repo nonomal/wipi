@@ -40,6 +40,11 @@ const Page: NextPage<IProps> = ({ page }) => {
     setTocs(tocs);
   }, []);
 
+  // 更新阅读量
+  useEffect(() => {
+    PageProvider.updatePageViews(page.id);
+  }, []);
+
   // 高亮
   useEffect(() => {
     if (ref.current) {
