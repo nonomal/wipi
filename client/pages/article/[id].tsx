@@ -202,7 +202,7 @@ const Article: NextPage<IProps> = ({ article }) => {
               content={article.tags.map(tag => tag.label).join(" ")}
             />
           )}
-          <meta itemProp="dataPublished" content={article.updateAt} />
+          <meta itemProp="dataPublished" content={article.publishAt} />
           {article.cover && <meta itemProp="image" content={article.cover} />}
           <div className={style.meta}>
             {article.cover && (

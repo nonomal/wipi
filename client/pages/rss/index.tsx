@@ -36,7 +36,7 @@ Rss.getInitialProps = async ctx => {
       title: article.title,
       description: article.summary,
       url: url.resolve(setting.systemUrl, "article/" + article.id),
-      date: article.updateAt,
+      date: article.publishAt,
       categories: [(article.category || {}).label]
     });
   });
