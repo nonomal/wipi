@@ -37,7 +37,8 @@ module.exports = withPlugins(
     [
       withSass,
       {
-        cssModules: true
+        cssModules: true,
+        localIdentName: "[name]__[local]_[hash:base64:5]"
       }
     ],
     [
