@@ -11,9 +11,9 @@ import "@/theme/markdown.scss";
 let lastUrl;
 
 const addView = url => {
-  // if (/admin/.test(url)) {
-  //   return;
-  // }
+  if (/localhost/.test(url)) {
+    return;
+  }
 
   ViewProvider.addView({ url });
 };
@@ -32,11 +32,9 @@ class MyApp extends App {
 
   componentDidUpdate() {
     const url = window.location.href;
-
     if (url === lastUrl) {
       return;
     }
-
     lastUrl = url;
     addView(url);
   }
