@@ -104,6 +104,9 @@
       width: 100%;
       text-align: center;
       border-collapse: collapse;
+      border-spacing: 0;
+      border: 1px solid #f4f4f4;
+      overflow: auto;
     }
 
     table th {
@@ -113,6 +116,10 @@
       padding: 0.5rem;
       background-color: #f7fafc;
       text-align: center;
+    }
+
+    table tr:nth-child(2n) {
+      background-color: #fcfcfc;
     }
 
     table td {
@@ -133,14 +140,9 @@
       vertical-align: baseline;
     }
 
-    table td:first-child {
-      border-color: #e2e8f0;
-    }
-
     ul,
     ol {
       line-height: 1.6em;
-      padding-bottom: 1.2em;
       padding-left: 1.5em;
 
       position: relative;
@@ -242,9 +244,7 @@
         color: hsla(0, 0%, 54.9%, 0.8);
         text-align: right;
         font-size: 0.75em;
-        padding: 5px 10px 0;
-        line-height: 15px;
-        height: 15px;
+        padding: 4px 8px 0;
         font-weight: 600;
       }
 
@@ -298,20 +298,16 @@
 
       code.language-javascript:before,
       code.language-js:before {
-        content: "JS";
+        content: "JavaScript";
       }
 
       code.language-typescript:before,
       code.language-ts:before {
-        content: "TS";
-      }
-
-      code.language-bash:before {
-        content: "Shell";
+        content: "TypeScript";
       }
 
       code.language-css:before {
-        content: "CSS";
+        content: "css";
       }
     }
   }
