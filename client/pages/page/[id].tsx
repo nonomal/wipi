@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NextPage } from "next";
+import { Helmet } from "react-helmet";
 import hljs from "highlight.js";
 import { Layout } from "@/layout/Layout";
 import Viewer from "viewerjs";
 import { CommentAndRecommendArticles } from "@components/CommentAndRecommendArticles";
 import { PageProvider } from "@providers/page";
+import { useSetting } from "@/hooks/useSetting";
 import style from "./index.module.scss";
 
 interface IProps {
@@ -12,6 +14,7 @@ interface IProps {
 }
 
 const Page: NextPage<IProps> = ({ page }) => {
+  const setting = useSetting();
   const ref = useRef(null);
   const [tocs, setTocs] = useState([]);
 
@@ -66,6 +69,9 @@ const Page: NextPage<IProps> = ({ page }) => {
         </div>
       ) : (
         <div className={style.container}>
+          <Helmet>
+            <title>{page.name + " | " + setting.systemTitle}</title>
+          </Helmet>
           <div className="container">
             {page.cover && (
               <div className={style.meta}>
