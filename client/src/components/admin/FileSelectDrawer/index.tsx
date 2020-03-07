@@ -28,7 +28,7 @@ const copy = value => {
   message.success("链接已复制到剪切板");
 };
 
-let viewer: any = null;
+// let viewer: any = null;
 
 export const FileSelectDrawer: React.FC<IFileProps> = ({
   visible,
@@ -47,11 +47,11 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
       .then(res => {
         setFiles(res[0]);
         setLoading(false);
-        if (!viewer) {
-          viewer = new Viewer(ref.current, { inline: false });
-        } else {
-          viewer.update();
-        }
+        // if (!viewer) {
+        //   viewer = new Viewer(ref.current, { inline: false });
+        // } else {
+        //   viewer.update();
+        // }
         return res;
       })
       .catch(err => {
@@ -104,10 +104,10 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
                       <div className={style.preview}>
                         <img
                           alt={file.originalname}
-                          onClick={e => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                          }}
+                          // onClick={e => {
+                          //   e.preventDefault();
+                          //   e.stopPropagation();
+                          // }}
                           src={file.url}
                         />
                       </div>
