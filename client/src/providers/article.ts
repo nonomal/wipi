@@ -40,7 +40,9 @@ export class ArticleProvider {
   /**
    * 获取所有文章归档
    */
-  static async getArchives(): Promise<{ [key: string]: IArticle[] }> {
+  static async getArchives(): Promise<{
+    [key: string]: { [key: string]: IArticle[] };
+  }> {
     return httpProvider.get("/article/archives");
   }
 

@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 import cls from "classnames";
 import { Row, Col, Timeline } from "antd";
+import * as dayjs from "dayjs";
 import { Layout } from "@/layout/Layout";
 import { ArticleProvider } from "@providers/article";
 import { RecommendArticles } from "@components/RecommendArticles";
@@ -10,22 +11,27 @@ import { Tags } from "@components/Tags";
 import style from "./index.module.scss";
 
 interface IProps {
-  articles: { [key: string]: IArticle[] };
+  articles: { [key: string]: { [key: string]: IArticle[] } };
 }
 
-const ArchiveItem = ({ year, articles = [] }) => {
+const ArchiveItem = ({ month, articles = [] }) => {
   return (
     <div className={style.item}>
-      <p>{year}</p>
-      <Timeline>
+      <h3>{month}</h3>
+      <ul>
         {articles.map(article => (
-          <Timeline.Item key={article.id}>
+          <li key={article.id}>
             <Link href={`/article/[id]`} as={`/article/${article.id}`}>
-              <a>{article.title}</a>
+              <a>
+                <span className={style.meta}>
+                  {dayjs.default(article.publishAt).format("MM-DD")}
+                </span>
+                <span className={style.title}>{article.title}</span>
+              </a>
             </Link>
-          </Timeline.Item>
+          </li>
         ))}
-      </Timeline>
+      </ul>
     </div>
   );
 };
@@ -39,11 +45,18 @@ const Archives: NextPage<IProps> = ({ articles }) => {
             <div className={style.content}>
               {Object.keys(articles).map(year => {
                 return (
-                  <ArchiveItem
-                    key={year}
-                    year={year}
-                    articles={articles[year]}
-                  />
+                  <div className={style.list}>
+                    <h2>{year}</h2>
+                    {Object.keys(articles[year]).map(month => {
+                      return (
+                        <ArchiveItem
+                          key={year}
+                          month={month}
+                          articles={articles[year][month]}
+                        />
+                      );
+                    })}
+                  </div>
                 );
               })}
             </div>
