@@ -5,20 +5,41 @@ $height: 64px;
 .header {
   position: relative;
   width: 100%;
-  z-index: 100;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  height: $height;
 }
 
 .wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  width: 100vw;
+  border-bottom: 1px solid #f1f1f1;
+  background-color: #fff;
+
+  &.isFixed {
+    position: fixed;
+    z-index: 100;
+    transform: translate3d(0, -100%, 0);
+
+    &.visible {
+      transform: translateZ(0);
+    }
+  }
+
+  &.boxShadow {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  > div {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  // justify-content: space-between;
 
   .logo {
     height: $height;
     line-height: $height;
     text-align: left;
     color: #333;
+    margin-right: 3rem;
 
     img {
       width: 32px;
@@ -27,6 +48,8 @@ $height: 64px;
 
   .mobileTrigger {
     display: none;
+    position: absolute;
+    right: 15px;
 
     .stick {
       width: 25px;
@@ -59,6 +82,7 @@ $height: 64px;
   }
 
   nav {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -67,12 +91,15 @@ $height: 64px;
     // margin-left: 48px;
 
     ul {
+      width: 100%;
+      position: relative;
+
       li {
         display: inline-flex;
         padding: 0;
         vertical-align: middle;
         line-height: 64px;
-        padding: 0 12px;
+        padding: 0 16px;
 
         &:first-of-type {
           padding-left: 0;
@@ -86,6 +113,13 @@ $height: 64px;
           color: inherit;
           width: 100%;
         }
+      }
+
+      .searchWrapper {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
       }
 
       .search {
@@ -105,6 +139,12 @@ $height: 64px;
           &:first-child {
             margin-top: 24px;
           }
+        }
+
+        .searchWrapper {
+          position: relative;
+          top: 0;
+          transform: translateY(0);
         }
 
         .search {

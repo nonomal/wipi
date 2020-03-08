@@ -60,8 +60,8 @@ const Home: NextPage<IProps> = ({
 
   return (
     <Layout needFooter={false}>
+      <CategoryMenu />
       <div className={cls("container", style.container)}>
-        <CategoryMenu />
         <div className={style.content}>
           <InfiniteScroll
             pageStart={1}
