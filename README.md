@@ -1,3 +1,4 @@
+
 最近疫情比较紧张，在家调休，闲着无聊便写了个前后端分离，服务端渲染的博客系统。支持特性：
 
 - 文章创建、编辑、发布
@@ -82,3 +83,9 @@ cd server && yarn start:dev
 1. 首页：https://custw.qifengle1412.cn/
 2. 后台：https://custw.qifengle1412.cn/admin/login （账户：<code>wipi</code>，密码：<code>wipi123456</code>）
 4. 源码：https://github.com/zhxuc/wipi （欢迎 star）
+
+## 交流群
+
+如果有问题，欢迎提 issue 或者加入下方微信群。
+
+![二维码](https://wipi.oss-cn-shanghai.aliyuncs.com/2020-03-08/TYM4W4F54Y5KLFDJOJGK7G/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200308182855.jpg)
