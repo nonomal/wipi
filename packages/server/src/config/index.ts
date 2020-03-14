@@ -1,10 +1,10 @@
 export const config = {
   admin: { name: 'admin', password: 'admin' },
   mysql: {
-    host: '47.103.42.49',
-    port: 33721,
+    host: '0.0.0.0',
+    port: 3306,
     username: 'root',
-    password: '?!#$1234KBen2020@pdd',
+    password: 'root',
     database: 'wipi',
     charset: 'utf8mb4',
   },
