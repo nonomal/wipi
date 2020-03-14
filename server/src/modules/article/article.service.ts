@@ -235,10 +235,10 @@ export class ArticleService {
 
     const data = await query.getOne();
 
-    if (data.needPassword) {
-      delete data.content;
-      delete data.html;
-    }
+    // if (data.needPassword) {
+    //   delete data.content;
+    //   delete data.html;
+    // }
 
     return data;
   }
