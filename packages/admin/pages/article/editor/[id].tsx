@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import cls from 'classnames';
 import { NextPage } from 'next';
-import { Button, Input, message } from 'antd';
-import { AdminLayout } from '@/layout/AdminLayout';
+import Router from 'next/router';
+import { Button, Input, message, PageHeader } from 'antd';
+import { Editor as CKEditor } from '@components/Editor';
 import { FileSelectDrawer } from '@/components/FileSelectDrawer';
 import { ArticleSettingDrawer } from '@/components/ArticleSettingDrawer';
 import { ArticleProvider } from '@providers/article';
-import SimpleMDE from 'react-simplemde-editor';
-import 'easymde/dist/easymde.min.css';
 import style from './index.module.scss';
 
 interface IProps {
@@ -14,28 +14,17 @@ interface IProps {
 }
 
 const Editor: NextPage<IProps> = ({ id }) => {
-  const [mounted, setMounted] = useState(false);
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
   const [article, setArticle] = useState<any>({});
   const [title, setArticleTitle] = useState<any>(null);
-  const [summary, setArticleSummary] = useState<any>(null);
 
   useEffect(() => {
     ArticleProvider.getArticle(id).then(res => {
       setArticle(res);
       setArticleTitle(res.title);
-      setArticleSummary(res.summary);
     });
   }, [id]);
-
-  useEffect(() => {
-    setMounted(true);
-
-    return () => {
-      setMounted(false);
-    };
-  }, []);
 
   const save = useCallback(() => {
     if (!article.title) {
@@ -78,7 +67,6 @@ const Editor: NextPage<IProps> = ({ id }) => {
     let canPublish = true;
     void [
       ['title', '请输入文章标题'],
-      ['summary', '请输入文章摘要'],
       ['content', '请输入文章内容'],
     ].forEach(([key, msg]) => {
       if (!article[key]) {
@@ -109,39 +97,43 @@ const Editor: NextPage<IProps> = ({ id }) => {
   };
 
   return (
-    <AdminLayout>
-      <div className={style.wrapper}>
-        <Input
-          placeholder="请输入文章标题"
-          // value={article.title}
-          value={title}
-          onChange={e => {
-            setArticleTitle(e.target.value);
-            setArticle(article => {
-              const value = e.target.value;
-              article.title = value;
-              return article;
-            });
+    <div className={style.wrapper}>
+      <header className={style.header}>
+        <PageHeader
+          style={{
+            border: '1px solid rgb(235, 237, 240)',
           }}
+          onBack={() => Router.back()}
+          title={
+            <Input
+              placeholder="请输入文章标题"
+              value={title}
+              onChange={e => {
+                setArticleTitle(e.target.value);
+              }}
+            />
+          }
+          extra={[
+            <Button
+              type="dashed"
+              onClick={() => {
+                setFileDrawerVisible(true);
+              }}
+            >
+              文件库
+            </Button>,
+            <Button onClick={save}>保存草稿</Button>,
+            <Button onClick={preview}>预览</Button>,
+            <Button type="primary" onClick={publish}>
+              发布
+            </Button>,
+          ]}
         />
-        <Input.TextArea
-          className={style.formItem}
-          placeholder="请输入文章摘要"
-          autoSize={{ minRows: 3, maxRows: 6 }}
-          value={summary}
-          onChange={e => {
-            setArticleSummary(e.target.value);
-            setArticle(article => {
-              const value = e.target.value;
-              article.summary = value;
-              return article;
-            });
-          }}
-        />
-        {mounted && (
-          <SimpleMDE
-            className={style.formItem}
-            value={article.content}
+      </header>
+      <div className={cls('container', style.content)}>
+        <article>
+          <CKEditor
+            value={article.html}
             onChange={value => {
               setArticle(article => {
                 article.content = value;
@@ -149,38 +141,23 @@ const Editor: NextPage<IProps> = ({ id }) => {
               });
             }}
           />
-        )}
-        <FileSelectDrawer
-          isCopy={true}
-          closeAfterClick={true}
-          visible={fileDrawerVisible}
-          onClose={() => {
-            setFileDrawerVisible(false);
-          }}
-        />
-        <ArticleSettingDrawer
-          article={article}
-          visible={settingDrawerVisible}
-          onClose={() => setSettingDrawerVisible(false)}
-          onChange={saveOrPublish}
-        />
-        <div className={style.operation}>
-          <Button
-            type="dashed"
-            onClick={() => {
-              setFileDrawerVisible(true);
-            }}
-          >
-            文件库
-          </Button>
-          <Button onClick={save}>更新</Button>
-          <Button onClick={preview}>预览</Button>
-          <Button type="primary" onClick={publish}>
-            发布
-          </Button>
-        </div>
+        </article>
       </div>
-    </AdminLayout>
+      <FileSelectDrawer
+        isCopy={true}
+        closeAfterClick={true}
+        visible={fileDrawerVisible}
+        onClose={() => {
+          setFileDrawerVisible(false);
+        }}
+      />
+      <ArticleSettingDrawer
+        article={article}
+        visible={settingDrawerVisible}
+        onClose={() => setSettingDrawerVisible(false)}
+        onChange={saveOrPublish}
+      />
+    </div>
   );
 };
 
