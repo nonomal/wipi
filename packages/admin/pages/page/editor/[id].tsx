@@ -97,8 +97,9 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
               placeholder="请输入页面名称"
               defaultValue={page.name}
               onChange={e => {
+                const value = e.target.value;
+
                 setPage(page => {
-                  const value = e.target.value;
                   page.name = value;
                   return page;
                 });

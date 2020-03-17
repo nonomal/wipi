@@ -93,8 +93,8 @@ const Editor: NextPage = () => {
               placeholder="请输入页面名称"
               defaultValue={page.name}
               onChange={e => {
+                const value = e.target.value;
                 setPage(page => {
-                  const value = e.target.value;
                   page.name = value;
                   return page;
                 });

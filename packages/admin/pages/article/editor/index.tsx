@@ -106,8 +106,8 @@ const Editor: NextPage = () => {
               placeholder="请输入文章标题"
               defaultValue={article.title}
               onChange={e => {
+                const value = e.target.value;
                 setArticle(article => {
-                  const value = e.target.value;
                   article.title = value;
                   return article;
                 });
