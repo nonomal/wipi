@@ -1,26 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import cls from 'classnames';
+import Router from 'next/router';
 import { NextPage } from 'next';
-import { Button, Input, Icon, message } from 'antd';
-import { AdminLayout } from '@/layout/AdminLayout';
+import { Button, Input, message, PageHeader, Icon, Drawer } from 'antd';
+import { Editor as CKEditor } from '@components/Editor';
 import { FileSelectDrawer } from '@/components/FileSelectDrawer';
 import { PageProvider } from '@providers/page';
-import SimpleMDE from 'react-simplemde-editor';
-import 'easymde/dist/easymde.min.css';
+import { useSetting } from '@/hooks/useSetting';
 import style from './index.module.scss';
+const url = require('url');
 
 const Editor: NextPage = () => {
-  const [mounted, setMounted] = useState(false);
+  const ref = useRef();
+  const setting = useSetting();
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [id, setId] = useState(null);
   const [page, setPage] = useState<any>({});
-
-  useEffect(() => {
-    setMounted(true);
-
-    return () => {
-      setMounted(false);
-    };
-  }, []);
+  const [pageDrawerVisible, setPageDrawerVisible] = useState(false);
 
   const save = useCallback(() => {
     if (!page.name) {
@@ -45,7 +41,7 @@ const Editor: NextPage = () => {
 
   const preview = useCallback(() => {
     if (id) {
-      window.open('/page/' + id);
+      window.open(url.resolve(setting.systemUrl || '', '/page/' + id));
     } else {
       message.warn('请先保存');
     }
@@ -84,8 +80,75 @@ const Editor: NextPage = () => {
   }, [page, id]);
 
   return (
-    <AdminLayout>
-      <div className={style.wrapper}>
+    <div className={style.wrapper}>
+      <header className={style.header}>
+        <PageHeader
+          style={{
+            borderBottom: '1px solid rgb(235, 237, 240)',
+            background: '#fff',
+          }}
+          onBack={() => window.close()}
+          title={
+            <Input
+              placeholder="请输入页面名称"
+              defaultValue={page.name}
+              onChange={e => {
+                setPage(page => {
+                  const value = e.target.value;
+                  page.name = value;
+                  return page;
+                });
+              }}
+            />
+          }
+          extra={[
+            <Button
+              type="dashed"
+              onClick={() => {
+                setFileDrawerVisible(true);
+              }}
+            >
+              文件库
+            </Button>,
+            <Button onClick={preview}>预览</Button>,
+            <Button
+              onClick={() => {
+                if (!page.name) {
+                  message.warn('请输入页面名称');
+                  return;
+                }
+                setPageDrawerVisible(true);
+              }}
+            >
+              保存
+            </Button>,
+          ]}
+        />
+        <div ref={ref} className={cls('container', style.toolbar)}></div>
+      </header>
+
+      <div className={cls('container', style.content)}>
+        <article>
+          <CKEditor
+            value={page.content}
+            getToolbar={element => {
+              (ref.current as any).appendChild(element);
+            }}
+            onChange={value => {
+              setPage(page => {
+                page.content = value;
+                return page;
+              });
+            }}
+          />
+        </article>
+      </div>
+      <Drawer
+        title={'页面属性'}
+        width={480}
+        visible={pageDrawerVisible}
+        onClose={() => setPageDrawerVisible(false)}
+      >
         <Input
           placeholder="请输入页面封面"
           addonAfter={
@@ -98,8 +161,9 @@ const Editor: NextPage = () => {
           }
           defaultValue={page.cover}
           onChange={e => {
+            const value = e.target.value;
+
             setPage(page => {
-              const value = e.target.value;
               page.cover = value;
               return page;
             });
@@ -107,65 +171,52 @@ const Editor: NextPage = () => {
         />
         <Input
           style={{ marginTop: 16 }}
-          placeholder="请输入页面名称"
-          defaultValue={page.name}
-          onChange={e => {
-            setPage(page => {
-              const value = e.target.value;
-              page.name = value;
-              return page;
-            });
-          }}
-        />
-        <Input
-          style={{ marginTop: 16 }}
-          placeholder="请输入页面路径"
+          placeholder="请配置页面路径"
           defaultValue={page.path}
           onChange={e => {
+            const value = e.target.value;
+
             setPage(page => {
-              const value = e.target.value;
               page.path = value;
               return page;
             });
           }}
         />
-        {mounted && (
-          <SimpleMDE
-            className={style.formItem}
-            value={page.content}
-            onChange={value => {
-              setPage(page => {
-                page.content = value;
-                return page;
-              });
-            }}
-          />
-        )}
-        <FileSelectDrawer
-          isCopy={true}
-          closeAfterClick={true}
-          visible={fileDrawerVisible}
-          onClose={() => {
-            setFileDrawerVisible(false);
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e8e8e8',
+            padding: '10px 16px',
+            textAlign: 'right',
+            left: 0,
+            background: '#fff',
+            borderRadius: '0 0 4px 4px',
           }}
-        />
-        <div className={style.operation}>
+        >
           <Button
-            type="dashed"
-            onClick={() => {
-              setFileDrawerVisible(true);
+            style={{
+              marginRight: 8,
             }}
+            onClick={save}
           >
-            文件库
+            保存草稿
           </Button>
-          <Button onClick={save}>保存草稿</Button>
-          <Button onClick={preview}>预览</Button>
           <Button type="primary" onClick={publish}>
             发布
           </Button>
         </div>
-      </div>
-    </AdminLayout>
+      </Drawer>
+      <FileSelectDrawer
+        isCopy={true}
+        closeAfterClick={true}
+        visible={fileDrawerVisible}
+        onClose={() => {
+          setFileDrawerVisible(false);
+        }}
+      />
+    </div>
   );
 };
 

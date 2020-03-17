@@ -65,7 +65,7 @@ const Page: NextPage<IProps> = ({ data: defaultData = [] }) => {
   }, []);
 
   return (
-    <AdminLayout padding={0} background={'transparent'}>
+    <AdminLayout>
       <Row gutter={16} className={style.wrapper}>
         <Col xs={24} sm={24} md={9}>
           <Card title={isCreateMode ? '添加分类' : '管理分类'} bordered={true}>

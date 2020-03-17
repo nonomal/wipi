@@ -9,17 +9,17 @@ const menus = [
     icon: 'user',
     path: '/ownspace',
   },
-  {
-    icon: 'user',
-    label: '用户管理',
-    path: '/user',
-  },
+  // {
+  //   icon: 'user',
+  //   label: '用户管理',
+  //   path: '/user',
+  // },
 
-  {
-    icon: 'setting',
-    label: '系统设置',
-    path: '/setting',
-  },
+  // {
+  //   icon: 'setting',
+  //   label: '系统设置',
+  //   path: '/setting',
+  // },
 ];
 
 export const UserInfo = () => {
@@ -59,14 +59,7 @@ export const UserInfo = () => {
 
   return (
     <Dropdown overlay={menu}>
-      <div
-      // style={{
-      //   display: "inline-block",
-      //   cursor: "pointer",
-      //   height: 64,
-      //   fontSize: 14
-      // }}
-      >
+      <div>
         {user && user.avatar ? (
           <Avatar size={'small'} src={user.avatar} />
         ) : (

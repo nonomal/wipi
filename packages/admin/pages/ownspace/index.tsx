@@ -93,7 +93,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
   };
 
   return (
-    <AdminLayout background="transparent" padding={0}>
+    <AdminLayout>
       <Row gutter={16}>
         <Col span={12} md={12} xs={24}>
           <List

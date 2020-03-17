@@ -151,7 +151,7 @@ const Article: NextPage<IArticleProps> = ({
     key: 'title',
     render: (text, record) => (
       <a
-        href={url.resolve(setting.systemUrl, `/article/${record.id}`)}
+        href={url.resolve(setting.systemUrl || '', `/article/${record.id}`)}
         target="_blank"
       >
         {text}
@@ -165,7 +165,7 @@ const Article: NextPage<IArticleProps> = ({
     render: (_, record) => (
       <span className={style.action}>
         <Link href={`/article/editor/[id]`} as={`/article/editor/` + record.id}>
-          <a>编辑</a>
+          <a target="_blank">编辑</a>
         </Link>
         <Divider type="vertical" />
         <span

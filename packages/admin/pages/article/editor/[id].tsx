@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import cls from 'classnames';
 import { NextPage } from 'next';
 import Router from 'next/router';
@@ -7,13 +7,17 @@ import { Editor as CKEditor } from '@components/Editor';
 import { FileSelectDrawer } from '@/components/FileSelectDrawer';
 import { ArticleSettingDrawer } from '@/components/ArticleSettingDrawer';
 import { ArticleProvider } from '@providers/article';
+import { useSetting } from '@/hooks/useSetting';
 import style from './index.module.scss';
+const url = require('url');
 
 interface IProps {
   id: any;
 }
 
 const Editor: NextPage<IProps> = ({ id }) => {
+  const ref = useRef();
+  const setting = useSetting();
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
   const [article, setArticle] = useState<any>({});
@@ -57,7 +61,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
 
   const preview = useCallback(() => {
     if (id) {
-      window.open('/article/' + id);
+      window.open(url.resolve(setting.systemUrl || '', '/article/' + id));
     } else {
       message.warn('请先保存');
     }
@@ -103,7 +107,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
           style={{
             border: '1px solid rgb(235, 237, 240)',
           }}
-          onBack={() => Router.back()}
+          onBack={() => window.close()}
           title={
             <Input
               placeholder="请输入文章标题"
@@ -122,13 +126,14 @@ const Editor: NextPage<IProps> = ({ id }) => {
             >
               文件库
             </Button>,
-            <Button onClick={save}>保存草稿</Button>,
+            <Button onClick={save}>更新</Button>,
             <Button onClick={preview}>预览</Button>,
             <Button type="primary" onClick={publish}>
               发布
             </Button>,
           ]}
         />
+        <div ref={ref} className={cls('container', style.toolbar)}></div>
       </header>
       <div className={cls('container', style.content)}>
         <article>
@@ -139,6 +144,9 @@ const Editor: NextPage<IProps> = ({ id }) => {
                 article.content = value;
                 return article;
               });
+            }}
+            getToolbar={element => {
+              (ref.current as any).appendChild(element);
             }}
           />
         </article>

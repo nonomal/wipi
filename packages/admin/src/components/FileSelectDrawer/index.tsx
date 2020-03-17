@@ -53,7 +53,7 @@ export const FileSelectDrawer: React.FC<IFileProps> = ({
 
   return (
     <Drawer
-      width={760}
+      width={786}
       placement="right"
       title={'文件选择'}
       closable={true}

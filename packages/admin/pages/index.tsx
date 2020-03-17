@@ -102,8 +102,20 @@ const Home: NextPage<IHomeProps> = ({ articles = [] }) => {
       ),
   };
 
+  const actionColumn = {
+    title: '操作',
+    key: 'action',
+    render: (_, record) => (
+      <span className={style.action}>
+        <Link href={`/article/editor/[id]`} as={`/article/editor/` + record.id}>
+          <a target="_blank">编辑</a>
+        </Link>
+      </span>
+    ),
+  };
+
   return (
-    <AdminLayout background="transparent" padding={0}>
+    <AdminLayout>
       <div className={style.recentArticle}>
         <div className={style.title}>
           <span>最新文章</span>
@@ -142,7 +154,7 @@ const Home: NextPage<IHomeProps> = ({ articles = [] }) => {
             message={
               <span>
                 系统检测到<strong>系统配置</strong>未完善，
-                <Link href="/setting">
+                <Link href="/setting?type=系统设置">
                   <a>点我立即完善</a>
                 </Link>
               </span>
@@ -155,7 +167,7 @@ const Home: NextPage<IHomeProps> = ({ articles = [] }) => {
       <div className={style.articles}>
         <Table
           dataSource={articles}
-          columns={[titleColumn, ...columns]}
+          columns={[titleColumn, ...columns, actionColumn]}
           pagination={false}
         ></Table>
       </div>

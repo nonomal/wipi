@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import cls from 'classnames';
 import { NextPage } from 'next';
 import Router from 'next/router';
@@ -7,10 +7,13 @@ import { Editor as CKEditor } from '@components/Editor';
 import { FileSelectDrawer } from '@/components/FileSelectDrawer';
 import { ArticleSettingDrawer } from '@/components/ArticleSettingDrawer';
 import { ArticleProvider } from '@providers/article';
+import { useSetting } from '@/hooks/useSetting';
 import style from './index.module.scss';
+const url = require('url');
 
 const Editor: NextPage = () => {
   const ref = useRef();
+  const setting = useSetting();
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
   const [id, setId] = useState(null);
@@ -47,7 +50,7 @@ const Editor: NextPage = () => {
 
   const preview = useCallback(() => {
     if (id) {
-      window.open('/article/' + id);
+      window.open(url.resolve(setting.systemUrl || '', '/article/' + id));
     } else {
       message.warn('请先保存');
     }
@@ -94,10 +97,10 @@ const Editor: NextPage = () => {
       <header className={style.header}>
         <PageHeader
           style={{
-            border: '1px solid rgb(235, 237, 240)',
+            borderBottom: '1px solid rgb(235, 237, 240)',
             background: '#fff',
           }}
-          onBack={() => Router.back()}
+          onBack={() => window.close()}
           title={
             <Input
               placeholder="请输入文章标题"
@@ -127,7 +130,6 @@ const Editor: NextPage = () => {
             </Button>,
           ]}
         />
-
         <div ref={ref} className={cls('container', style.toolbar)}></div>
       </header>
       <div className={cls('container', style.content)}>

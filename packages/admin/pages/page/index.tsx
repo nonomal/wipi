@@ -115,7 +115,7 @@ const Page: NextPage<IProps> = ({
     key: 'name',
     render: (text, record) => (
       <a
-        href={url.resolve(setting.systemUrl, `/page/${record.path}`)}
+        href={url.resolve(setting.systemUrl || '', `/page/${record.path}`)}
         target="_blank"
       >
         {text}
@@ -140,7 +140,7 @@ const Page: NextPage<IProps> = ({
           )}
           <Divider type="vertical" />
           <Link href={`/page/editor/[id]`} as={`/page/editor/` + record.id}>
-            <a>编辑</a>
+            <a target="_blank">编辑</a>
           </Link>
           <Divider type="vertical" />
           <span

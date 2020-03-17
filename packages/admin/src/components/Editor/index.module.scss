@@ -8,10 +8,14 @@
       background-color: transparent !important;
     }
 
-    .ck-editor__editable {
+    div.ck-content {
       border-width: 0 !important;
       box-shadow: none !important;
       min-height: calc(100vh - 66.5px - 40px - 48px - 48px) !important;
+
+      .table {
+        width: 100%;
+      }
     }
   }
 }

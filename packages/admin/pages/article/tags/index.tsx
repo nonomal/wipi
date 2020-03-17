@@ -75,7 +75,7 @@ const TagPage: NextPage<ITagProps> = ({ tags: defaultTags = [] }) => {
   }, []);
 
   return (
-    <AdminLayout padding={0} background={'transparent'}>
+    <AdminLayout>
       <Row gutter={16} className={style.wrapper}>
         <Col xs={24} sm={24} md={9}>
           <Card title={isCreateMode ? '添加标签' : '管理标签'} bordered={true}>

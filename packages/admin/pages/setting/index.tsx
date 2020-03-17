@@ -50,6 +50,7 @@ const Setting: NextPage<IProps> = ({ type: defaultType }) => {
       {setting && (
         <Tabs
           activeKey={type}
+          tabPosition={'left'}
           onChange={key => {
             setType(key);
             router.push(`/setting`, `/setting?type=` + key, {

@@ -120,7 +120,7 @@ const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
               message={
                 <span>
                   系统检测到<strong>阿里云OSS配置</strong>未完善，
-                  <Link href="/setting">
+                  <Link href="/setting?type=OSS%20设置">
                     <a>点我立即完善</a>
                   </Link>
                 </span>
@@ -131,18 +131,17 @@ const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
         ) : (
           <div style={{ marginBottom: 24 }}>
             <Spin tip="文件上传中..." spinning={loading}>
-              <Upload {...uploadProps}>
-                {/* <p className="ant-upload-drag-icon">
-            <Icon type="inbox" />
-          </p>
-          <p className="ant-upload-text">点击选择文件或将文件拖拽到此处</p>
-          <p className="ant-upload-hint">
-            文件将上传到 阿里云 OSS, 如未配置请先配置
-          </p> */}
-                <Button>
-                  <Icon type="upload" /> 上传文件
-                </Button>
-              </Upload>
+              <Upload.Dragger {...uploadProps}>
+                <p className="ant-upload-drag-icon">
+                  <Icon type="inbox" />
+                </p>
+                <p className="ant-upload-text">
+                  点击选择文件或将文件拖拽到此处
+                </p>
+                <p className="ant-upload-hint">
+                  文件将上传到 阿里云 OSS, 如未配置请先配置
+                </p>
+              </Upload.Dragger>
             </Spin>
           </div>
         )}
