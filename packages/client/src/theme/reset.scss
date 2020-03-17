@@ -4,15 +4,15 @@
 
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
-  background-color: rgba(95, 95, 95, 0.4);
+  background-color: #dadada;
   transition: all 0.2s;
   border-radius: 0.5rem;
 }
 
 ::-webkit-scrollbar {
-  width: 0.5rem;
-  height: 0.5rem;
-  background: hsla(0, 0%, 100%, 0.6);
+  width: 6px;
+  height: 6px;
+  background: transparent;
 }
 
 ul {
@@ -38,7 +38,7 @@ html {
 }
 
 body {
-  font-family: "Nunito", "Helvetica", Arial, sans-serif;
+  font-family: 'Nunito', 'Helvetica', Arial, sans-serif;
   color: #5f5f6f;
   line-height: 1.75em;
   overflow-x: hidden;
