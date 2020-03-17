@@ -32,16 +32,16 @@ export const Editor: React.FC<IProps> = ({ value, onChange, getToolbar }) => {
   }, []);
 
   const highlight = useCallback(() => {
-    hljs.highlightBlock(ref.current);
+    // hljs.highlightBlock(ref.current);
   }, []);
 
-  useEffect(() => {
-    if (!mounted) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!mounted) {
+  //     return;
+  //   }
 
-    hljs.initHighlightingOnLoad();
-  }, [mounted]);
+  //   hljs.initHighlightingOnLoad();
+  // }, [mounted]);
 
   return mounted ? (
     <div className={cls(style.wrapper, 'markdown')} ref={ref}>
@@ -55,7 +55,6 @@ export const Editor: React.FC<IProps> = ({ value, onChange, getToolbar }) => {
           //     editor.ui.view.toolbar.element,
           //     editor.ui.getEditableElement()
           //   );
-
           getToolbar && getToolbar(editor.ui.view.toolbar.element);
         }}
         onChange={(event, editor) => {
