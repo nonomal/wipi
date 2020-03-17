@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { NextPage } from 'next';
+import Link from 'next/link';
 import {
   Row,
   Col,
@@ -12,10 +13,12 @@ import {
   Card,
   List,
   Popconfirm,
+  Alert,
 } from 'antd';
 import * as dayjs from 'dayjs';
 import Viewer from 'viewerjs';
 import { AdminLayout } from '@/layout/AdminLayout';
+import { useSetting } from '@/hooks/useSetting';
 import { FileProvider } from '@providers/file';
 import { SPTDataTable } from '@/components/SPTDataTable';
 import style from './index.module.scss';
@@ -52,11 +55,19 @@ let viewer: any = null;
 
 const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
   const ref = useRef();
+  const setting = useSetting();
   const [loading, setLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [files, setFiles] = useState<IFile[]>(defaultFiles);
   const [currentFile, setCurrentFile] = useState<IFile | null>(null);
   const [params, setParams] = useState(null);
+
+  const isOSSSettingFullFiled =
+    setting &&
+    setting.ossRegion &&
+    setting.ossAccessKeyId &&
+    setting.ossAccessKeySecret &&
+    setting.ossBucket;
 
   const uploadProps = {
     name: 'file',
@@ -103,22 +114,38 @@ const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
   return (
     <AdminLayout>
       <div className={style.wrapper}>
-        <div style={{ marginBottom: '1.5rem' }}>
-          <Spin tip="文件上传中..." spinning={loading}>
-            <Upload {...uploadProps}>
-              {/* <p className="ant-upload-drag-icon">
-                <Icon type="inbox" />
-              </p>
-              <p className="ant-upload-text">点击选择文件或将文件拖拽到此处</p>
-              <p className="ant-upload-hint">
-                文件将上传到 阿里云 OSS, 如未配置请先配置
-              </p> */}
-              <Button>
-                <Icon type="upload" /> 上传文件
-              </Button>
-            </Upload>
-          </Spin>
-        </div>
+        {!isOSSSettingFullFiled ? (
+          <div style={{ marginBottom: 24 }}>
+            <Alert
+              message={
+                <span>
+                  系统检测到<strong>阿里云OSS配置</strong>未完善，
+                  <Link href="/setting">
+                    <a>点我立即完善</a>
+                  </Link>
+                </span>
+              }
+              type="warning"
+            />
+          </div>
+        ) : (
+          <div style={{ marginBottom: 24 }}>
+            <Spin tip="文件上传中..." spinning={loading}>
+              <Upload {...uploadProps}>
+                {/* <p className="ant-upload-drag-icon">
+            <Icon type="inbox" />
+          </p>
+          <p className="ant-upload-text">点击选择文件或将文件拖拽到此处</p>
+          <p className="ant-upload-hint">
+            文件将上传到 阿里云 OSS, 如未配置请先配置
+          </p> */}
+                <Button>
+                  <Icon type="upload" /> 上传文件
+                </Button>
+              </Upload>
+            </Spin>
+          </div>
+        )}
 
         <SPTDataTable
           data={files}

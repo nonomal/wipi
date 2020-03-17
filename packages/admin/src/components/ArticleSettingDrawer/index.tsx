@@ -44,12 +44,12 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
   const [cover, setCover] = useState(article.cover || null);
 
   useEffect(() => {
-    setSummary(article.summary)
+    setSummary(article.summary);
     setCommentable(article.isCommentable || true);
     setSelectedCategory((article.category && article.category.id) || null);
     setSelectedTags((article.tags && article.tags.map(tag => tag.id)) || []);
     setCover(article.cover || null);
-  }, [article.summary, article.isCommentable, article.category, article.tags, article.cover]);
+  }, [article.isCommentable, article.category, article.tags, article.cover]);
 
   useEffect(() => {
     CategoryProvider.getCategory().then(res => setCategorys(res));
@@ -89,17 +89,20 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
       onClose={onClose}
       visible={visible}
     >
-      <FormItem label="文章摘要" content={
-        <Input.TextArea
-          className={style.formItem}
-          placeholder="请输入文章摘要"
-          autoSize={{ minRows: 6, maxRows: 8 }}
-          value={summary}
-          onChange={e => {
-            setSummary(e.target.value);
-          }}
-        />
-      } />
+      <FormItem
+        label="文章摘要"
+        content={
+          <Input.TextArea
+            className={style.formItem}
+            placeholder="请输入文章摘要"
+            autoSize={{ minRows: 6, maxRows: 8 }}
+            value={summary}
+            onChange={e => {
+              setSummary(e.target.value);
+            }}
+          />
+        }
+      />
       <FormItem
         label="访问密码"
         content={

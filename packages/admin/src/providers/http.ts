@@ -56,7 +56,7 @@ httpProvider.interceptors.response.use(
           break;
 
         case 403:
-          message.warn('访客无权进行该操作');
+          typeof window !== 'undefined' && message.warn('访客无权进行该操作');
           break;
 
         case 401:

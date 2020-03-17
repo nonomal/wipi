@@ -1,36 +1,19 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { Row, Col, Icon, Table, Badge, Tag } from 'antd';
+import { Row, Col, Icon, Table, Badge, Tag, Alert } from 'antd';
 import * as dayjs from 'dayjs';
+import { useSetting } from '@/hooks/useSetting';
 import { AdminLayout } from '@/layout/AdminLayout';
 import { ArticleProvider } from '@providers/article';
-import { CommentProvider } from '@providers/comment';
-import { TagProvider } from '@/providers/tag';
-import { FileProvider } from '@/providers/file';
 import style from './index.module.scss';
+const url = require('url');
 
 interface IHomeProps {
   articles: IArticle[];
-  articlesCount: number;
-  tags: ITag[];
-  files: IFile[];
-  filesCount: number;
-  comments: IComment[];
-  commentsCount: number;
 }
 
 const columns = [
-  {
-    title: '标题',
-    dataIndex: 'title',
-    key: 'title',
-    render: (text, record) => (
-      <Link href={`/article/[id]`} as={`/article/${record.id}`}>
-        <a target="_blank">{text}</a>
-      </Link>
-    ),
-  },
   {
     title: '状态',
     dataIndex: 'status',
@@ -99,15 +82,26 @@ const columns = [
   },
 ];
 
-const Home: NextPage<IHomeProps> = ({
-  articles = [],
-  articlesCount = 0,
-  tags = [],
-  files = [],
-  filesCount = 0,
-  comments = [],
-  commentsCount = 0,
-}) => {
+const Home: NextPage<IHomeProps> = ({ articles = [] }) => {
+  const setting = useSetting();
+
+  const titleColumn = {
+    title: '标题',
+    dataIndex: 'title',
+    key: 'title',
+    render: (text, record) =>
+      setting.systemUrl ? (
+        <a
+          href={url.resolve(setting.systemUrl, `/article/${record.id}`)}
+          target="_blank"
+        >
+          {text}
+        </a>
+      ) : (
+        text
+      ),
+  };
+
   return (
     <AdminLayout background="transparent" padding={0}>
       <div className={style.recentArticle}>
@@ -141,10 +135,27 @@ const Home: NextPage<IHomeProps> = ({
           })}
         </Row>
       </div>
+
+      {!setting || !setting.systemUrl ? (
+        <div style={{ marginTop: 24 }}>
+          <Alert
+            message={
+              <span>
+                系统检测到<strong>系统配置</strong>未完善，
+                <Link href="/setting">
+                  <a>点我立即完善</a>
+                </Link>
+              </span>
+            }
+            type="warning"
+          />
+        </div>
+      ) : null}
+
       <div className={style.articles}>
         <Table
           dataSource={articles}
-          columns={columns}
+          columns={[titleColumn, ...columns]}
           pagination={false}
         ></Table>
       </div>
@@ -153,21 +164,12 @@ const Home: NextPage<IHomeProps> = ({
 };
 
 Home.getInitialProps = async () => {
-  const [articles, tags, files, comments] = await Promise.all([
+  const [articles] = await Promise.all([
     ArticleProvider.getArticles({ page: 1, pageSize: 12 }),
-    TagProvider.getTags(),
-    FileProvider.getFiles({ page: 1, pageSize: 6 }),
-    CommentProvider.getComments({ page: 1, pageSize: 6 }),
   ]);
 
   return {
     articles: articles[0],
-    articlesCount: articles[1],
-    tags,
-    files: files[0],
-    filesCount: files[1],
-    comments: comments[0],
-    commentsCount: comments[1],
   };
 };
 

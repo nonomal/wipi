@@ -15,16 +15,6 @@ const url = require('url');
 
 const columns = [
   {
-    title: '名称',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text, record) => (
-      <Link href={`/page/[id]`} as={`/page/${record.path}`}>
-        <a target="_blank">{text}</a>
-      </Link>
-    ),
-  },
-  {
     title: '路径',
     dataIndex: 'path',
     key: 'path',
@@ -119,6 +109,20 @@ const Page: NextPage<IProps> = ({
     [params]
   );
 
+  const titleColumn = {
+    title: '名称',
+    dataIndex: 'name',
+    key: 'name',
+    render: (text, record) => (
+      <a
+        href={url.resolve(setting.systemUrl, `/page/${record.path}`)}
+        target="_blank"
+      >
+        {text}
+      </a>
+    ),
+  };
+
   const actionColumn = {
     title: '操作',
     key: 'action',
@@ -167,7 +171,7 @@ const Page: NextPage<IProps> = ({
         <SPTDataTable
           data={pages}
           defaultTotal={defaultTotal}
-          columns={[...columns, actionColumn]}
+          columns={[titleColumn, ...columns, actionColumn]}
           searchFields={[
             {
               label: '名称',

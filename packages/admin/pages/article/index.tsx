@@ -26,16 +26,6 @@ const url = require('url');
 
 const columns = [
   {
-    title: '标题',
-    dataIndex: 'title',
-    key: 'title',
-    render: (text, record) => (
-      <Link href={`/article/[id]`} as={`/article/${record.id}`}>
-        <a target="_blank">{text}</a>
-      </Link>
-    ),
-  },
-  {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
@@ -155,6 +145,20 @@ const Article: NextPage<IArticleProps> = ({
     [params]
   );
 
+  const titleColumn = {
+    title: '标题',
+    dataIndex: 'title',
+    key: 'title',
+    render: (text, record) => (
+      <a
+        href={url.resolve(setting.systemUrl, `/article/${record.id}`)}
+        target="_blank"
+      >
+        {text}
+      </a>
+    ),
+  };
+
   const actionColumn = {
     title: '操作',
     key: 'action',
@@ -191,7 +195,7 @@ const Article: NextPage<IArticleProps> = ({
         <SPTDataTable
           data={articles}
           defaultTotal={defaultTotal}
-          columns={[...columns, actionColumn]}
+          columns={[titleColumn, ...columns, actionColumn]}
           searchFields={[
             {
               label: '标题',

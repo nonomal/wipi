@@ -1,6 +1,6 @@
 .wrapper {
   background-color: #f4f5f5;
-  padding-top: 66.5px;
+  padding-top: 106.5px;
   min-height: 100vh;
 
   .header {
@@ -8,12 +8,24 @@
     top: 0;
     z-index: 1000;
     width: 100%;
-    height: 66.5px;
+    // height: 66.5px;
     background-color: #fff;
 
     input {
       border: 0 !important;
       box-shadow: none !important;
+    }
+
+    .toolbar {
+      :global {
+        .ck-toolbar {
+          border: 0 !important;
+          background: #fff !important;
+        }
+        .ck-toolbar__separator {
+          background-color: transparent !important;
+        }
+      }
     }
   }
 

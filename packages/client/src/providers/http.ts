@@ -6,7 +6,7 @@ export const httpProvider = axios.create({
   baseURL:
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:4000/api'
-      : 'https://blog.wipi.tech/api',
+      : 'http://114.215.43.24:4000/api',
   timeout: 10000,
 });
 

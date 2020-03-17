@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import cls from 'classnames';
 import { NextPage } from 'next';
 import Router from 'next/router';
@@ -10,6 +10,7 @@ import { ArticleProvider } from '@providers/article';
 import style from './index.module.scss';
 
 const Editor: NextPage = () => {
+  const ref = useRef();
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
   const [id, setId] = useState(null);
@@ -94,6 +95,7 @@ const Editor: NextPage = () => {
         <PageHeader
           style={{
             border: '1px solid rgb(235, 237, 240)',
+            background: '#fff',
           }}
           onBack={() => Router.back()}
           title={
@@ -125,11 +127,16 @@ const Editor: NextPage = () => {
             </Button>,
           ]}
         />
+
+        <div ref={ref} className={cls('container', style.toolbar)}></div>
       </header>
       <div className={cls('container', style.content)}>
         <article>
           <CKEditor
             value={article.html}
+            getToolbar={element => {
+              (ref.current as any).appendChild(element);
+            }}
             onChange={value => {
               setArticle(article => {
                 article.content = value;
