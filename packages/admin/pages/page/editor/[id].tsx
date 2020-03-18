@@ -15,7 +15,6 @@ interface IProps {
 }
 
 const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
-  const ref = useRef();
   const setting = useSetting();
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [id, setId] = useState(defaultPage.id);
@@ -129,16 +128,12 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
             </Button>,
           ]}
         />
-        <div ref={ref} className={cls('container', style.toolbar)}></div>
       </header>
 
       <div className={cls('container', style.content)}>
         <article>
           <CKEditor
-            value={page.content}
-            getToolbar={element => {
-              (ref.current as any).appendChild(element);
-            }}
+            value={page.html}
             onChange={value => {
               setPage(page => {
                 page.content = value;
@@ -180,7 +175,6 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
           defaultValue={page.path}
           onChange={e => {
             const value = e.target.value;
-
             setPage(page => {
               page.path = value;
               return page;

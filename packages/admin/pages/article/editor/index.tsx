@@ -130,7 +130,6 @@ const Editor: NextPage = () => {
             </Button>,
           ]}
         />
-        <div ref={ref} className={cls('container', style.toolbar)}></div>
       </header>
       <div className={cls('container', style.content)}>
         <article>

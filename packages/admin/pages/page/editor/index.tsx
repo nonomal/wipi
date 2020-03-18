@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import cls from 'classnames';
-import Router from 'next/router';
 import { NextPage } from 'next';
 import { Button, Input, message, PageHeader, Icon, Drawer } from 'antd';
 import { Editor as CKEditor } from '@components/Editor';
@@ -11,7 +10,6 @@ import style from './index.module.scss';
 const url = require('url');
 
 const Editor: NextPage = () => {
-  const ref = useRef();
   const setting = useSetting();
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [id, setId] = useState(null);
@@ -124,16 +122,11 @@ const Editor: NextPage = () => {
             </Button>,
           ]}
         />
-        <div ref={ref} className={cls('container', style.toolbar)}></div>
       </header>
-
       <div className={cls('container', style.content)}>
         <article>
           <CKEditor
             value={page.content}
-            getToolbar={element => {
-              (ref.current as any).appendChild(element);
-            }}
             onChange={value => {
               setPage(page => {
                 page.content = value;

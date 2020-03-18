@@ -16,7 +16,6 @@ interface IProps {
 }
 
 const Editor: NextPage<IProps> = ({ id }) => {
-  const ref = useRef();
   const setting = useSetting();
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
@@ -105,7 +104,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
       <header className={style.header}>
         <PageHeader
           style={{
-            border: '1px solid rgb(235, 237, 240)',
+            borderBottom: '1px solid rgb(235, 237, 240)',
           }}
           onBack={() => window.close()}
           title={
@@ -133,7 +132,6 @@ const Editor: NextPage<IProps> = ({ id }) => {
             </Button>,
           ]}
         />
-        <div ref={ref} className={cls('container', style.toolbar)}></div>
       </header>
       <div className={cls('container', style.content)}>
         <article>
@@ -144,9 +142,6 @@ const Editor: NextPage<IProps> = ({ id }) => {
                 article.content = value;
                 return article;
               });
-            }}
-            getToolbar={element => {
-              (ref.current as any).appendChild(element);
             }}
           />
         </article>

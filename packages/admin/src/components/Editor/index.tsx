@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import cls from 'classnames';
-import { Spin } from 'antd';
+import { Spin, Upload, Icon } from 'antd';
 import { FileProvider } from '@providers/file';
 import style from './index.module.scss';
+import { ContentUtils } from 'braft-utils';
+import 'braft-editor/dist/index.css';
 
 interface IProps {
   value: string;
@@ -10,34 +12,7 @@ interface IProps {
   getToolbar?: (arg: any) => void;
 }
 
-// 自定义文件上传
-class MyUploadAdapter {
-  loader: any;
-
-  constructor(loader) {
-    this.loader = loader;
-  }
-
-  upload() {
-    return this.loader.file.then(file => {
-      return new Promise(resolve => {
-        FileProvider.uploadFile(file).then(res => {
-          resolve({ ...res, default: res.url });
-        });
-      });
-    });
-  }
-}
-
-function MyCustomUploadAdapterPlugin(editor) {
-  editor.plugins.get('FileRepository').createUploadAdapter = loader => {
-    return new MyUploadAdapter(loader);
-  };
-}
-
-let editor;
-let CKEditor = (() => null) as any;
-let CustomEditor = () => null;
+let BraftEditor;
 
 export const Editor: React.FC<IProps> = ({
   value = '',
@@ -45,37 +20,20 @@ export const Editor: React.FC<IProps> = ({
   getToolbar,
 }) => {
   const ref = useRef(null);
+  const [editorState, setEditorState] = useState();
   const [mounted, setMounted] = useState(false);
-  const [words, setWords] = useState(0);
-  const [chars, setChars] = useState(0);
-
-  const [initialData, setInitialData] = useState(value);
-
-  // useEffect(() => {
-  //   if (!mounted || !editor) {
-  //     return;
-  //   }
-
-  //   try {
-  //     console.log(value);
-  //     var viewFragment = editor.data.processor.toView(
-  //       `<p>78979798</p><p>测试</p><p>sdfsdfsdfsdfsd</p><p>dsads</p><pre><code><span>代码片段</span>console.<span>log</span><span>1</span>)</code></pre>`
-  //     );
-  //     var modelFragment = editor.data.toModel(viewFragment);
-  //     editor.model.insertContent(modelFragment);
-  //     console.log(editor);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }, [mounted, editor, value]);
 
   useEffect(() => {
-    Promise.all([
-      import('@ckeditor/ckeditor5-react'),
-      import('./ckeditor/ckeditor'),
-    ]).then(res => {
-      CKEditor = res[0].default;
-      CustomEditor = res[1].default;
+    if (!mounted) {
+      return;
+    }
+
+    setEditorState(BraftEditor.createEditorState(value));
+  }, [mounted, value]);
+
+  useEffect(() => {
+    Promise.all([import('braft-editor')]).then(res => {
+      BraftEditor = res[0].default;
       setMounted(true);
     });
 
@@ -84,44 +42,88 @@ export const Editor: React.FC<IProps> = ({
     };
   }, []);
 
-  // console.log(value);
+  const upload = useCallback(() => {
+    param => {
+      if (!param.file) {
+        return false;
+      }
+      FileProvider.uploadFile(param.file).then(res => {
+        setEditorState(
+          ContentUtils.insertMedias(editorState, [
+            {
+              type: 'IMAGE',
+              url: res.url,
+            },
+          ])
+        );
+      });
+    };
+  }, [editorState]);
+
+  const controls = [
+    'undo',
+    'redo',
+    'separator',
+    'headings',
+    'font-size',
+    // 'line-height',
+    // 'letter-spacing',
+    'separator',
+    'list-ul',
+    'list-ol',
+    'blockquote',
+    'code',
+    'emoji',
+    'separator',
+    'link',
+    'separator',
+
+    'text-color',
+    'bold',
+    'italic',
+    'underline',
+    'strike-through',
+    'separator',
+    'superscript',
+    'subscript',
+    'remove-styles',
+    'separator',
+    'text-indent',
+    'text-align',
+    'separator',
+
+    'hr',
+    'separator',
+  ];
+  const extendControls = [
+    {
+      key: 'antd-uploader',
+      type: 'component',
+      component: (
+        <Upload accept="image/*" showUploadList={false} customRequest={upload}>
+          <button
+            type="button"
+            className="control-item button upload-button"
+            data-title="插入图片"
+          >
+            <Icon type="picture" theme="filled" />
+          </button>
+        </Upload>
+      ),
+    },
+  ];
 
   return mounted ? (
     <div className={cls(style.wrapper, '')} ref={ref}>
-      <CKEditor
-        editor={CustomEditor}
-        // data={escapeHtml(value)}
-        onInit={_editor => {
-          editor = _editor;
-          getToolbar && getToolbar(editor.ui.view.toolbar.element);
+      <BraftEditor
+        value={editorState}
+        onChange={editorState => {
+          const html = editorState.toHTML();
+          onChange(html);
         }}
-        onChange={(_, editor) => {
-          let data = editor.getData();
-          // TODO: 优化正则
-          data = data.replace(/<figure class="image">([\S]+)\)/g, (_, $2) => {
-            return `<figure class="image">\n${$2})`;
-          });
-          data = data.replace(
-            /<figure class="image image-style-side">([\S]+)\)/g,
-            (_, $2) => {
-              return `<figure class="image image-style-side">\n${$2})`;
-            }
-          );
-          onChange(data);
-        }}
-        config={{
-          extraPlugins: [MyCustomUploadAdapterPlugin],
-          wordCount: {
-            onUpdate: stats => {
-              setWords(stats.words);
-              setChars(stats.characters);
-            },
-          },
-        }}
+        controls={controls}
+        extendControls={extendControls}
       />
-      <p className={style.stats}>
-        字数：{chars}，行数：{words}
-      </p>
     </div>
   ) : (
     <Spin tip="编辑器努力加载中..." spinning={true}></Spin>

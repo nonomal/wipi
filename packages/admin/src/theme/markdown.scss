@@ -205,7 +205,7 @@
       margin-bottom: 20px;
       background: none;
       border: none;
-      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
       border-radius: 0.5rem;
       font-weight: 400;
       scrollbar-width: none;
@@ -249,65 +249,65 @@
       }
 
       code.language-go:before {
-        content: "go";
+        content: 'go';
       }
 
       code.language-css:before {
-        content: "css";
+        content: 'css';
       }
 
       code.language-sql:before {
-        content: "sql";
+        content: 'sql';
       }
 
       code.language-php:before {
-        content: "php";
+        content: 'php';
       }
 
       code.language-bash:before {
-        content: "bash";
+        content: 'bash';
       }
 
       code.language-less:before {
-        content: "less";
+        content: 'less';
       }
 
       code.language-scss:before {
-        content: "scss";
+        content: 'scss';
       }
 
       code.language-shell:before {
-        content: "shell";
+        content: 'shell';
       }
 
       code.language-nginx:before {
-        content: "nginx";
+        content: 'nginx';
       }
 
       code.language-stylus:before {
-        content: "stylus";
+        content: 'stylus';
       }
 
       code.language-python:before {
-        content: "python";
+        content: 'python';
       }
 
       code.language-html:before {
-        content: "HTML";
+        content: 'HTML';
       }
 
       code.language-javascript:before,
       code.language-js:before {
-        content: "JavaScript";
+        content: 'JavaScript';
       }
 
       code.language-typescript:before,
       code.language-ts:before {
-        content: "TypeScript";
+        content: 'TypeScript';
       }
 
       code.language-css:before {
-        content: "css";
+        content: 'css';
       }
     }
   }
