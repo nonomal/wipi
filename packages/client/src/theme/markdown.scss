@@ -140,6 +140,39 @@
       vertical-align: baseline;
     }
 
+    figure.image {
+      display: table;
+      width: 100%;
+      clear: both;
+      text-align: center;
+      border: 1px solid #f4f4f4;
+    }
+
+    figure.image-style-side {
+      max-width: 50%;
+      float: right;
+    }
+
+    figure.image p {
+      text-align: center;
+    }
+
+    figure.image p,
+    figure.image img {
+      margin: 0;
+    }
+
+    figure.image > figcaption {
+      display: table-caption;
+      caption-side: bottom;
+      word-break: break-word;
+      color: #333;
+      background-color: #f4f4f4;
+      padding: 0.6em;
+      font-size: 0.75em;
+      outline-offset: -1px;
+    }
+
     ul,
     ol {
       line-height: 1.6em;
@@ -205,7 +238,7 @@
       margin-bottom: 20px;
       background: none;
       border: none;
-      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
       border-radius: 0.5rem;
       font-weight: 400;
       scrollbar-width: none;
@@ -249,65 +282,65 @@
       }
 
       code.language-go:before {
-        content: "go";
+        content: 'go';
       }
 
       code.language-css:before {
-        content: "css";
+        content: 'css';
       }
 
       code.language-sql:before {
-        content: "sql";
+        content: 'sql';
       }
 
       code.language-php:before {
-        content: "php";
+        content: 'php';
       }
 
       code.language-bash:before {
-        content: "bash";
+        content: 'bash';
       }
 
       code.language-less:before {
-        content: "less";
+        content: 'less';
       }
 
       code.language-scss:before {
-        content: "scss";
+        content: 'scss';
       }
 
       code.language-shell:before {
-        content: "shell";
+        content: 'shell';
       }
 
       code.language-nginx:before {
-        content: "nginx";
+        content: 'nginx';
       }
 
       code.language-stylus:before {
-        content: "stylus";
+        content: 'stylus';
       }
 
       code.language-python:before {
-        content: "python";
+        content: 'python';
       }
 
       code.language-html:before {
-        content: "HTML";
+        content: 'HTML';
       }
 
       code.language-javascript:before,
       code.language-js:before {
-        content: "JavaScript";
+        content: 'JavaScript';
       }
 
       code.language-typescript:before,
       code.language-ts:before {
-        content: "TypeScript";
+        content: 'TypeScript';
       }
 
       code.language-css:before {
-        content: "css";
+        content: 'css';
       }
     }
   }
