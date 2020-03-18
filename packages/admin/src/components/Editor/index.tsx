@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import cls from 'classnames';
+import { Spin } from 'antd';
 import { FileProvider } from '@providers/file';
 import style from './index.module.scss';
 
@@ -71,8 +72,18 @@ export const Editor: React.FC<IProps> = ({ value, onChange, getToolbar }) => {
         }}
         config={{
           extraPlugins: [MyCustomUploadAdapterPlugin],
+          wordCount: {
+            onUpdate: stats => {
+              // Prints the current content statistics.
+              console.log(
+                `Characters: ${stats.characters}\nWords: ${stats.words}`
+              );
+            },
+          },
         }}
       />
     </div>
-  ) : null;
+  ) : (
+    <Spin tip="编辑器努力加载中..." spinning={true}></Spin>
+  );
 };
