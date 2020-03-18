@@ -31,13 +31,15 @@ export class ArticleService {
     }
 
     let { content, tags, category } = article;
-    const { html, toc } = content ? marked(content) : { html: null, toc: null };
+    // 后台系统直接返回 html，toc
+    // const { html, toc } = content ? marked(content) : { html: null, toc: null };
     tags = await this.tagService.findByIds(('' + tags).split(','));
     let existCategory = await this.categoryService.findById(category);
     const newArticle = await this.articleRepository.create({
       ...article,
-      html,
-      toc: JSON.stringify(toc),
+      html: content,
+      // TODO: 后台处理 toc
+      toc: JSON.stringify([]),
       category: existCategory,
       tags,
       needPassword: !!article.password,
@@ -251,7 +253,8 @@ export class ArticleService {
   async updateById(id, article: Partial<Article>): Promise<Article> {
     const oldArticle = await this.articleRepository.findOne(id);
     let { content, tags, category, status } = article;
-    const { html, toc } = content ? marked(content) : oldArticle;
+    // 后台系统直接返回 html，toc
+    // const { html, toc } = content ? marked(content) : oldArticle;
 
     if (tags) {
       tags = await this.tagService.findByIds(('' + tags).split(','));
@@ -261,9 +264,10 @@ export class ArticleService {
 
     const newArticle = {
       ...article,
-      html,
+      html: content,
       category: existCategory,
-      toc: JSON.stringify(toc),
+      // TODO: 前台处理 toc
+      toc: JSON.stringify([]),
       needPassword: !!article.password,
       publishAt: status === 'publish' ? new Date() : oldArticle.publishAt,
     };
