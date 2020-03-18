@@ -138,7 +138,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
       <div className={cls('container', style.content)}>
         <article>
           <CKEditor
-            value={article.content}
+            value={article.html}
             onChange={value => {
               setArticle(article => {
                 article.content = value;

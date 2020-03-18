@@ -35,12 +35,39 @@ function MyCustomUploadAdapterPlugin(editor) {
   };
 }
 
+let editor;
 let CKEditor = (() => null) as any;
 let CustomEditor = () => null;
 
-export const Editor: React.FC<IProps> = ({ value, onChange, getToolbar }) => {
+export const Editor: React.FC<IProps> = ({
+  value = '',
+  onChange,
+  getToolbar,
+}) => {
   const ref = useRef(null);
   const [mounted, setMounted] = useState(false);
+  const [words, setWords] = useState(0);
+  const [chars, setChars] = useState(0);
+
+  const [initialData, setInitialData] = useState(value);
+
+  // useEffect(() => {
+  //   if (!mounted || !editor) {
+  //     return;
+  //   }
+
+  //   try {
+  //     console.log(value);
+  //     var viewFragment = editor.data.processor.toView(
+  //       `<p>78979798</p><p>测试</p><p>sdfsdfsdfsdfsd</p><p>dsads</p><pre><code><span>代码片段</span>console.<span>log</span><span>1</span>)</code></pre>`
+  //     );
+  //     var modelFragment = editor.data.toModel(viewFragment);
+  //     editor.model.insertContent(modelFragment);
+  //     console.log(editor);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, [mounted, editor, value]);
 
   useEffect(() => {
     Promise.all([
@@ -57,31 +84,44 @@ export const Editor: React.FC<IProps> = ({ value, onChange, getToolbar }) => {
     };
   }, []);
 
+  // console.log(value);
+
   return mounted ? (
     <div className={cls(style.wrapper, '')} ref={ref}>
       <CKEditor
         editor={CustomEditor}
-        data={value}
-        onInit={editor => {
+        // data={escapeHtml(value)}
+        onInit={_editor => {
+          editor = _editor;
           getToolbar && getToolbar(editor.ui.view.toolbar.element);
         }}
         onChange={(_, editor) => {
-          const data = editor.getData();
-          console.log(data);
+          let data = editor.getData();
+          // TODO: 优化正则
+          data = data.replace(/<figure class="image">([\S]+)\)/g, (_, $2) => {
+            return `<figure class="image">\n${$2})`;
+          });
+          data = data.replace(
+            /<figure class="image image-style-side">([\S]+)\)/g,
+            (_, $2) => {
+              return `<figure class="image image-style-side">\n${$2})`;
+            }
+          );
           onChange(data);
         }}
         config={{
           extraPlugins: [MyCustomUploadAdapterPlugin],
           wordCount: {
             onUpdate: stats => {
-              // Prints the current content statistics.
-              console.log(
-                `Characters: ${stats.characters}\nWords: ${stats.words}`
-              );
+              setWords(stats.words);
+              setChars(stats.characters);
             },
           },
         }}
       />
+      <p className={style.stats}>
+        字数：{chars}，行数：{words}
+      </p>
     </div>
   ) : (
     <Spin tip="编辑器努力加载中..." spinning={true}></Spin>
