@@ -65,7 +65,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
     } else {
       message.warn('请先保存');
     }
-  }, [id]);
+  }, [id, setting.systemUrl]);
 
   const publish = useCallback(() => {
     let canPublish = true;
@@ -138,7 +138,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
       <div className={cls('container', style.content)}>
         <article>
           <CKEditor
-            value={article.html}
+            value={article.content}
             onChange={value => {
               setArticle(article => {
                 article.content = value;

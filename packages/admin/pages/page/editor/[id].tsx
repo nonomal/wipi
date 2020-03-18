@@ -49,7 +49,7 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
     } else {
       message.warn('请先保存');
     }
-  }, [id]);
+  }, [id, setting.systemUrl]);
 
   const publish = useCallback(() => {
     let canPublish = true;
