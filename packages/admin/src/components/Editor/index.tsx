@@ -18,7 +18,13 @@ class MyUploadAdapter {
   }
 
   upload() {
-    return this.loader.file.then(file => FileProvider.uploadFile(file));
+    return this.loader.file.then(file => {
+      return new Promise(resolve => {
+        FileProvider.uploadFile(file).then(res => {
+          resolve({ ...res, default: res.url });
+        });
+      });
+    });
   }
 }
 
@@ -60,6 +66,7 @@ export const Editor: React.FC<IProps> = ({ value, onChange, getToolbar }) => {
         }}
         onChange={(_, editor) => {
           const data = editor.getData();
+          console.log(data);
           onChange(data);
         }}
         config={{
