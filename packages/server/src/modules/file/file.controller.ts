@@ -24,7 +24,13 @@ export class FileController {
    * @param file
    */
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fieldSize: 50 * 1024 * 1024,
+      },
+    })
+  )
   @UseGuards(JwtAuthGuard)
   uploadFile(@UploadedFile() file) {
     return this.fileService.uploadFile(file);
