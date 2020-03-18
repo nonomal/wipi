@@ -113,18 +113,8 @@ body {
     background-color: transparent !important;
   }
 
-  // .page-transition-enter {
-  //   opacity: 0.1;
-  //   transform: translate3d(0, 20px, 0);
-  // }
-  // .page-transition-enter-active {
-  //   opacity: 1;
-  //   transform: translate3d(0, 0, 0);
-  // }
-  // .page-transition-exit {
-  //   opacity: 1;
-  // }
-  // .page-transition-exit-active {
-  //   opacity: 0.1;
-  // }
+  .braft-finder .bf-manager-footer {
+    background: transparent !important;
+    border: 0 !important;
+  }
 }

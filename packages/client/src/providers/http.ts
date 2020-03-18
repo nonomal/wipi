@@ -5,7 +5,7 @@ import Router from 'next/router';
 export const httpProvider = axios.create({
   baseURL:
     process.env.NODE_ENV === 'development'
-      ? 'https://custw.qifengle1412.cn/api'
+      ? 'http://localhost:4000/api'
       : 'http://114.215.43.24:4000/api',
   timeout: 10000,
 });
@@ -45,15 +45,6 @@ httpProvider.interceptors.response.use(
         case 504:
         case 404:
           typeof window !== 'undefined' && message.error('服务器异常');
-          break;
-
-        case 403:
-          message.warn('访客无权进行该操作');
-          break;
-
-        case 401:
-          typeof window !== 'undefined' && message.info('请重新登录');
-          Router.push('/admin/login');
           break;
 
         default:

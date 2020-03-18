@@ -6,6 +6,17 @@
   margin-bottom: 16px;
   // margin-left: 48px;
 
+  :global {
+    .bf-container {
+      border: 1px solid #d9d9d9;
+      margin-bottom: 16px;
+    }
+
+    .bf-content {
+      height: 240px;
+    }
+  }
+
   .avatar {
     position: absolute;
     left: -48px;

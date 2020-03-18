@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Button, Icon, Avatar } from "antd";
-import { format, render } from "timeago.js";
-import cls from "classnames";
-import Viewer from "viewerjs";
-import { CommentProvider } from "@providers/comment";
-import { Editor } from "./Editor";
-import style from "./index.module.scss";
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { Button, Icon, Avatar } from 'antd';
+import { format } from 'timeago.js';
+import cls from 'classnames';
+import Viewer from 'viewerjs';
+import { CommentProvider } from '@providers/comment';
+import { Editor } from './Editor';
+import style from './index.module.scss';
 
 const colors = [
-  "#52c41a",
-  "#f5222d",
-  "#1890ff",
-  "#faad14",
-  "#ff0064",
-  "#722ed1"
+  '#52c41a',
+  '#f5222d',
+  '#1890ff',
+  '#faad14',
+  '#ff0064',
+  '#722ed1',
 ];
 const getRandomColor = (() => {
   let cache = {};
@@ -36,7 +36,7 @@ export const CommentItem = ({
   isHostInPage,
   onReply = () => {},
   subComments = [],
-  isChildren = false
+  isChildren = false,
 }) => {
   const [visible, setVisible] = useState(false);
   const [replyComment, setReplyComment] = useState(null);
@@ -48,7 +48,7 @@ export const CommentItem = ({
           size={isChildren ? 24 : 32}
           style={{ backgroundColor: getRandomColor(comment.name) }}
         >
-          {("" + comment.name).charAt(0).toUpperCase()}
+          {('' + comment.name).charAt(0).toUpperCase()}
         </Avatar>
         <span className={style.info}>
           <strong>{comment.name}</strong>
@@ -64,12 +64,12 @@ export const CommentItem = ({
       </header>
       <main style={{ paddingLeft: isChildren ? 24 + 10 : 32 + 10 }}>
         <div
-          className={cls("markdown", style.content)}
+          className={cls('markdown', style.content)}
           dangerouslySetInnerHTML={{ __html: comment.html }}
         ></div>
         <div className={style.meta}>
           {comment.userAgent ? <span>{comment.userAgent}</span> : null}
-          <span>{format(comment.createAt, "zh_CN")}</span>
+          <span>{format(comment.createAt, 'zh_CN')}</span>
           <span
             className={style.reply}
             onClick={() => {
@@ -134,7 +134,7 @@ export const CommentItem = ({
                   disabled={disabled}
                 >
                   评论
-                </Button>
+                </Button>,
               ];
             }}
           />
@@ -153,7 +153,7 @@ let viewer: any = null;
 
 export const MyComment: React.FC<IProps> = ({
   articleId,
-  isInPage = false
+  isInPage = false,
 }) => {
   const ref = useRef(null);
   const [total, setTotal] = useState(0);
@@ -167,7 +167,7 @@ export const MyComment: React.FC<IProps> = ({
       setLoading(true);
       CommentProvider.getArticleComments(articleId, {
         page,
-        pageSize
+        pageSize,
       })
         .then(res => {
           setLoading(false);

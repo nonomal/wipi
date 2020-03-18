@@ -1,11 +1,11 @@
-import { httpProvider } from "./http";
+import { httpProvider } from './http';
 
 export class ArticleProvider {
   /**
    * 获取所有文章
    */
   static async getArticles(params): Promise<[IArticle[], number]> {
-    return httpProvider.get("/article", { params });
+    return httpProvider.get('/article', { params });
   }
 
   /**
@@ -17,7 +17,7 @@ export class ArticleProvider {
     category,
     params
   ): Promise<[IArticle[], number]> {
-    return httpProvider.get("/article/category/" + category, { params });
+    return httpProvider.get('/article/category/' + category, { params });
   }
 
   /**
@@ -26,7 +26,7 @@ export class ArticleProvider {
    * @param params
    */
   static async getArticlesByTag(tag, params): Promise<[IArticle[], number]> {
-    return httpProvider.get("/article/tag/" + tag, { params });
+    return httpProvider.get('/article/tag/' + tag, { params });
   }
 
   /**
@@ -34,7 +34,7 @@ export class ArticleProvider {
    * @param articleId
    */
   static async getRecommend(articleId = null): Promise<IArticle[]> {
-    return httpProvider.get("/article/recommend", { params: { articleId } });
+    return httpProvider.get('/article/recommend', { params: { articleId } });
   }
 
   /**
@@ -43,7 +43,7 @@ export class ArticleProvider {
   static async getArchives(): Promise<{
     [key: string]: { [key: string]: IArticle[] };
   }> {
-    return httpProvider.get("/article/archives");
+    return httpProvider.get('/article/archives');
   }
 
   /**
@@ -59,7 +59,7 @@ export class ArticleProvider {
    * @param data
    */
   static async addArticle(data): Promise<IArticle> {
-    return httpProvider.post("/article", data);
+    return httpProvider.post('/article', data);
   }
 
   /**
