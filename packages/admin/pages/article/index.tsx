@@ -171,7 +171,9 @@ const Article: NextPage<IArticleProps> = ({
         <span
           onClick={() => {
             setVisible(true);
-            getViews(url.resolve(setting.systemUrl, '/article/' + record.id));
+            getViews(
+              url.resolve(setting.systemUrl || '', '/article/' + record.id)
+            );
           }}
         >
           <a>查看访问</a>

@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { NextPage } from 'next';
-import Link from 'next/link';
 import {
   Button,
   Select,
@@ -17,19 +16,20 @@ import { AdminLayout } from '@/layout/AdminLayout';
 import { CommentProvider } from '@/providers/comment';
 import { SettingProvider } from '@/providers/setting';
 import { SPTDataTable } from '@/components/SPTDataTable';
+import { useSetting } from '@/hooks/useSetting';
 import style from './index.module.scss';
+const url = require('url');
 
 interface IProps {
   comments: IComment[];
   total: number;
-  setting: any;
 }
 
 const Comment: NextPage<IProps> = ({
   comments: defaultComments = [],
   total = 0,
-  setting,
 }) => {
+  const setting = useSetting();
   const [comments, setComments] = useState<IComment[]>(defaultComments);
   const [selectedComment, setSelectedComment] = useState(null);
   const [replyContent, setReplyContent] = useState(null);
@@ -165,19 +165,21 @@ const Comment: NextPage<IProps> = ({
       },
     },
     {
-      title: '评论文章',
+      title: '管理文章',
       dataIndex: 'hostId',
       key: 'hostId',
       render: (hostId, record) => {
         return hostId ? (
-          <Link
-            href={`/${record.isHostInPage ? 'page' : 'article'}/[id]`}
-            as={`/${record.isHostInPage ? 'page' : 'article'}/` + hostId}
+          <a
+            href={url.resolve(
+              setting.systemUrl || '',
+              `/${record.isHostInPage ? 'page' : 'article'}/` + hostId
+            )}
+            className={style.link}
+            target="_blank"
           >
-            <a className={style.link} target="_blank">
-              前往查看
-            </a>
-          </Link>
+            前往查看
+          </a>
         ) : (
           '文章不存在，可能已经被删除'
         );
@@ -304,11 +306,10 @@ const Comment: NextPage<IProps> = ({
 };
 
 Comment.getInitialProps = async () => {
-  const [comments, setting] = await Promise.all([
+  const [comments] = await Promise.all([
     CommentProvider.getComments({ page: 1, pageSize: 12 }),
-    SettingProvider.getSetting(),
   ]);
-  return { comments: comments[0], total: comments[1], setting };
+  return { comments: comments[0], total: comments[1] };
 };
 
 export default Comment;

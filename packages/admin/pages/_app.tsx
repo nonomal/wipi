@@ -3,10 +3,9 @@ import App from 'next/app';
 import { ViewProvider } from '@providers/view';
 import { NProgress } from '@components/NProgress';
 import 'viewerjs/dist/viewer.css';
-import 'highlight.js/styles/github-gist.css';
 import '@/theme/antd.less';
 import '@/theme/reset.scss';
-import '@/theme/markdown.scss';
+// import '@/theme/markdown.scss';
 
 let lastUrl;
 
