@@ -125,14 +125,6 @@ export class CommentService {
                 <p>站点收到新评论：</p>
                 <p>评论人：<b>${comment.name}</b></p>
                 <p>评论内容：<b>${comment.content}</b></p>
-                <p align="center">
-                  <a href="${url.resolve(
-                    systemUrl,
-                    'admin/comment'
-                  )}" style="display: inline-block; margin: 16px auto; width: 160px; height: 32px; line-height: 32px; color: #ff0064; border: 1px solid #ff0064; background-color: #fff0f6; border-radius: 4px; text-decoration: none;">
-                  前往审核
-                  </a>
-                </p>
                 <p align="right">${systemTitle}</p>
                 <p align="right">${dayjs(new Date()).format(
                   'YYYY-MM-DD HH:mm:ss'
