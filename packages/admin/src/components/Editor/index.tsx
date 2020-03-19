@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import cls from 'classnames';
-import { Spin, Upload, Icon } from 'antd';
+import { Spin, Upload, Icon, message } from 'antd';
 import { FileProvider } from '@providers/file';
 import style from './index.module.scss';
 import { ContentUtils } from 'braft-utils';
@@ -9,16 +9,11 @@ import 'braft-editor/dist/index.css';
 interface IProps {
   value: string;
   onChange: (arg: any) => void;
-  getToolbar?: (arg: any) => void;
 }
 
 let BraftEditor;
 
-export const Editor: React.FC<IProps> = ({
-  value = '',
-  onChange,
-  getToolbar,
-}) => {
+export const Editor: React.FC<IProps> = ({ value = '', onChange }) => {
   const ref = useRef(null);
   const [editorState, setEditorState] = useState();
   const [mounted, setMounted] = useState(false);
@@ -46,16 +41,30 @@ export const Editor: React.FC<IProps> = ({
     if (!param.file) {
       return false;
     }
-    FileProvider.uploadFile(param.file).then(res => {
-      setEditorState(
-        ContentUtils.insertMedias(editorState, [
-          {
-            type: 'IMAGE',
-            url: res.url,
-          },
-        ])
-      );
-    });
+
+    let size = param.size || 0;
+
+    let hide = () => {};
+    if (size > 1024 * 1024 * 4) {
+      hide = message.loading('文件上传中...', 0);
+    }
+
+    FileProvider.uploadFile(param.file)
+      .then(res => {
+        hide();
+        setEditorState(
+          ContentUtils.insertMedias(editorState, [
+            {
+              type: 'IMAGE',
+              url: res.url,
+            },
+          ])
+        );
+      })
+      .catch(() => {
+        hide();
+        message.error('文件上传失败，可能过大！');
+      });
   };
 
   const controls = [
