@@ -63,7 +63,6 @@ export const BfEditor: React.FC<IProps> = ({ value = '', onChange }) => {
         media={{
           validateFn: file => {
             let isLimit = file.size <= 1024 * 200;
-            console.log(1, isLimit, file.size);
             if (!isLimit) {
               message.error('图片大小不允许超过 200K！');
             }
