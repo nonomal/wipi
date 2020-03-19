@@ -125,6 +125,7 @@ export const Editor: React.FC<IProps> = ({ value = '', onChange }) => {
       <BraftEditor
         value={editorState}
         onChange={editorState => {
+          setEditorState(editorState);
           const html = editorState.toHTML();
           onChange(html);
         }}
