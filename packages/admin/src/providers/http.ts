@@ -13,7 +13,7 @@ export const httpProvider = axios.create({
 httpProvider.interceptors.request.use(
   config => {
     if (typeof window !== 'undefined') {
-      const token = window.localStorage.getItem('token');
+      const token = window.sessionStorage.getItem('token');
 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
