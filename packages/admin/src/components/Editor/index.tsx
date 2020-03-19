@@ -42,7 +42,7 @@ export const Editor: React.FC<IProps> = ({ value = '', onChange }) => {
       return false;
     }
 
-    let size = param.size || 0;
+    let size = param.file.size || 0;
 
     let hide = () => {};
     if (size > 1024 * 1024 * 4) {

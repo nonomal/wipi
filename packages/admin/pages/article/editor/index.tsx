@@ -135,9 +135,6 @@ const Editor: NextPage = () => {
         <article>
           <CKEditor
             value={article.content}
-            getToolbar={element => {
-              (ref.current as any).appendChild(element);
-            }}
             onChange={value => {
               setArticle(article => {
                 article.content = value;
