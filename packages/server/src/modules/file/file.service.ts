@@ -23,7 +23,7 @@ export class FileService {
   async uploadFile(file: any): Promise<File> {
     const { originalname, mimetype, size, buffer } = file;
     // FIXME: 使用 uuid ，无法管理，改成相应资源包名
-    const filename = `/${dayjs().format('yyyy-MM-dd')}/${originalname}`;
+    const filename = `/${dayjs().format('YYYY-MM-DD')}/${originalname}`;
     const {
       ossRegion,
       ossAccessKeyId,
