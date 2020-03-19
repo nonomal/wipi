@@ -19,7 +19,7 @@ const _Login: React.FC<ILoginProps> = ({ form }) => {
         setLoading(true);
         UserProvider.login(values)
           .then(userInfo => {
-            localStorage.setItem('user', JSON.stringify(userInfo));
+            sessionStorage.setItem('user', JSON.stringify(userInfo));
             sessionStorage.setItem('token', userInfo.token);
             setLoading(false);
             Router.push('/');
