@@ -42,23 +42,21 @@ export const Editor: React.FC<IProps> = ({
     };
   }, []);
 
-  const upload = useCallback(() => {
-    param => {
-      if (!param.file) {
-        return false;
-      }
-      FileProvider.uploadFile(param.file).then(res => {
-        setEditorState(
-          ContentUtils.insertMedias(editorState, [
-            {
-              type: 'IMAGE',
-              url: res.url,
-            },
-          ])
-        );
-      });
-    };
-  }, [editorState]);
+  const upload = param => {
+    if (!param.file) {
+      return false;
+    }
+    FileProvider.uploadFile(param.file).then(res => {
+      setEditorState(
+        ContentUtils.insertMedias(editorState, [
+          {
+            type: 'IMAGE',
+            url: res.url,
+          },
+        ])
+      );
+    });
+  };
 
   const controls = [
     'undo',
