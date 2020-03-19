@@ -54,7 +54,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
   const [newPassword2, setNewPassword2] = useState(null);
 
   useEffect(() => {
-    let info = window.localStorage.getItem('user');
+    let info = window.sessionStorage.getItem('user');
     try {
       info = JSON.parse(info);
       setUser(info as any);
@@ -64,7 +64,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
   const save = useCallback(() => {
     UserProvider.update(user).then(res => {
       setUser(res);
-      window.localStorage.setItem('user', JSON.stringify(res));
+      window.sessionStorage.setItem('user', JSON.stringify(res));
       message.success('用户信息已保存');
     });
   }, [user]);
