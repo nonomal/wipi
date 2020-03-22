@@ -8,7 +8,7 @@
 
 - `POST /user/register`：用户注册（`name`、`password`）
 - `POST /auth/login`：用户登录（`name`、`password`）
-- `POST /user/update`：更新用户信息（`name`、`password`）
+- `POST /user/update`：更新用户信息
 - `POST /user/password`：更新用户密码（`oldPassword`、`newPassword`）
 
 ### 文章
