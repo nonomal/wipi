@@ -237,17 +237,10 @@ export class ArticleService {
 
     const data = await query.getOne();
 
-<<<<<<< HEAD:server/src/modules/article/article.service.ts
-    // if (data.needPassword) {
-    //   delete data.content;
-    //   delete data.html;
-    // }
-=======
     if (data && data.needPassword && !isAdmin) {
       delete data.content;
       delete data.html;
     }
->>>>>>> @{-1}:packages/server/src/modules/article/article.service.ts
 
     return data;
   }
