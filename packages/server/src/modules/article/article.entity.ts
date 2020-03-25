@@ -6,13 +6,10 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
-  JoinColumn,
-  OneToOne,
   ManyToOne,
 } from 'typeorm';
 import { Tag } from '../tag/tag.entity';
 import { Category } from '../category/category.entity';
-import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class Article {
@@ -30,12 +27,6 @@ export class Article {
 
   @Column({ type: 'mediumtext', default: null, charset: 'utf8mb4' })
   content: string; // 原始内容
-
-  @Column({ type: 'mediumtext', default: null, charset: 'utf8mb4' })
-  html: string; // 格式化内容，自动生成
-
-  @Column({ type: 'text', default: null })
-  toc: string; // 格式化内容索引，自动生成
 
   @ManyToOne(
     () => Category,

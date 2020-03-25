@@ -4,10 +4,6 @@ import { Repository } from 'typeorm';
 import { TagService } from '../tag/tag.service';
 import { CategoryService } from '../category/category.service';
 import { Article } from './article.entity';
-import { marked } from './markdown.util';
-import { Tag } from '../tag/tag.entity';
-const nodejieba = require('nodejieba');
-const topN = 4;
 
 @Injectable()
 export class ArticleService {
@@ -30,16 +26,11 @@ export class ArticleService {
       throw new HttpException('文章标题已存在', HttpStatus.BAD_REQUEST);
     }
 
-    let { content, tags, category } = article;
-    // 后台系统直接返回 html，toc
-    // const { html, toc } = content ? marked(content) : { html: null, toc: null };
+    let { tags, category } = article;
     tags = await this.tagService.findByIds(('' + tags).split(','));
     let existCategory = await this.categoryService.findById(category);
     const newArticle = await this.articleRepository.create({
       ...article,
-      html: content,
-      // TODO: 后台处理 toc
-      toc: JSON.stringify([]),
       category: existCategory,
       tags,
       needPassword: !!article.password,
@@ -80,7 +71,6 @@ export class ArticleService {
     data.forEach(d => {
       if (d.needPassword) {
         delete d.content;
-        delete d.html;
       }
     });
 
@@ -112,7 +102,6 @@ export class ArticleService {
     data.forEach(d => {
       if (d.needPassword) {
         delete d.content;
-        delete d.html;
       }
     });
 
@@ -144,7 +133,6 @@ export class ArticleService {
     data.forEach(d => {
       if (d.needPassword) {
         delete d.content;
-        delete d.html;
       }
     });
 
@@ -182,7 +170,6 @@ export class ArticleService {
 
       if (d.needPassword) {
         delete d.content;
-        delete d.html;
       }
 
       if (!ret[year]) {
@@ -239,7 +226,6 @@ export class ArticleService {
 
     if (data && data.needPassword && !isAdmin) {
       delete data.content;
-      delete data.html;
     }
 
     return data;
@@ -252,9 +238,7 @@ export class ArticleService {
    */
   async updateById(id, article: Partial<Article>): Promise<Article> {
     const oldArticle = await this.articleRepository.findOne(id);
-    let { content, tags, category, status } = article;
-    // 后台系统直接返回 html，toc
-    // const { html, toc } = content ? marked(content) : oldArticle;
+    let { tags, category, status } = article;
 
     if (tags) {
       tags = await this.tagService.findByIds(('' + tags).split(','));
@@ -264,10 +248,7 @@ export class ArticleService {
 
     const newArticle = {
       ...article,
-      html: content,
       category: existCategory,
-      // TODO: 前台处理 toc
-      toc: JSON.stringify([]),
       needPassword: !!article.password,
       publishAt: status === 'publish' ? new Date() : oldArticle.publishAt,
     };
@@ -350,28 +331,33 @@ export class ArticleService {
       }
 
       const { title, summary } = exist;
-      const kw1 = nodejieba.extract(title, topN);
-      const kw2 = nodejieba.extract(summary, topN);
 
-      kw1.forEach((kw, i) => {
-        let paramKey = `title_` + i;
-        if (i === 0) {
-          query.where(`article.title LIKE :${paramKey}`);
-        } else {
-          query.orWhere(`article.title LIKE :${paramKey}`);
-        }
-        query.setParameter(paramKey, `%${kw.word}%`);
-      });
+      try {
+        const nodejieba = require('nodejieba');
+        const topN = 4;
+        const kw1 = nodejieba.extract(title, topN);
+        const kw2 = nodejieba.extract(summary, topN);
 
-      kw2.forEach((kw, i) => {
-        let paramKey = `summary_` + i;
-        if (!kw1.length) {
-          query.where(`article.summary LIKE :${paramKey}`);
-        } else {
-          query.orWhere(`article.summary LIKE :${paramKey}`);
-        }
-        query.setParameter(paramKey, `%${kw.word}%`);
-      });
+        kw1.forEach((kw, i) => {
+          let paramKey = `title_` + i;
+          if (i === 0) {
+            query.where(`article.title LIKE :${paramKey}`);
+          } else {
+            query.orWhere(`article.title LIKE :${paramKey}`);
+          }
+          query.setParameter(paramKey, `%${kw.word}%`);
+        });
+
+        kw2.forEach((kw, i) => {
+          let paramKey = `summary_` + i;
+          if (!kw1.length) {
+            query.where(`article.summary LIKE :${paramKey}`);
+          } else {
+            query.orWhere(`article.summary LIKE :${paramKey}`);
+          }
+          query.setParameter(paramKey, `%${kw.word}%`);
+        });
+      } catch (e) {}
 
       const data = await query.getMany();
       return data.filter(d => d.id !== articleId && d.status === 'publish');
