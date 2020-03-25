@@ -21,8 +21,6 @@ interface IArticle {
   summary: string;
   content: string;
   cover?: string;
-  html: string;
-  toc: string;
   views: number;
   category: any;
   tags?: [any];
