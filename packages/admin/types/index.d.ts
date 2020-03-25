@@ -20,6 +20,7 @@ interface IArticle {
   title: string;
   summary: string;
   content: string;
+  tags?: [any];
   cover?: string;
   toc: string;
   views: number;
