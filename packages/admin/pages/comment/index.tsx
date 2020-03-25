@@ -67,8 +67,8 @@ const Comment: NextPage<IProps> = ({
       return;
     }
 
-    const userInfo = JSON.parse(window.localStorage.getItem('user'));
-    const email = userInfo.mail || (setting && setting.smtpFromUser);
+    const userInfo = JSON.parse(window.sessionStorage.getItem('user'));
+    const email = (userInfo && userInfo.mail) || (setting && setting.smtpFromUser);
 
     const notify = () => {
       notification.error({
