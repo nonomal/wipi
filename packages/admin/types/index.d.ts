@@ -21,11 +21,9 @@ interface IArticle {
   summary: string;
   content: string;
   cover?: string;
-  html: string;
   toc: string;
   views: number;
   category: any;
-  tags?: [any];
   status: string;
   password?: string; // 访问密码
   needPassword: boolean;
@@ -53,7 +51,6 @@ interface IPage {
   path: string;
   cover?: string;
   content: string;
-  html: string;
   toc: string;
   status: string;
   views: number;
