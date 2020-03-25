@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
-import { NextPage } from "next";
-import { Helmet } from "react-helmet";
-import hljs from "highlight.js";
-import { Layout } from "@/layout/Layout";
-import Viewer from "viewerjs";
-import { CommentAndRecommendArticles } from "@components/CommentAndRecommendArticles";
-import { PageProvider } from "@providers/page";
-import { useSetting } from "@/hooks/useSetting";
-import style from "./index.module.scss";
+import React, { useState, useEffect, useRef } from 'react';
+import { NextPage } from 'next';
+import { Helmet } from 'react-helmet';
+import hljs from 'highlight.js';
+import { Layout } from '@/layout/Layout';
+import Viewer from 'viewerjs';
+import { CommentAndRecommendArticles } from '@components/CommentAndRecommendArticles';
+import { PageProvider } from '@providers/page';
+import { useSetting } from '@/hooks/useSetting';
+import style from './index.module.scss';
 
 interface IProps {
   page: IPage;
@@ -34,7 +34,7 @@ const Page: NextPage<IProps> = ({ page }) => {
         i = max + 1;
       }
 
-      if (typeof tocs === "string" && i < max) {
+      if (typeof tocs === 'string' && i < max) {
         handle();
       }
     };
@@ -70,7 +70,7 @@ const Page: NextPage<IProps> = ({ page }) => {
       ) : (
         <div className={style.container}>
           <Helmet>
-            <title>{page.name + " | " + setting.systemTitle}</title>
+            <title>{page.name + ' | ' + setting.systemTitle}</title>
           </Helmet>
           <div className="container">
             {page.cover && (
@@ -81,8 +81,8 @@ const Page: NextPage<IProps> = ({ page }) => {
             <div className={style.content}>
               <div
                 ref={ref}
-                className={"markdown"}
-                dangerouslySetInnerHTML={{ __html: page.html }}
+                className={'markdown'}
+                dangerouslySetInnerHTML={{ __html: page.content }}
               ></div>
             </div>
           </div>

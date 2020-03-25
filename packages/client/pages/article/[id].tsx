@@ -1,78 +1,28 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Helmet } from "react-helmet";
-import { NextPage } from "next";
-import Router from "next/router";
-import Link from "next/link";
-import cls from "classnames";
-import Viewer from "viewerjs";
-import { Anchor, Modal, Form, Input, message } from "antd";
-import * as dayjs from "dayjs";
-import hljs from "highlight.js";
-import { useSetting } from "@/hooks/useSetting";
-import { Layout } from "@/layout/Layout";
-import { ArticleProvider } from "@providers/article";
-import { CommentAndRecommendArticles } from "@components/CommentAndRecommendArticles";
-import style from "./index.module.scss";
-const url = require("url");
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { Helmet } from 'react-helmet';
+import { NextPage } from 'next';
+import Router from 'next/router';
+import Link from 'next/link';
+import cls from 'classnames';
+import Viewer from 'viewerjs';
+import { Modal, Form, Input, message } from 'antd';
+import * as dayjs from 'dayjs';
+import hljs from 'highlight.js';
+import { useSetting } from '@/hooks/useSetting';
+import { Layout } from '@/layout/Layout';
+import { ArticleProvider } from '@providers/article';
+import { CommentAndRecommendArticles } from '@components/CommentAndRecommendArticles';
+import style from './index.module.scss';
+const url = require('url');
 
 interface IProps {
   article: IArticle;
 }
 
-const buildTocTree = tocs => {
-  let tree: any = [];
-
-  for (let toc of tocs) {
-    let level = toc[0];
-
-    if (!tree.length) {
-      tree.push({ node: toc, children: [] });
-    } else {
-      let pre = tree[tree.length - 1];
-      let nodes = [pre, ...pre.children];
-      nodes.reverse();
-      let target = nodes.find(node => node.node[0] === level - 1);
-
-      if (target) {
-        target.children = target.children || [];
-        target.children.push({ node: toc, children: [] });
-      } else {
-        tree.push({ node: toc, children: [] });
-      }
-    }
-  }
-  return tree;
-};
-
-const renderTocTree = tocs => {
-  return (
-    <>
-      {tocs.filter(Boolean).map(toc => {
-        const node = toc.node;
-        return node && node.length === 3 ? (
-          <Anchor.Link
-            key={node[2]}
-            href={"#" + node[1]}
-            title={
-              // <Tooltip title={node[2]} placement={"left"}>
-              node[2]
-              // </Tooltip>
-            }
-          >
-            {toc.children ? renderTocTree(toc.children) : null}
-          </Anchor.Link>
-        ) : null;
-      })}
-    </>
-  );
-};
-
 const Article: NextPage<IProps> = ({ article }) => {
   const setting = useSetting();
   const ref = useRef(null);
   const content = useRef(null);
-  const [tocs, setTocs] = useState([]);
-  const [affix, setAffix] = useState(true);
   const [password, setPassword] = useState(null);
   const [shouldCheckPassWord, setShouldCheckPassword] = useState(
     article && article.needPassword
@@ -85,39 +35,18 @@ const Article: NextPage<IProps> = ({ article }) => {
         Object.assign(article, res);
         setShouldCheckPassword(false);
       } else {
-        message.error("密码错误");
+        message.error('密码错误');
         setShouldCheckPassword(true);
       }
     });
   }, [article.id, password]);
 
   const back = useCallback(() => {
-    Router.push("/");
+    Router.push('/');
   }, []);
 
   useEffect(() => {
     setShouldCheckPassword(article && article.needPassword);
-  }, [article.id]);
-
-  useEffect(() => {
-    let tocs = JSON.parse(article.toc);
-    let i = 0;
-    let max = 10; // 最大尝试次数
-    const handle = () => {
-      i++;
-      try {
-        tocs = JSON.parse(tocs);
-      } catch (e) {
-        i = max + 1;
-      }
-
-      if (typeof tocs === "string" && i < max) {
-        handle();
-      }
-    };
-
-    handle();
-    setTocs(buildTocTree(tocs));
   }, [article.id]);
 
   // 更新阅读量
@@ -142,38 +71,18 @@ const Article: NextPage<IProps> = ({ article }) => {
     }
   }, [shouldCheckPassWord]);
 
-  useEffect(() => {
-    const handler = () => {
-      const el = content && content.current;
-      if (!el) {
-        return;
-      }
-      const { top, height } = el.getBoundingClientRect();
-      const diff = top + height;
-      setAffix(diff > 100);
-    };
-
-    if (!shouldCheckPassWord) {
-      document.addEventListener("scroll", handler);
-    }
-
-    return () => {
-      document.removeEventListener("scroll", handler);
-    };
-  }, [shouldCheckPassWord]);
-
   return (
     <Layout backgroundColor="#fff">
       {/* S 密码检验 */}
       <Modal
         title="文章受保护，请输入访问密码"
-        cancelText={"回首页"}
-        okText={"确认"}
+        cancelText={'回首页'}
+        okText={'确认'}
         visible={shouldCheckPassWord}
         onOk={checkPassWord}
         onCancel={back}
       >
-        <Form.Item label={"密码"}>
+        <Form.Item label={'密码'}>
           <Input.Password
             value={password}
             onChange={e => {
@@ -186,9 +95,9 @@ const Article: NextPage<IProps> = ({ article }) => {
 
       <div>
         <Helmet>
-          <title>{article.title + " | " + setting.systemTitle}</title>
+          <title>{article.title + ' | ' + setting.systemTitle}</title>
         </Helmet>
-        <article className={cls("container", style.container)}>
+        <article className={cls('container', style.container)}>
           {setting.systemUrl && (
             <meta
               itemProp="url"
@@ -199,7 +108,7 @@ const Article: NextPage<IProps> = ({ article }) => {
           {article.tags && (
             <meta
               itemProp="keywords"
-              content={article.tags.map(tag => tag.label).join(" ")}
+              content={article.tags.map(tag => tag.label).join(' ')}
             />
           )}
           <meta itemProp="dataPublished" content={article.publishAt} />
@@ -211,8 +120,8 @@ const Article: NextPage<IProps> = ({ article }) => {
             <h1 className={style.title}>{article.title}</h1>
             <p className={style.desc}>
               <span>
-                发布于{" "}
-                {dayjs.default(article.publishAt).format("YYYY-MM-DD HH:mm:ss")}
+                发布于{' '}
+                {dayjs.default(article.publishAt).format('YYYY-MM-DD HH:mm:ss')}
               </span>
               <span> • </span>
               <span>阅读量 {article.views}</span>
@@ -222,8 +131,8 @@ const Article: NextPage<IProps> = ({ article }) => {
             <div className={style.content}>
               <div
                 ref={ref}
-                className={cls("markdown", style.markdown)}
-                dangerouslySetInnerHTML={{ __html: article.html }}
+                className={cls('markdown', style.markdown)}
+                dangerouslySetInnerHTML={{ __html: article.content }}
               ></div>
               <div className={style.articleFooter}>
                 {article.tags && article.tags.length ? (
@@ -233,7 +142,7 @@ const Article: NextPage<IProps> = ({ article }) => {
                       {article.tags.map(tag => {
                         return (
                           <div className={style.tag} key={tag.id}>
-                            <Link href={"/tag/[tag]"} as={"/tag/" + tag.value}>
+                            <Link href={'/tag/[tag]'} as={'/tag/' + tag.value}>
                               <a>
                                 <span>{tag.label}</span>
                               </a>
@@ -255,15 +164,6 @@ const Article: NextPage<IProps> = ({ article }) => {
                 </div>
               </div>
             </div>
-            {/* S 文章目录 */}
-            {Array.isArray(tocs) && (
-              <div className={style.anchorWidget}>
-                <Anchor targetOffset={32} offsetTop={32} affix={affix}>
-                  {renderTocTree(tocs)}
-                </Anchor>
-              </div>
-            )}
-            {/* E 文章目录 */}
           </div>
         </article>
         <CommentAndRecommendArticles
