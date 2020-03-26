@@ -18,7 +18,10 @@ if (typeof require !== 'undefined') {
   require.extensions['.less'] = file => {};
 }
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig = {
+  assetPrefix: isProd ? 'https://cdn.admin.blog.wipi.tech' : '/',
   webpack: config => {
     config.resolve.plugins.push(new TsconfigPathsPlugin());
     config.plugins.push(
