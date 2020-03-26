@@ -1,12 +1,10 @@
-import React from "react";
-import cls from "classnames";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useTags } from "@/hooks/useTags";
-import style from "./index.module.scss";
+import React from 'react';
+import cls from 'classnames';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import style from './index.module.scss';
 
-export const Tags = () => {
-  const tags = useTags();
+export const Tags = ({ tags = [] }) => {
   const router = useRouter();
   const { tag: routerTag } = router.query;
 

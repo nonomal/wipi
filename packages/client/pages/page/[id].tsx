@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { NextPage } from 'next';
 import { Helmet } from 'react-helmet';
 import hljs from 'highlight.js';
@@ -6,42 +6,16 @@ import { Layout } from '@/layout/Layout';
 import Viewer from 'viewerjs';
 import { CommentAndRecommendArticles } from '@components/CommentAndRecommendArticles';
 import { PageProvider } from '@providers/page';
-import { useSetting } from '@/hooks/useSetting';
 import style from './index.module.scss';
 
 interface IProps {
   page: IPage;
 }
 
-const Page: NextPage<IProps> = ({ page }) => {
-  const setting = useSetting();
+const Page: NextPage<IProps> = props => {
+  const { setting = {}, pages = [], page } = props as any;
+
   const ref = useRef(null);
-  const [tocs, setTocs] = useState([]);
-
-  useEffect(() => {
-    if (!page) {
-      return;
-    }
-
-    let tocs = JSON.parse(page.toc);
-    let i = 0;
-    let max = 10; // 最大尝试次数
-    const handle = () => {
-      i++;
-      try {
-        tocs = JSON.parse(tocs);
-      } catch (e) {
-        i = max + 1;
-      }
-
-      if (typeof tocs === 'string' && i < max) {
-        handle();
-      }
-    };
-
-    handle();
-    setTocs(tocs);
-  }, []);
 
   // 更新阅读量
   useEffect(() => {
@@ -62,7 +36,7 @@ const Page: NextPage<IProps> = ({ page }) => {
   }, []);
 
   return (
-    <Layout backgroundColor="#fff">
+    <Layout backgroundColor="#fff" setting={setting} pages={pages}>
       {!page ? (
         <div className="container">
           <p>页面不存在</p>

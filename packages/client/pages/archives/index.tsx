@@ -1,14 +1,14 @@
-import React from "react";
-import { NextPage } from "next";
-import Link from "next/link";
-import cls from "classnames";
-import { Row, Col, Timeline } from "antd";
-import * as dayjs from "dayjs";
-import { Layout } from "@/layout/Layout";
-import { ArticleProvider } from "@providers/article";
-import { RecommendArticles } from "@components/RecommendArticles";
-import { Tags } from "@components/Tags";
-import style from "./index.module.scss";
+import React from 'react';
+import { NextPage } from 'next';
+import Link from 'next/link';
+import cls from 'classnames';
+import { Row, Col } from 'antd';
+import * as dayjs from 'dayjs';
+import { Layout } from '@/layout/Layout';
+import { ArticleProvider } from '@providers/article';
+import { RecommendArticles } from '@components/RecommendArticles';
+import { Tags } from '@components/Tags';
+import style from './index.module.scss';
 
 interface IProps {
   articles: { [key: string]: { [key: string]: IArticle[] } };
@@ -24,7 +24,7 @@ const ArchiveItem = ({ month, articles = [] }) => {
             <Link href={`/article/[id]`} as={`/article/${article.id}`}>
               <a>
                 <span className={style.meta}>
-                  {dayjs.default(article.publishAt).format("MM-DD")}
+                  {dayjs.default(article.publishAt).format('MM-DD')}
                 </span>
                 <span className={style.title}>{article.title}</span>
               </a>
@@ -36,10 +36,12 @@ const ArchiveItem = ({ month, articles = [] }) => {
   );
 };
 
-const Archives: NextPage<IProps> = ({ articles }) => {
+const Archives: NextPage<IProps> = props => {
+  const { articles = [], setting = {}, pages = [], tags = [] } = props as any;
+
   return (
-    <Layout>
-      <div className={cls("container", style.container)}>
+    <Layout setting={setting} pages={pages}>
+      <div className={cls('container', style.container)}>
         <Row>
           <Col sm={16} className={style.main}>
             <div className={style.content}>
@@ -63,7 +65,7 @@ const Archives: NextPage<IProps> = ({ articles }) => {
           </Col>
           <Col sm={8} className={style.aside}>
             <RecommendArticles mode="inline" />
-            <Tags />
+            <Tags tags={tags} />
           </Col>
         </Row>
       </div>

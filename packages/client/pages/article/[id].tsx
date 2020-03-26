@@ -8,7 +8,6 @@ import Viewer from 'viewerjs';
 import { Modal, Form, Input, message } from 'antd';
 import * as dayjs from 'dayjs';
 import hljs from 'highlight.js';
-import { useSetting } from '@/hooks/useSetting';
 import { Layout } from '@/layout/Layout';
 import { ArticleProvider } from '@providers/article';
 import { CommentAndRecommendArticles } from '@components/CommentAndRecommendArticles';
@@ -19,8 +18,8 @@ interface IProps {
   article: IArticle;
 }
 
-const Article: NextPage<IProps> = ({ article }) => {
-  const setting = useSetting();
+const Article: NextPage<IProps> = props => {
+  const { setting = {}, pages = [], article } = props as any;
   const ref = useRef(null);
   const content = useRef(null);
   const [password, setPassword] = useState(null);
@@ -72,7 +71,7 @@ const Article: NextPage<IProps> = ({ article }) => {
   }, [shouldCheckPassWord]);
 
   return (
-    <Layout backgroundColor="#fff">
+    <Layout backgroundColor="#fff" setting={setting} pages={pages}>
       {/* S 密码检验 */}
       <Modal
         title="文章受保护，请输入访问密码"

@@ -1,24 +1,44 @@
-import React from "react";
-import { BackTop } from "antd";
-import { Helmet } from "react-helmet";
-import { useSetting } from "@/hooks/useSetting";
-import { useMenus } from "@/hooks/useMenus";
-import { Header } from "@components/Header";
-import { Footer } from "@components/Footer";
-import style from "./index.module.scss";
+import React from 'react';
+import { BackTop } from 'antd';
+import { Helmet } from 'react-helmet';
+import { Header } from '@components/Header';
+import { Footer } from '@components/Footer';
+import style from './index.module.scss';
+
+const defaultMenus = [
+  {
+    label: '首页',
+    path: '/',
+    dynamicPath: '/[tag]',
+  },
+
+  {
+    label: '归档',
+    path: '/archives',
+  },
+];
 
 interface Iprops {
   backgroundColor?: string;
   needFooter?: boolean;
+  setting: any;
+  pages: any;
 }
 
 export const Layout: React.FC<Iprops> = ({
-  backgroundColor = "#f4f5f5",
+  backgroundColor = '#f4f5f5',
   children,
-  needFooter = true
+  needFooter = true,
+  setting = {},
+  pages = [],
 }) => {
-  const setting = useSetting();
-  const menus = useMenus();
+  const menus = [
+    ...defaultMenus,
+    ...pages.map(r => ({
+      path: `/page/` + r.path,
+      label: r.name,
+    })),
+  ];
 
   return (
     <div>
@@ -36,7 +56,7 @@ export const Layout: React.FC<Iprops> = ({
       <main
         className={style.main}
         style={{
-          backgroundColor
+          backgroundColor,
         }}
       >
         {children}

@@ -1,16 +1,15 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { NextPage } from "next";
-import cls from "classnames";
-import InfiniteScroll from "react-infinite-scroller";
-import { useSetting } from "@/hooks/useSetting";
-import { ArticleProvider } from "@providers/article";
-import { Layout } from "@/layout/Layout";
-import { CategoryMenu } from "@components/CategoryMenu";
-import { ArticleList } from "@components/ArticleList";
-import { RecommendArticles } from "@components/RecommendArticles";
-import { Tags } from "@components/Tags";
-import { Footer } from "@components/Footer";
-import style from "../index.module.scss";
+import React, { useState, useCallback, useEffect } from 'react';
+import { NextPage } from 'next';
+import cls from 'classnames';
+import InfiniteScroll from 'react-infinite-scroller';
+import { ArticleProvider } from '@providers/article';
+import { Layout } from '@/layout/Layout';
+import { CategoryMenu } from '@components/CategoryMenu';
+import { ArticleList } from '@components/ArticleList';
+import { RecommendArticles } from '@components/RecommendArticles';
+import { Tags } from '@components/Tags';
+import { Footer } from '@components/Footer';
+import style from '../index.module.scss';
 
 interface IProps {
   articles: IArticle[];
@@ -20,12 +19,16 @@ interface IProps {
 
 const pageSize = 12;
 
-const Home: NextPage<IProps> = ({
-  articles: defaultArticles = [],
-  total,
-  tag
-}) => {
-  const setting = useSetting();
+const Home: NextPage<IProps> = props => {
+  const {
+    articles: defaultArticles = [],
+    total,
+    tag,
+    setting = {},
+    tags = [],
+    pages = [],
+    categories = [],
+  } = props as any;
   const [affix, setAffix] = useState(false);
   const [page, setPage] = useState(1);
   const [articles, setArticles] = useState<IArticle[]>(defaultArticles);
@@ -36,10 +39,10 @@ const Home: NextPage<IProps> = ({
       setAffix(y > 100);
     };
 
-    document.addEventListener("scroll", handler);
+    document.addEventListener('scroll', handler);
 
     return () => {
-      document.removeEventListener("scroll", handler);
+      document.removeEventListener('scroll', handler);
     };
   }, []);
 
@@ -51,7 +54,7 @@ const Home: NextPage<IProps> = ({
     ArticleProvider.getArticlesByTag(tag, {
       page,
       pageSize,
-      status: "publish"
+      status: 'publish',
     }).then(res => {
       setPage(page);
       setArticles(articles => [...articles, ...res[0]]);
@@ -59,9 +62,9 @@ const Home: NextPage<IProps> = ({
   }, []);
 
   return (
-    <Layout needFooter={false}>
-      <CategoryMenu />
-      <div className={cls("container", style.container)}>
+    <Layout needFooter={false} setting={setting} pages={pages}>
+      <CategoryMenu categories={categories} />
+      <div className={cls('container', style.container)}>
         <div className={style.content}>
           <InfiniteScroll
             pageStart={1}
@@ -79,7 +82,7 @@ const Home: NextPage<IProps> = ({
           <aside className={cls(style.aside)}>
             <div className={cls(affix ? style.isFixed : false)}>
               <RecommendArticles mode="inline" />
-              <Tags />
+              <Tags tags={tags} />
               <Footer className={style.footer} setting={setting} />
             </div>
           </aside>
@@ -96,10 +99,10 @@ Home.getInitialProps = async ctx => {
     ArticleProvider.getArticlesByTag(tag, {
       page: 1,
       pageSize: 8,
-      status: "publish"
-    })
+      status: 'publish',
+    }),
   ]);
-  return { articles: articles[0], total: articles[1], tag: "" + tag };
+  return { articles: articles[0], total: articles[1], tag: '' + tag };
 };
 
 export default Home;

@@ -1,12 +1,16 @@
-import React from "react";
-import App from "next/app";
-import { ViewProvider } from "@providers/view";
-import { NProgress } from "@components/NProgress";
-import "viewerjs/dist/viewer.css";
-import "highlight.js/styles/github-gist.css";
-import "@/theme/antd.less";
-import "@/theme/reset.scss";
-import "@/theme/markdown.scss";
+import React from 'react';
+import App from 'next/app';
+import { ViewProvider } from '@providers/view';
+import { SettingProvider } from '@providers/setting';
+import { PageProvider } from '@providers/page';
+import { CategoryProvider } from '@providers/category';
+import { TagProvider } from '@providers/tag';
+import { NProgress } from '@components/NProgress';
+import 'viewerjs/dist/viewer.css';
+import 'highlight.js/styles/github-gist.css';
+import '@/theme/antd.less';
+import '@/theme/reset.scss';
+import '@/theme/markdown.scss';
 
 let lastUrl;
 
@@ -19,9 +23,20 @@ const addView = url => {
 };
 
 class MyApp extends App {
+  static getInitialProps = async ctx => {
+    const [appProps, setting, tags, categories, pages] = await Promise.all([
+      App.getInitialProps(ctx),
+      SettingProvider.getSetting(),
+      TagProvider.getTags(),
+      CategoryProvider.getCategory(),
+      PageProvider.getAllPublisedPages(),
+    ]);
+    return { ...appProps, setting, tags, categories, pages: pages[0] || [] };
+  };
+
   componentDidMount() {
     try {
-      const el = document.querySelector("#holderStyle");
+      const el = document.querySelector('#holderStyle');
       el.parentNode.removeChild(el);
     } catch (e) {}
 
@@ -40,7 +55,14 @@ class MyApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
+    const {
+      Component,
+      pageProps,
+      setting = {},
+      tags = [],
+      categories = [],
+      pages = [],
+    } = this.props as any;
 
     return (
       <div>
@@ -49,11 +71,17 @@ class MyApp extends App {
           dangerouslySetInnerHTML={{
             __html: ` * {
       transition: none !important;
-    }`
+    }`,
           }}
         ></style>
-        <NProgress color={"#ff0064"} />
-        <Component {...pageProps} />
+        <NProgress color={'#ff0064'} />
+        <Component
+          {...pageProps}
+          setting={setting}
+          tags={tags}
+          categories={categories}
+          pages={pages}
+        />
       </div>
     );
   }

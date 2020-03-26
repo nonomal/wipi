@@ -1,21 +1,19 @@
-import React from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import cls from "classnames";
-import { useCategory } from "@/hooks/useCategory";
-import style from "./index.module.scss";
+import React from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import cls from 'classnames';
+import style from './index.module.scss';
 
-export const CategoryMenu = () => {
-  const categories = useCategory();
+export const CategoryMenu = ({ categories = [] }) => {
   const router = useRouter();
   const { category: routerCategory } = router.query;
 
   return (
     <div className={cls(style.wrapper)}>
-      <div className={cls("container")}>
+      <div className={cls('container')}>
         <ul>
           <li
-            key={"all"}
+            key={'all'}
             className={cls(
               style.tagItem,
               !routerCategory && !/tag/.test(router.pathname)
