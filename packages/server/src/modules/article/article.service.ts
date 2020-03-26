@@ -250,7 +250,10 @@ export class ArticleService {
       ...article,
       category: existCategory,
       needPassword: !!article.password,
-      publishAt: status === 'publish' ? new Date() : oldArticle.publishAt,
+      publishAt:
+        oldArticle.status === 'draft' && status === 'publish'
+          ? new Date()
+          : oldArticle.publishAt,
     };
 
     if (tags) {
