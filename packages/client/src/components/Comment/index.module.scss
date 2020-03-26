@@ -188,12 +188,12 @@
       }
 
       .editorContainer {
-        height: 0;
+        max-height: 0;
         overflow: hidden;
         transition: all ease-in-out 0.3s;
 
         &.isActive {
-          height: 378px;
+          max-height: initial;
         }
       }
     }
