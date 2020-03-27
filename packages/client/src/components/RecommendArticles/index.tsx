@@ -1,63 +1,37 @@
-import React, { useEffect, useState, useRef } from "react";
-import Link from "next/link";
-import { ArticleProvider } from "@providers/article";
-import { ArticleList } from "@components/ArticleList";
-import { format } from "timeago.js";
-import style from "./index.module.scss";
+import React, { useEffect, useState, useRef } from 'react';
+import Link from 'next/link';
+import { ArticleProvider } from '@providers/article';
+import { ArticleList } from '@components/ArticleList';
+import { format } from 'timeago.js';
+import style from './index.module.scss';
 
 interface IProps {
   articleId?: string;
-  mode?: "inline" | "vertical";
+  mode?: 'inline' | 'vertical';
   needTitle?: boolean;
   asCard?: boolean;
 }
 
-let cache = null;
-
-function isEqual(a, b) {
-  if (a.length === 0 && b.lenth === 0) {
-    return true;
-  }
-
-  if (a.length !== b.length) {
-    return false;
-  }
-
-  return a.every((c, i) => c === b[i]);
-}
-
 export const RecommendArticles: React.FC<IProps> = ({
-  mode = "vertical",
+  mode = 'vertical',
   articleId = null,
   needTitle = true,
-  asCard = false
+  asCard = false,
 }) => {
-  const articles = useRef(cache);
-  const [, setUpdate] = useState(false);
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     ArticleProvider.getRecommend(articleId).then(res => {
-      const isSame = isEqual(
-        (res || []).map(t => t.id),
-        (cache || []).map(t => t.id)
-      );
-
-      if (isSame) {
-        return;
-      }
-
-      articles.current = res;
-      cache = res;
-      setUpdate(true);
+      setArticles(res);
     });
-  }, [articleId, cache]);
+  }, [articleId]);
 
   return (
     <div className={style.wrapper}>
       {needTitle && <div className={style.title}>推荐文章</div>}
-      {mode === "inline" ? (
+      {mode === 'inline' ? (
         <ul>
-          {(articles.current || []).map(article => {
+          {(articles || []).map(article => {
             return (
               <li key={article.id}>
                 <div>
@@ -65,8 +39,8 @@ export const RecommendArticles: React.FC<IProps> = ({
                     <a>
                       <p className={style.articleTitle}>
                         <strong>{article.title}</strong>
-                        {" · "}
-                        <span>{format(article.publishAt, "zh_CN")}</span>
+                        {' · '}
+                        <span>{format(article.publishAt, 'zh_CN')}</span>
                       </p>
                     </a>
                   </Link>
@@ -76,7 +50,7 @@ export const RecommendArticles: React.FC<IProps> = ({
           })}
         </ul>
       ) : (
-        <ArticleList articles={articles.current || []} asCard={asCard} />
+        <ArticleList articles={articles || []} asCard={asCard} />
       )}
     </div>
   );
