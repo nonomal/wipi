@@ -13,7 +13,7 @@ async function bootstrap() {
   app.use(
     rateLimit({
       windowMs: 60 * 1000, // 1 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
+      max: 1000, // limit each IP to 1000 requests per windowMs
     })
   );
   app.use(compression()); // 启用 gzip 压缩
