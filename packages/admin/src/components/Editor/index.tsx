@@ -5,6 +5,7 @@ import { FileProvider } from '@providers/file';
 import style from './index.module.scss';
 import { ContentUtils } from 'braft-utils';
 import 'braft-editor/dist/index.css';
+import 'braft-extensions/dist/table.css';
 
 interface IProps {
   value: string;
@@ -27,8 +28,23 @@ export const Editor: React.FC<IProps> = ({ value = '', onChange }) => {
   }, [mounted, value]);
 
   useEffect(() => {
-    Promise.all([import('braft-editor')]).then(res => {
+    Promise.all([
+      import('braft-editor'),
+      import('braft-extensions/dist/table'),
+      import('braft-extensions/dist/markdown'),
+    ]).then(res => {
       BraftEditor = res[0].default;
+      const Table = res[1].default;
+      const Markdown = res[2].default;
+      const options = {
+        defaultColumns: 3, // 默认列数
+        defaultRows: 3, // 默认行数
+        withDropdown: false, // 插入表格前是否弹出下拉菜单
+        columnResizable: false, // 是否允许拖动调整列宽，默认false
+        exportAttrString: '', // 指定输出HTML时附加到table标签上的属性字符串
+      };
+      BraftEditor.use(Table(options));
+      BraftEditor.use(Markdown({}));
       setMounted(true);
     });
 
@@ -101,6 +117,7 @@ export const Editor: React.FC<IProps> = ({ value = '', onChange }) => {
 
     'hr',
     'separator',
+    'table',
   ];
   const extendControls = [
     {
