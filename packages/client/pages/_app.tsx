@@ -76,7 +76,7 @@ class MyApp extends App {
     }`,
           }}
         ></style>
-        <NProgress color={'#ff0064'} />
+        <NProgress color={'#f90'} />
         <Component
           {...pageProps}
           setting={setting}
