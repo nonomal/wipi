@@ -3,7 +3,6 @@ import { BackTop } from 'antd';
 import { Helmet } from 'react-helmet';
 import { Header } from '@components/Header';
 import { Footer } from '@components/Footer';
-import style from './index.module.scss';
 
 const defaultMenus = [
   {
@@ -26,7 +25,6 @@ interface Iprops {
 }
 
 export const Layout: React.FC<Iprops> = ({
-  backgroundColor = '#f4f5f5',
   children,
   needFooter = true,
   setting = {},
@@ -53,14 +51,7 @@ export const Layout: React.FC<Iprops> = ({
         ></link>
       </Helmet>
       <Header setting={setting} menus={menus} />
-      <main
-        className={style.main}
-        style={{
-          backgroundColor,
-        }}
-      >
-        {children}
-      </main>
+      <main>{children}</main>
       <BackTop />
       {needFooter && <Footer setting={setting} />}
     </div>

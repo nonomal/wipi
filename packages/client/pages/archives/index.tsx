@@ -4,7 +4,6 @@ import Link from 'next/link';
 import cls from 'classnames';
 import { Row, Col } from 'antd';
 import * as dayjs from 'dayjs';
-import { Layout } from '@/layout/Layout';
 import { ArticleProvider } from '@providers/article';
 import { RecommendArticles } from '@components/RecommendArticles';
 import { Tags } from '@components/Tags';
@@ -37,10 +36,10 @@ const ArchiveItem = ({ month, articles = [] }) => {
 };
 
 const Archives: NextPage<IProps> = props => {
-  const { articles = [], setting = {}, pages = [], tags = [] } = props as any;
+  const { articles = [], tags = [] } = props as any;
 
   return (
-    <Layout setting={setting} pages={pages}>
+    <div className={style.wrapper}>
       <div className={cls('container', style.container)}>
         <Row>
           <Col sm={16} className={style.main}>
@@ -69,7 +68,7 @@ const Archives: NextPage<IProps> = props => {
           </Col>
         </Row>
       </div>
-    </Layout>
+    </div>
   );
 };
 

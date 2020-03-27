@@ -1,4 +1,8 @@
-@import "../src/theme/var.scss";
+@import '../src/theme/var.scss';
+
+.wrapper {
+  background-color: #f4f5f5;
+}
 
 .container {
   padding-top: 1rem;

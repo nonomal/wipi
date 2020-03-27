@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { NextPage } from 'next';
 import { Helmet } from 'react-helmet';
 import hljs from 'highlight.js';
-import { Layout } from '@/layout/Layout';
 import Viewer from 'viewerjs';
 import { CommentAndRecommendArticles } from '@components/CommentAndRecommendArticles';
 import { PageProvider } from '@providers/page';
@@ -13,7 +12,7 @@ interface IProps {
 }
 
 const Page: NextPage<IProps> = props => {
-  const { setting = {}, pages = [], page } = props as any;
+  const { setting = {}, page } = props as any;
 
   const ref = useRef(null);
 
@@ -36,7 +35,7 @@ const Page: NextPage<IProps> = props => {
   }, []);
 
   return (
-    <Layout backgroundColor="#fff" setting={setting} pages={pages}>
+    <div>
       {!page ? (
         <div className="container">
           <p>页面不存在</p>
@@ -63,7 +62,7 @@ const Page: NextPage<IProps> = props => {
           <CommentAndRecommendArticles pageId={page.id} isCommentable={true} />
         </div>
       )}
-    </Layout>
+    </div>
   );
 };
 

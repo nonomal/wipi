@@ -1,7 +1,12 @@
-@import "../../src/theme/var.scss";
+@import '../../src/theme/var.scss';
+
+.wrapper {
+  background-color: #f4f5f5;
+}
 
 .container {
   padding-top: 40px;
+  padding-bottom: 40px;
 
   .main {
     background-color: #fff;
@@ -52,8 +57,16 @@
       position: relative;
       padding: 0.5rem 0rem;
 
+      a {
+        display: inline-block;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       &::before {
-        content: " ";
+        content: ' ';
         position: absolute;
         left: -1rem;
         top: 17px;

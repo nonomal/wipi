@@ -3,7 +3,6 @@ import { NextPage } from 'next';
 import cls from 'classnames';
 import InfiniteScroll from 'react-infinite-scroller';
 import { ArticleProvider } from '@providers/article';
-import { Layout } from '@/layout/Layout';
 import { CategoryMenu } from '@components/CategoryMenu';
 import { ArticleList } from '@components/ArticleList';
 import { RecommendArticles } from '@components/RecommendArticles';
@@ -26,7 +25,6 @@ const Home: NextPage<IProps> = props => {
     tag,
     setting = {},
     tags = [],
-    pages = [],
     categories = [],
   } = props as any;
   const [affix, setAffix] = useState(false);
@@ -62,7 +60,7 @@ const Home: NextPage<IProps> = props => {
   }, []);
 
   return (
-    <Layout needFooter={false} setting={setting} pages={pages}>
+    <div className={style.wrapper}>
       <CategoryMenu categories={categories} />
       <div className={cls('container', style.container)}>
         <div className={style.content}>
@@ -88,7 +86,7 @@ const Home: NextPage<IProps> = props => {
           </aside>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 
@@ -102,7 +100,12 @@ Home.getInitialProps = async ctx => {
       status: 'publish',
     }),
   ]);
-  return { articles: articles[0], total: articles[1], tag: '' + tag };
+  return {
+    articles: articles[0],
+    total: articles[1],
+    tag: '' + tag,
+    needLayoutFooter: false,
+  };
 };
 
 export default Home;

@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { NextPage } from 'next';
 import cls from 'classnames';
 import InfiniteScroll from 'react-infinite-scroller';
-import { Layout } from '@/layout/Layout';
 import { ArticleProvider } from '@providers/article';
 import { CategoryMenu } from '@components/CategoryMenu';
 import { ArticleList } from '@components/ArticleList';
@@ -25,7 +24,6 @@ const Home: NextPage<IHomeProps> = props => {
     setting = {},
     categories = [],
     tags = [],
-    pages = [],
   } = props as any;
   const [affix, setAffix] = useState(false);
   const [page, setPage] = useState(1);
@@ -60,7 +58,7 @@ const Home: NextPage<IHomeProps> = props => {
   }, []);
 
   return (
-    <Layout setting={setting} pages={pages} needFooter={false}>
+    <div className={style.wrapper}>
       <CategoryMenu categories={categories} />
       <div className={cls('container', style.container)}>
         <div className={style.content}>
@@ -86,7 +84,7 @@ const Home: NextPage<IHomeProps> = props => {
           </aside>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 
@@ -95,7 +93,7 @@ Home.getInitialProps = async () => {
   const [articles] = await Promise.all([
     ArticleProvider.getArticles({ page: 1, pageSize, status: 'publish' }),
   ]);
-  return { articles: articles[0], total: articles[1] };
+  return { articles: articles[0], total: articles[1], needLayoutFooter: false };
 };
 
 export default Home;

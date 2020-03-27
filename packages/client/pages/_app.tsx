@@ -5,6 +5,7 @@ import { SettingProvider } from '@providers/setting';
 import { PageProvider } from '@providers/page';
 import { CategoryProvider } from '@providers/category';
 import { TagProvider } from '@providers/tag';
+import { Layout } from '@/layout/Layout';
 import { NProgress } from '@components/NProgress';
 import 'viewerjs/dist/viewer.css';
 import 'highlight.js/styles/github-gist.css';
@@ -63,9 +64,10 @@ class MyApp extends App {
       categories = [],
       pages = [],
     } = this.props as any;
+    const { needLayoutFooter = true } = pageProps;
 
     return (
-      <div>
+      <Layout setting={setting} pages={pages} needFooter={needLayoutFooter}>
         <style
           id="holderStyle"
           dangerouslySetInnerHTML={{
@@ -82,7 +84,7 @@ class MyApp extends App {
           categories={categories}
           pages={pages}
         />
-      </div>
+      </Layout>
     );
   }
 }
