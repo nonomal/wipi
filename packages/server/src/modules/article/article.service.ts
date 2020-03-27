@@ -248,6 +248,7 @@ export class ArticleService {
 
     const newArticle = {
       ...article,
+      views: oldArticle.views,
       category: existCategory,
       needPassword: !!article.password,
       publishAt:
