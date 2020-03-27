@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import cls from "classnames";
-import Router from "next/router";
-import { Spin } from "antd";
-import { SearchProvider } from "@providers/search";
-import { ArticleList } from "@components/ArticleList";
-import style from "./index.module.scss";
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import cls from 'classnames';
+import Router from 'next/router';
+import { Spin } from 'antd';
+import { SearchProvider } from '@providers/search';
+import { ArticleList } from '@components/ArticleList';
+import style from './index.module.scss';
 
 interface IProps {
   visible: boolean;
@@ -15,7 +15,7 @@ let timer = null;
 export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
   const ref = useRef(null);
   const [articles, setArticles] = useState<IArticle[] | null>(null);
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState('');
   const [hasSearch, setHasSearch] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -23,9 +23,12 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
     setLoading(true);
     SearchProvider.searchArticles(keyword)
       .then(res => {
-        const ret = res.filter(r => r.status === "publish" && !r.needPassword);
+        const ret = res.filter(r => r.status === 'publish' && !r.needPassword);
         setHasSearch(true);
         setArticles(ret);
+        try {
+          document.body.style.overflow = 'hidden';
+        } catch (e) {}
         timer = setTimeout(() => {
           setLoading(false);
         }, 500);
@@ -35,21 +38,21 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
 
   useEffect(() => {
     const handle = () => {
-      setKeyword("");
+      setKeyword('');
       onClose();
     };
 
-    Router.events.on("routeChangeStart", handle);
+    Router.events.on('routeChangeStart', handle);
 
     return () => {
       clearTimeout(timer);
-      Router.events.off("routeChangeStart", handle);
+      Router.events.off('routeChangeStart', handle);
     };
   }, []);
 
   useEffect(() => {
     if (!visible || !ref.current) {
-      setKeyword("");
+      setKeyword('');
       return;
     }
 
@@ -82,8 +85,11 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
           />
           <button
             onClick={() => {
-              setKeyword("");
+              setKeyword('');
               setHasSearch(false);
+              try {
+                document.body.style.overflow = '';
+              } catch (e) {}
               onClose && onClose();
             }}
           >
