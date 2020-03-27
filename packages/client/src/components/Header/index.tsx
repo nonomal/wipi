@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import cls from "classnames";
-import { Search } from "@/components/Search";
-import style from "./index.module.scss";
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import cls from 'classnames';
+import { Search } from '@/components/Search';
+import style from './index.module.scss';
 
 function throttle(fn, threshhold) {
   var last;
@@ -47,10 +47,10 @@ export const _Header = ({ setting, menus }) => {
       beforeY = y;
     }, 200);
 
-    document.addEventListener("scroll", handler);
+    document.addEventListener('scroll', handler);
 
     return () => {
-      document.removeEventListener("scroll", handler);
+      document.removeEventListener('scroll', handler);
     };
   }, []);
 
@@ -63,7 +63,7 @@ export const _Header = ({ setting, menus }) => {
           affixVisible ? style.visible : false
         )}
       >
-        <div className={cls("container")}>
+        <div className={cls('container')}>
           <div className={style.logo}>
             {/^http/.test(setting.systemLogo) ? (
               <Link href="/">
@@ -96,11 +96,16 @@ export const _Header = ({ setting, menus }) => {
                     [style.active]:
                       pathname === menu.path ||
                       asPath === menu.path ||
-                      (menu.dynamicPath && pathname === menu.dynamicPath)
+                      (menu.dynamicPath && pathname === menu.dynamicPath),
                   })}
+                  onClick={() => {
+                    if (visible) {
+                      setVisible(false);
+                    }
+                  }}
                 >
                   {/page/.test(menu.path) ? (
-                    <Link href={"/page/[id]"} as={menu.path}>
+                    <Link href={'/page/[id]'} as={menu.path}>
                       <a>{menu.label}</a>
                     </Link>
                   ) : (
