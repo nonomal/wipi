@@ -8,7 +8,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang="zh-Hans">
+      <Html lang="zh-CN">
         <Head />
         <script
           dangerouslySetInnerHTML={{
@@ -16,7 +16,7 @@ class MyDocument extends Document {
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?2f616121a4be61774c494d106870f30e";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();`,
           }}
