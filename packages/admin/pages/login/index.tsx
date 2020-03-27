@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Form, Button, Input, Icon } from 'antd';
 import Router from 'next/router';
 import Link from 'next/link';
+import { Helmet } from 'react-helmet';
 import { FormComponentProps } from 'antd/es/form';
 import { UserProvider } from '@providers/user';
 import style from './index.module.scss';
@@ -31,6 +32,9 @@ const _Login: React.FC<ILoginProps> = ({ form }) => {
 
   return (
     <div className={style.wrapper}>
+      <Helmet>
+        <title>系统登录</title>
+      </Helmet>
       <div className={style.container}>
         <h2>系统登录</h2>
         <Form onSubmit={submit}>

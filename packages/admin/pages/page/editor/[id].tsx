@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import cls from 'classnames';
-import Router from 'next/router';
+import { Helmet } from 'react-helmet';
 import { NextPage } from 'next';
 import { Button, Input, message, PageHeader, Icon, Drawer } from 'antd';
 import { Editor as CKEditor } from '@components/Editor';
@@ -84,6 +84,9 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
 
   return (
     <div className={style.wrapper}>
+      <Helmet>
+        <title>编辑文章</title>
+      </Helmet>
       <header className={style.header}>
         <PageHeader
           style={{

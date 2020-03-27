@@ -2,6 +2,7 @@ export const menus = [
   {
     icon: 'dashboard',
     label: '工作台',
+    title: '工作台',
     path: '/',
   },
   {
@@ -10,6 +11,7 @@ export const menus = [
   {
     icon: 'form',
     label: '所有文章',
+    title: '所有文章',
     path: '/article',
   },
   {
@@ -25,11 +27,13 @@ export const menus = [
   {
     icon: 'copy',
     label: '分类管理',
+    title: '分类管理',
     path: '/article/category',
   },
   {
     icon: 'tag',
     label: '标签管理',
+    title: '标签管理',
     path: '/article/tags',
   },
   {
@@ -38,6 +42,7 @@ export const menus = [
   {
     icon: 'snippets',
     label: '所有页面',
+    title: '所有页面',
     path: '/page',
   },
   {
@@ -56,16 +61,19 @@ export const menus = [
   {
     icon: 'message',
     label: '评论管理',
+    title: '评论管理',
     path: '/comment',
   },
   {
     icon: 'mail',
     label: '邮件管理',
+    title: '邮件管理',
     path: '/mail',
   },
   {
     icon: 'folder-open',
     label: '文件管理',
+    title: '文件管理',
     path: '/file',
   },
   {
@@ -74,12 +82,14 @@ export const menus = [
   {
     icon: 'search',
     label: '搜索记录',
+    title: '搜索记录',
     path: '/search',
   },
 
   {
     icon: 'project',
     label: '访问统计',
+    title: '访问统计',
     path: '/view',
   },
   {
@@ -87,6 +97,7 @@ export const menus = [
   },
   {
     label: '个人中心',
+    title: '个人中心',
     icon: 'user',
     path: '/ownspace',
     ignore: true,
@@ -94,12 +105,14 @@ export const menus = [
   {
     icon: 'user',
     label: '用户管理',
+    title: '用户管理',
     path: '/user',
   },
 
   {
     icon: 'setting',
     label: '系统设置',
+    title: '系统设置',
     path: '/setting',
   },
 ];

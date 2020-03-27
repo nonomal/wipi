@@ -51,7 +51,7 @@ export const AdminLayout: React.FC = ({ children }) => {
   return (
     <Layout className={style.wrapper}>
       <Helmet>
-        <title>{'管理后台 - ' + setting.systemTitle || 'Wipi'}</title>
+        <title>{activeMenu.title || '管理后台'}</title>
         <meta name="keyword" content={setting.seoKeyword} />
         <meta name="description" content={setting.seoDesc} />
         <link rel="shortcut icon" href={setting.systemFavicon} />

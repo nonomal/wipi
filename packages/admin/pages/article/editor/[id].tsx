@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import cls from 'classnames';
 import { NextPage } from 'next';
-import Router from 'next/router';
+import { Helmet } from 'react-helmet';
 import { Button, Input, message, PageHeader } from 'antd';
 import { Editor as CKEditor } from '@components/Editor';
 import { FileSelectDrawer } from '@/components/FileSelectDrawer';
@@ -101,6 +101,9 @@ const Editor: NextPage<IProps> = ({ id }) => {
 
   return (
     <div className={style.wrapper}>
+      <Helmet>
+        <title>编辑文章</title>
+      </Helmet>
       <header className={style.header}>
         <PageHeader
           style={{

@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Form, Button, Input, Icon, Modal } from 'antd';
 import Router from 'next/router';
 import Link from 'next/link';
+import { Helmet } from 'react-helmet';
 import { FormComponentProps } from 'antd/es/form';
 import { UserProvider } from '@providers/user';
 import style from './index.module.scss';
@@ -54,6 +55,9 @@ const _Register: React.FC<IProps> = ({ form }) => {
 
   return (
     <div className={style.wrapper}>
+      <Helmet>
+        <title>访客注册</title>
+      </Helmet>
       <div className={style.container}>
         <h2>访客注册</h2>
         <Form onSubmit={submit}>

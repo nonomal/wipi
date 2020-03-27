@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import cls from 'classnames';
 import { NextPage } from 'next';
-import Router from 'next/router';
+import { Helmet } from 'react-helmet';
 import { Button, Input, message, PageHeader } from 'antd';
 import { Editor as CKEditor } from '@components/Editor';
 import { FileSelectDrawer } from '@/components/FileSelectDrawer';
@@ -12,7 +12,6 @@ import style from './index.module.scss';
 const url = require('url');
 
 const Editor: NextPage = () => {
-  const ref = useRef();
   const setting = useSetting();
   const [fileDrawerVisible, setFileDrawerVisible] = useState(false);
   const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
@@ -94,6 +93,9 @@ const Editor: NextPage = () => {
 
   return (
     <div className={style.wrapper}>
+      <Helmet>
+        <title>新建文章</title>
+      </Helmet>
       <header className={style.header}>
         <PageHeader
           style={{
