@@ -158,7 +158,7 @@ export const MyComment: React.FC<IProps> = ({
   const ref = useRef(null);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(12);
+  const [pageSize] = useState(6);
   const [comments, setComments] = useState<IComment[]>([]);
   const [loading, setLoading] = useState(false);
 
