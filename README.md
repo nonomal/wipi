@@ -1,3 +1,10 @@
+<p align="center">
+    <img width="300" src="https://wipi.oss-cn-shanghai.aliyuncs.com/2020-03-28/Logo_OrzWipi-40-360x120px.png" alt="logo">
+</p>
+
+<h2 align="center"></h2>
+
+
 前后端分离，服务端渲染的博客系统。支持特性：
 
 - 文章创建、编辑、发布
@@ -18,11 +25,11 @@
 
 ### 前台页面
 
-地址：https://custw.qifengle1412.cn/
+地址：https://blog.wipi.tech/
 
 ### 后台页面
 
-地址：https://admin.custw.qifengle1412.cn/register （支持访客注册，也可使用账户：`wipi` `wipi123456`）。
+地址：https://admin.blog.wipi.tech/ （支持访客注册，也可使用账户：`wipi` `wipi123456`）。
 
 ## 本地启动
 
