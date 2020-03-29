@@ -14,14 +14,14 @@ const antdVariables = lessToJS(
 
 // fix: prevents error when .less files are required by node
 if (typeof require !== 'undefined') {
-  require.extensions['.less'] = file => {};
+  require.extensions['.less'] = (file) => {};
 }
 
 const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig = {
   assetPrefix: isProd ? 'https://cdn.blog.wipi.tech' : '/',
-  webpack: config => {
+  webpack: (config) => {
     config.resolve.plugins.push(new TsconfigPathsPlugin());
     config.plugins.push(
       new FilterWarningsPlugin({

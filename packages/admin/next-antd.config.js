@@ -1,4 +1,4 @@
-const cssLoaderConfig = require("@zeit/next-css/css-loader-config");
+const cssLoaderConfig = require('@zeit/next-css/css-loader-config');
 
 module.exports = (nextConfig = {}) => ({
   ...nextConfig,
@@ -6,7 +6,7 @@ module.exports = (nextConfig = {}) => ({
     webpack(config, options) {
       if (!options.defaultLoaders) {
         throw new Error(
-          "This plugin is not compatible with Next.js versions below 5.0.0 https://err.sh/next-plugins/upgrade"
+          'This plugin is not compatible with Next.js versions below 5.0.0 https://err.sh/next-plugins/upgrade'
         );
       }
 
@@ -15,12 +15,12 @@ module.exports = (nextConfig = {}) => ({
         cssModules,
         cssLoaderOptions,
         postcssLoaderOptions,
-        lessLoaderOptions = {}
+        lessLoaderOptions = {},
       } = nextConfig;
 
       // for all less in clint
       const baseLessConfig = {
-        extensions: ["less"],
+        extensions: ['less'],
         cssModules,
         cssLoaderOptions,
         postcssLoaderOptions,
@@ -28,28 +28,32 @@ module.exports = (nextConfig = {}) => ({
         isServer,
         loaders: [
           {
-            loader: "less-loader",
-            options: lessLoaderOptions
-          }
-        ]
+            loader: 'less-loader',
+            options: lessLoaderOptions,
+          },
+        ],
       };
 
       config.module.rules.push({
         test: /\.less$/,
         exclude: /node_modules/,
-        use: cssLoaderConfig(config, baseLessConfig)
+        use: cssLoaderConfig(config, baseLessConfig),
       });
 
       // for antd less in client
       const antdLessConfig = {
         ...baseLessConfig,
-        ...{ cssModules: false, cssLoaderOptions: {}, postcssLoaderOptions: {} }
+        ...{
+          cssModules: false,
+          cssLoaderOptions: {},
+          postcssLoaderOptions: {},
+        },
       };
 
       config.module.rules.push({
         test: /\.less$/,
         include: /node_modules/,
-        use: cssLoaderConfig(config, antdLessConfig)
+        use: cssLoaderConfig(config, antdLessConfig),
       });
 
       // for antd less in server (yarn build)
@@ -63,26 +67,26 @@ module.exports = (nextConfig = {}) => ({
               return callback();
             }
 
-            if (typeof rawExternals[0] === "function") {
+            if (typeof rawExternals[0] === 'function') {
               rawExternals[0](context, request, callback);
             } else {
               callback();
             }
           },
-          ...(typeof rawExternals[0] === "function" ? [] : rawExternals)
+          ...(typeof rawExternals[0] === 'function' ? [] : rawExternals),
         ];
 
         config.module.rules.unshift({
           test: antdStyles,
-          use: "null-loader"
+          use: 'null-loader',
         });
       }
 
-      if (typeof nextConfig.webpack === "function") {
+      if (typeof nextConfig.webpack === 'function') {
         return nextConfig.webpack(config, options);
       }
 
       return config;
-    }
-  }
+    },
+  },
 });
