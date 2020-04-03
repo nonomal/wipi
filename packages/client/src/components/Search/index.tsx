@@ -19,11 +19,13 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
   const [hasSearch, setHasSearch] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const getArticles = useCallback(keyword => {
+  const getArticles = useCallback((keyword) => {
     setLoading(true);
     SearchProvider.searchArticles(keyword)
-      .then(res => {
-        const ret = res.filter(r => r.status === 'publish' && !r.needPassword);
+      .then((res) => {
+        const ret = res.filter(
+          (r) => r.status === 'publish' && !r.needPassword
+        );
         setHasSearch(true);
         setArticles(ret);
         try {
@@ -39,6 +41,9 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
   useEffect(() => {
     const handle = () => {
       setKeyword('');
+      try {
+        document.body.style.overflow = '';
+      } catch (e) {}
       onClose();
     };
 
@@ -74,8 +79,8 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
             type="search"
             placeholder="keywords"
             value={keyword}
-            onChange={e => setKeyword(e.target.value)}
-            onKeyPress={e => {
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyPress={(e) => {
               if (e.nativeEvent.keyCode === 13) {
                 if (keyword) {
                   getArticles(keyword);
