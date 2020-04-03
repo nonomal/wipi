@@ -77,13 +77,9 @@ export const Editor = ({
       message.success('评论成功，已提交审核');
       setLoading(false);
       setContent('');
-      let userInfo: any = window.localStorage.getItem('user');
+      let userInfo = { name, email };
       try {
-        userInfo = JSON.parse(userInfo);
-        window.localStorage.setItem(
-          'user',
-          JSON.stringify(Object.assign(userInfo, { name, email }))
-        );
+        window.localStorage.setItem('user', JSON.stringify(userInfo));
       } catch (err) {}
       onSuccess();
     });
@@ -93,7 +89,7 @@ export const Editor = ({
     <div className={cls(style.editor)}>
       <div>
         <BfEditor
-          onChange={value => {
+          onChange={(value) => {
             setContent(value);
           }}
           value={''}
@@ -101,14 +97,14 @@ export const Editor = ({
         <div className={style.nameAndMail}>
           <Input
             value={name}
-            onChange={e => {
+            onChange={(e) => {
               setName(e.target.value);
             }}
             placeholder="请输入您的称呼"
           />
           <Input
             value={email}
-            onChange={e => {
+            onChange={(e) => {
               setEmail(e.target.value);
             }}
             placeholder="请输入您的邮箱（不会公开）"
