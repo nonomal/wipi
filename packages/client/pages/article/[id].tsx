@@ -17,7 +17,7 @@ interface IProps {
   article: IArticle;
 }
 
-const Article: NextPage<IProps> = props => {
+const Article: NextPage<IProps> = (props) => {
   const { setting = {}, article } = props as any;
   const ref = useRef(null);
   const content = useRef(null);
@@ -28,7 +28,7 @@ const Article: NextPage<IProps> = props => {
 
   // 检查文章密码
   const checkPassWord = useCallback(() => {
-    ArticleProvider.checkPassword(article.id, password).then(res => {
+    ArticleProvider.checkPassword(article.id, password).then((res) => {
       if (res.pass) {
         Object.assign(article, res);
         setShouldCheckPassword(false);
@@ -83,7 +83,7 @@ const Article: NextPage<IProps> = props => {
         <Form.Item label={'密码'}>
           <Input.Password
             value={password}
-            onChange={e => {
+            onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
@@ -106,14 +106,16 @@ const Article: NextPage<IProps> = props => {
           {article.tags && (
             <meta
               itemProp="keywords"
-              content={article.tags.map(tag => tag.label).join(' ')}
+              content={article.tags.map((tag) => tag.label).join(' ')}
             />
           )}
           <meta itemProp="dataPublished" content={article.publishAt} />
           {article.cover && <meta itemProp="image" content={article.cover} />}
           <div className={style.meta}>
             {article.cover && (
-              <img className={style.cover} src={article.cover} alt="文章封面" />
+              <div className={style.coverWrapper}>
+                <img src={article.cover} alt="文章封面" />
+              </div>
             )}
             <h1 className={style.title}>{article.title}</h1>
             <p className={style.desc}>
@@ -137,7 +139,7 @@ const Article: NextPage<IProps> = props => {
                   <div className={style.tags}>
                     <div>
                       <span>标签：</span>
-                      {article.tags.map(tag => {
+                      {article.tags.map((tag) => {
                         return (
                           <div className={style.tag} key={tag.id}>
                             <Link href={'/tag/[tag]'} as={'/tag/' + tag.value}>
@@ -173,7 +175,7 @@ const Article: NextPage<IProps> = props => {
   );
 };
 
-Article.getInitialProps = async ctx => {
+Article.getInitialProps = async (ctx) => {
   const { id } = ctx.query;
   const article = await ArticleProvider.getArticle(id);
   return { article };
