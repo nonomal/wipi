@@ -5,6 +5,8 @@ import { CommentProvider } from '@providers/comment';
 import { BfEditor } from './BfEditor';
 import style from './index.module.scss';
 
+const isEmptyContent = (content) => /<p>(\s)*<\/p>/.test(content);
+
 export const Editor = ({
   hostId,
   isHostInPage = false,
@@ -116,14 +118,14 @@ export const Editor = ({
           renderFooter({
             loading,
             submit,
-            disabled: !name || !email || !content,
+            disabled: !name || !email || isEmptyContent(content),
           })
         ) : (
           <Button
             loading={loading}
             onClick={submit}
             type="primary"
-            disabled={!name || !email || !content}
+            disabled={!name || !email || isEmptyContent(content)}
           >
             评论
           </Button>
