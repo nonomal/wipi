@@ -8,10 +8,10 @@
 
   .title {
     padding: 1rem 1.3rem;
-    background-color: #fff;
     color: $textMainColor;
     font-weight: bold;
-    border-bottom: 1px solid hsla(0, 0%, 59.2%, 0.1);
+    background-color: #fff;
+    border-bottom: 1px solid $borderColor;
 
     span {
       margin-left: 8px;
@@ -21,29 +21,43 @@
   ul {
     padding: 1rem;
     background-color: #fff;
-    box-shadow: $boxShadow;
+    box-shadow: $borderColor;
   }
 
   li {
-    padding: 2px 7px;
+    padding: 8px 7px;
     color: $textSecondColor;
     line-height: 1.5em;
-    display: inline-block;
     margin: 0 7px 7px 0;
-    border: 1px solid $borderColor;
     border-radius: $borderRadius;
     transition: all ease-in-out 0.2s;
 
+    a {
+      width: 100%;
+      display: inline-flex;
+      justify-content: space-between;
+
+      > span:first-of-type {
+        color: $textMainColor;
+      }
+    }
+
     &:hover {
-      background-color: $primaryColor;
       color: #fff;
-      border: 1px solid $primaryColor;
+      background-color: $primaryColor;
+
+      a > span:first-of-type {
+        color: inherit;
+      }
     }
 
     &.active {
       color: #fff;
-      border: 1px solid $primaryColor;
       background-color: $primaryColor;
+
+      a > span:first-of-type {
+        color: inherit;
+      }
     }
   }
 }

@@ -3,10 +3,10 @@ import { NextPage } from 'next';
 import cls from 'classnames';
 import InfiniteScroll from 'react-infinite-scroller';
 import { ArticleProvider } from '@providers/article';
-import { CategoryMenu } from '@components/CategoryMenu';
 import { ArticleList } from '@components/ArticleList';
 import { RecommendArticles } from '@components/RecommendArticles';
 import { Tags } from '@components/Tags';
+import { Categories } from '@components/Categories';
 import { Footer } from '@components/Footer';
 import style from './index.module.scss';
 
@@ -17,7 +17,7 @@ interface IHomeProps {
 
 const pageSize = 12;
 
-const Home: NextPage<IHomeProps> = props => {
+const Home: NextPage<IHomeProps> = (props) => {
   const {
     articles: defaultArticles = [],
     total = 0,
@@ -46,20 +46,20 @@ const Home: NextPage<IHomeProps> = props => {
     setArticles(defaultArticles);
   }, [defaultArticles]);
 
-  const getArticles = useCallback(page => {
+  const getArticles = useCallback((page) => {
     ArticleProvider.getArticles({
       page,
       pageSize,
       status: 'publish',
-    }).then(res => {
+    }).then((res) => {
       setPage(page);
-      setArticles(articles => [...articles, ...res[0]]);
+      setArticles((articles) => [...articles, ...res[0]]);
     });
   }, []);
 
   return (
     <div className={style.wrapper}>
-      <CategoryMenu categories={categories} />
+      {/* <CategoryMenu categories={categories} /> */}
       <div className={cls('container', style.container)}>
         <div className={style.content}>
           <InfiniteScroll
@@ -76,10 +76,19 @@ const Home: NextPage<IHomeProps> = props => {
           </InfiniteScroll>
 
           <aside className={cls(style.aside)}>
-            <div className={cls(affix ? style.isFixed : false)}>
-              <RecommendArticles mode="inline" />
-              <Tags tags={tags} />
-              <Footer className={style.footer} setting={setting} />
+            <div>
+              <div
+                style={{
+                  transform: `translateY(${affix ? '-100%' : 0})`,
+                }}
+              >
+                <RecommendArticles mode="inline" />
+              </div>
+              <div className={cls(affix ? style.isFixed : false)}>
+                <Categories categories={categories} />
+                <Tags tags={tags} />
+                <Footer className={style.footer} setting={setting} />
+              </div>
             </div>
           </aside>
         </div>

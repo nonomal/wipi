@@ -1,6 +1,7 @@
 import React from 'react';
 import cls from 'classnames';
 import Link from 'next/link';
+import { Icon } from 'antd';
 import { useRouter } from 'next/router';
 import style from './index.module.scss';
 
@@ -10,9 +11,12 @@ export const Tags = ({ tags = [] }) => {
 
   return (
     <div className={style.wrapper}>
-      <div className={style.title}>标签</div>
+      <div className={style.title}>
+        <Icon type="tags" />
+        <span>标签</span>
+      </div>
       <ul>
-        {tags.map(tag => (
+        {tags.map((tag) => (
           <li
             key={tag.id}
             className={cls(
@@ -21,7 +25,9 @@ export const Tags = ({ tags = [] }) => {
             )}
           >
             <Link href={`/tag/[tag]`} as={`/tag/` + tag.value}>
-              <a>{tag.label}</a>
+              <a>
+                {tag.label} [{tag.articleCount}]
+              </a>
             </Link>
           </li>
         ))}

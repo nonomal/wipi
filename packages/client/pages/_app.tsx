@@ -15,7 +15,7 @@ import '@/theme/markdown.scss';
 
 let lastUrl;
 
-const addView = url => {
+const addView = (url) => {
   if (/localhost/.test(url)) {
     return;
   }
@@ -24,7 +24,7 @@ const addView = url => {
 };
 
 class MyApp extends App {
-  static getInitialProps = async ctx => {
+  static getInitialProps = async (ctx) => {
     const [appProps, setting, tags, categories, pages] = await Promise.all([
       App.getInitialProps(ctx),
       SettingProvider.getSetting(),

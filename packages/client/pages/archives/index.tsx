@@ -2,11 +2,12 @@ import React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import cls from 'classnames';
-import { Row, Col } from 'antd';
+import { Row, Col, Icon } from 'antd';
 import * as dayjs from 'dayjs';
 import { ArticleProvider } from '@providers/article';
 import { RecommendArticles } from '@components/RecommendArticles';
 import { Tags } from '@components/Tags';
+import { Categories } from '@components/Categories';
 import style from './index.module.scss';
 
 interface IProps {
@@ -18,7 +19,7 @@ const ArchiveItem = ({ month, articles = [] }) => {
     <div className={style.item}>
       <h3>{month}</h3>
       <ul>
-        {articles.map(article => (
+        {articles.map((article) => (
           <li key={article.id}>
             <Link href={`/article/[id]`} as={`/article/${article.id}`}>
               <a>
@@ -35,8 +36,18 @@ const ArchiveItem = ({ month, articles = [] }) => {
   );
 };
 
-const Archives: NextPage<IProps> = props => {
-  const { articles = [], tags = [] } = props as any;
+const resolveArticlesCount = (articles) => {
+  let years = Object.keys(articles);
+
+  return years.reduce((a, year) => {
+    let months = Object.keys(articles[year]);
+    a += months.reduce((b, month) => (b += articles[year][month].length), 0);
+    return a;
+  }, 0);
+};
+
+const Archives: NextPage<IProps> = (props) => {
+  const { articles = [], tags = [], categories = [] } = props as any;
 
   return (
     <div className={style.wrapper}>
@@ -44,11 +55,22 @@ const Archives: NextPage<IProps> = props => {
         <Row>
           <Col sm={16} className={style.main}>
             <div className={style.content}>
-              {Object.keys(articles).map(year => {
+              <div className={style.summary}>
+                <div>
+                  <Icon type="block" />
+                </div>
+                <p>
+                  <span>归档</span>
+                </p>
+                <p>
+                  共计 <span>{resolveArticlesCount(articles)}</span> 篇
+                </p>
+              </div>
+              {Object.keys(articles).map((year) => {
                 return (
                   <div className={style.list}>
                     <h2>{year}</h2>
-                    {Object.keys(articles[year]).map(month => {
+                    {Object.keys(articles[year]).map((month) => {
                       return (
                         <ArchiveItem
                           key={year}
@@ -64,6 +86,7 @@ const Archives: NextPage<IProps> = props => {
           </Col>
           <Col sm={8} className={style.aside}>
             <RecommendArticles mode="inline" />
+            <Categories categories={categories} />
             <Tags tags={tags} />
           </Col>
         </Row>

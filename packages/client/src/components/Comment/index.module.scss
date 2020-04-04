@@ -1,10 +1,10 @@
+@import '../../theme/var.scss';
+
 .editor {
   padding: 16px;
   background-color: #fff;
-  // border-top: 1px solid #e1e4e8;
   position: relative;
   margin-bottom: 16px;
-  // margin-left: 48px;
 
   :global {
     .bf-container {
@@ -35,7 +35,7 @@
 
   .controls {
     text-align: right;
-    color: #555;
+    color: $textSecondColor;
     font-size: 12px;
 
     span {
@@ -72,26 +72,6 @@
   }
 }
 
-.emojis {
-  font-size: 18px;
-  text-align: justify;
-  max-width: 360px;
-  max-height: 185px;
-  overflow: auto;
-  padding: 4px 0;
-
-  i {
-    font-style: normal;
-    padding: 7px 0;
-    width: 38px;
-    cursor: pointer;
-    text-align: center;
-    display: inline-block;
-    vertical-align: middle;
-    user-select: none;
-  }
-}
-
 .commentWrapper {
   :global {
     .markdown {
@@ -115,7 +95,7 @@
         position: relative;
         display: flex;
         align-items: center;
-        color: #8590a6;
+        color: $textSecondColor;
 
         > span.info {
           margin-left: 10px;
@@ -131,7 +111,7 @@
         }
 
         strong.replyUser {
-          color: #ff0064;
+          color: $primaryColor;
         }
 
         > div:last-of-type {
@@ -159,7 +139,7 @@
         }
 
         div.meta {
-          color: #99a2aa;
+          color: $textDisableColor;
 
           span + span {
             margin-left: 1rem;
@@ -169,7 +149,7 @@
             cursor: pointer;
 
             &:hover {
-              color: #ff0064;
+              color: $primaryColor;
             }
 
             i {

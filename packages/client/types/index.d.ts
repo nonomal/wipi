@@ -37,12 +37,14 @@ interface ITag {
   id: string;
   label: string;
   value: string;
+  articleCount?: number;
 }
 
 interface ICategory {
   id: string;
   label: string;
   value: string;
+  articleCount?: number;
 }
 
 interface IPage {

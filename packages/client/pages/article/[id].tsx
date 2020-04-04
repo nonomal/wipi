@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { NextPage } from 'next';
 import Router from 'next/router';
+import { Icon } from 'antd';
 import Link from 'next/link';
 import cls from 'classnames';
 import Viewer from 'viewerjs';
@@ -134,34 +135,50 @@ const Article: NextPage<IProps> = (props) => {
                 className={cls('markdown', style.markdown)}
                 dangerouslySetInnerHTML={{ __html: article.content }}
               ></div>
+
+              <div className={style.articleInfo}>
+                <blockquote>
+                  <p>
+                    发布时间：
+                    {dayjs
+                      .default(article.publishAt)
+                      .format('YYYY-MM-DD HH:mm:ss')}
+                  </p>
+                  <p>
+                    更新时间：
+                    {dayjs
+                      .default(article.updateAt)
+                      .format('YYYY-MM-DD HH:mm:ss')}
+                  </p>
+                  <p>
+                    版权信息：
+                    <a
+                      href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+                      target="_blank"
+                    >
+                      非商用-署名-自由转载
+                    </a>
+                  </p>
+                </blockquote>
+              </div>
+
               <div className={style.articleFooter}>
                 {article.tags && article.tags.length ? (
                   <div className={style.tags}>
-                    <div>
-                      <span>标签：</span>
-                      {article.tags.map((tag) => {
-                        return (
-                          <div className={style.tag} key={tag.id}>
-                            <Link href={'/tag/[tag]'} as={'/tag/' + tag.value}>
-                              <a>
-                                <span>{tag.label}</span>
-                              </a>
-                            </Link>
-                          </div>
-                        );
-                      })}
-                    </div>
+                    {article.tags.map((tag) => {
+                      return (
+                        <div className={style.tag} key={tag.id}>
+                          <Link href={'/tag/[tag]'} as={'/tag/' + tag.value}>
+                            <a>
+                              <Icon type="tag" />
+                              <span>{tag.label}</span>
+                            </a>
+                          </Link>
+                        </div>
+                      );
+                    })}
                   </div>
                 ) : null}
-                <div>
-                  版权信息：
-                  <a
-                    href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
-                    target="_blank"
-                  >
-                    非商用-署名-自由转载
-                  </a>
-                </div>
               </div>
             </div>
           </div>

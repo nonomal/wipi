@@ -9,12 +9,14 @@ interface IProps {
   articles: IArticle[];
   bordered?: boolean;
   asCard?: boolean;
+  needMeta?: boolean;
 }
 
 export const ArticleList: React.FC<IProps> = ({
   articles = [],
   bordered = false,
   asCard = false,
+  needMeta = true,
 }) => {
   return (
     <div
@@ -34,29 +36,34 @@ export const ArticleList: React.FC<IProps> = ({
             >
               <Link href={`/article/[id]`} as={`/article/${article.id}`}>
                 <a>
-                  {article.cover && (
-                    <LazyLoad height={180}>
-                      <div className={style.imgWrapper}>
-                        <img src={article.cover} alt="cover" />
-                      </div>
-                    </LazyLoad>
-                  )}
                   <div className={style.info}>
-                    <p className={style.title}>{article.title}</p>
-                    <p className={style.desc}>{article.summary}</p>
-                    <p className={style.meta}>
-                      <span className={style.category}>
-                        {article.category ? article.category.label : ''}
-                      </span>
-                      <span className={style.seperator}>·</span>
-                      <span>
-                        {dayjs
-                          .default(article.publishAt)
-                          .format('YYYY-MM-DD HH:mm:ss')}
-                      </span>
-                      <span className={style.seperator}>·</span>
-                      <span>{article.views} 次阅读</span>
-                    </p>
+                    {article.cover && (
+                      <LazyLoad height={180}>
+                        <div className={style.imgWrapper}>
+                          <img src={article.cover} alt="cover" />
+                        </div>
+                      </LazyLoad>
+                    )}
+                    <div style={{ width: '100%' }}>
+                      <p className={style.title}>{article.title}</p>
+                      <p className={style.desc}>{article.summary}</p>
+                      <div className={style.meta}>
+                        {article.category ? (
+                          <>
+                            <span className={style.category}>
+                              {article.category ? article.category.label : ''}
+                            </span>
+                            <span className={style.seperator}>·</span>
+                          </>
+                        ) : null}
+                        <span>{article.views} 次阅读</span>
+                        <span className={style.pullRight}>
+                          {dayjs
+                            .default(article.publishAt)
+                            .format('YYYY-MM-DD HH:mm:ss')}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </a>
               </Link>

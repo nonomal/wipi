@@ -1,20 +1,25 @@
-@import "../../theme/var.scss";
+@import '../../theme/var.scss';
 
 .wrapper {
-  border-radius: 2px;
+  border-radius: $borderRadius;
   margin-bottom: 1.3rem;
   line-height: 1.29;
-  color: #333;
 
   .title {
     padding: 1rem 1.3rem;
+    color: $textMainColor;
+    font-weight: bold;
     background-color: #fff;
-    border-bottom: 1px solid hsla(0, 0%, 59.2%, 0.1);
+    border-bottom: 1px solid $borderColor;
+
+    span {
+      margin-left: 8px;
+    }
   }
 
   ul {
     padding: 0 1rem 1rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: $boxShadow;
     background-color: #fff;
 
     li {
@@ -22,6 +27,7 @@
       flex-wrap: nowrap;
       align-items: stretch;
       padding-top: 1rem;
+      color: $textSecondColor;
 
       > div:last-of-type {
         display: flex;
@@ -29,8 +35,16 @@
       }
 
       a {
+        span:first-of-type {
+          color: $textMainColor;
+        }
+
         &:hover {
           color: $primaryColor;
+
+          span:first-of-type {
+            color: inherit;
+          }
         }
       }
 

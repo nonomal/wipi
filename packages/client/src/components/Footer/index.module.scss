@@ -1,8 +1,10 @@
+@import '../../theme/var.scss';
+
 footer {
   background: #292525;
   padding: 20px 0;
   text-align: center;
-  border-top: 1px solid #eee;
+  border-top: 1px solid $borderColor;
   color: #c1bdbd;
 }
 
@@ -20,6 +22,10 @@ ul.icons {
 
     &:first-of-type {
       margin-top: 1px;
+    }
+
+    &:hover {
+      color: $textMainColor;
     }
   }
 }

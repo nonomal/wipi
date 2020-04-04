@@ -110,7 +110,12 @@ export const Search: React.FC<IProps> = ({ visible = false, onClose }) => {
         {hasSearch && !loading && (
           <div className={cls(style.ret, hasSearch ? style.active : false)}>
             {articles && articles.length ? (
-              <ArticleList articles={articles} bordered />
+              <ArticleList
+                articles={articles}
+                asCard
+                bordered
+                needMeta={false}
+              />
             ) : (
               <p className={style.none}>未搜索到数据</p>
             )}

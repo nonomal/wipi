@@ -1,11 +1,11 @@
-import { httpProvider } from "./http";
+import { httpProvider } from './http';
 
 export class TagProvider {
   /**
    * 获取所有标签
    */
   static async getTags(): Promise<ITag[]> {
-    return httpProvider.get("/tag");
+    return httpProvider.get('/tag');
   }
 
   /**
@@ -17,7 +17,7 @@ export class TagProvider {
       `/tag/${id}/article`,
       needFilter
         ? {
-            params: { status: "publish" }
+            params: { status: 'publish' },
           }
         : {}
     );
@@ -28,7 +28,15 @@ export class TagProvider {
    * @param data
    */
   static async addTag(data): Promise<ITag> {
-    return httpProvider.post("/tag", data);
+    return httpProvider.post('/tag', data);
+  }
+
+  /**
+   * 获取标签
+   * @param id
+   */
+  static async getTagById(id): Promise<ITag> {
+    return httpProvider.get(`/tag/${id}`);
   }
 
   /**

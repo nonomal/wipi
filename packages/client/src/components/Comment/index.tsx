@@ -236,7 +236,7 @@ export const MyComment: React.FC<IProps> = ({
             加载更多
           </Button>
         ) : (
-          <span>共 {total} 组</span>
+          <span>{total > 0 ? `共 ${total} 组` : '快来抢沙发'}</span>
         )}
       </div>
     </div>

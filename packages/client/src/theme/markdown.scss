@@ -1,6 +1,9 @@
+@import './var.scss';
+
 :global {
   .markdown {
-    color: #5f5f6f !important;
+    padding: 0;
+    color: $textMainColor !important;
     background-color: #fff !important;
     overflow: hidden !important;
 
@@ -19,7 +22,7 @@
 
     hr {
       border-width: 0 0 2px;
-      border-color: #edf2f7;
+      border-color: $borderColor;
       margin-top: 4rem;
       margin-bottom: 4rem;
     }
@@ -29,7 +32,7 @@
     p a,
     ul li a,
     a.markdown {
-      color: #4299e1;
+      color: $linkColor;
       text-decoration: underline;
       font-weight: 500;
     }
@@ -41,7 +44,7 @@
     h5,
     h6 {
       font-weight: 700;
-      color: #303030;
+      color: $textMainColor;
 
       > * {
         color: inherit !important;
@@ -72,9 +75,9 @@
       code {
         padding: 2px 4px;
         font-size: 90%;
-        color: #ff0064;
+        color: $primaryColor;
         background-color: #f9f2f4;
-        border-radius: 4px;
+        border-radius: $borderRadius;
       }
     }
 
@@ -85,7 +88,7 @@
 
     blockquote {
       font-size: 14px;
-      border-left: 4px solid #ff0064;
+      border-left: 4px solid $primaryColor;
       padding: 12px 24px 12px 12px;
       margin-top: 1em;
       border-left-width: 4px;
@@ -105,7 +108,7 @@
       text-align: center;
       border-collapse: collapse;
       border-spacing: 0;
-      border: 1px solid #f4f4f4;
+      border: 1px solid $borderColor;
       overflow: auto;
     }
 
@@ -125,7 +128,7 @@
     table td {
       padding: 0.5rem;
       border-top-width: 1px;
-      border-color: #edf2f7;
+      border-color: $borderColor;
       font-size: 0.875rem;
     }
 
@@ -133,8 +136,6 @@
       background-color: #f7fafc;
       padding-left: 0.25rem;
       padding-right: 0.25rem;
-      font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New,
-        monospace;
       font-size: 0.75rem;
       color: #6b46c1;
       vertical-align: baseline;
@@ -145,7 +146,7 @@
       width: 100%;
       clear: both;
       text-align: center;
-      border: 1px solid #f4f4f4;
+      border: 1px solid $borderColor;
     }
 
     figure.image-style-side {
@@ -166,7 +167,7 @@
       display: table-caption;
       caption-side: bottom;
       word-break: break-word;
-      color: #333;
+      color: $textSecondColor;
       background-color: #f4f4f4;
       padding: 0.6em;
       font-size: 0.75em;
@@ -229,17 +230,17 @@
       margin: 0 0 10px;
       font-size: 13px;
       line-height: 1.42857143;
-      color: #333;
+      color: $textMainColor;
       word-break: break-all;
       word-wrap: break-word;
       background-color: #f5f5f5;
-      border: 1px solid #ccc;
+      border: 1px solid $borderColor;
       padding: 0;
       margin-bottom: 20px;
       background: none;
       border: none;
       font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
-      border-radius: 0.5rem;
+      border-radius: $borderRadius;
       font-weight: 400;
       scrollbar-width: none;
 
@@ -250,7 +251,7 @@
         color: #333;
         line-height: 1.45;
         background-color: #f6f8fa;
-        border-radius: 3px;
+        border-radius: $borderRadius;
       }
 
       code.language-go:before,

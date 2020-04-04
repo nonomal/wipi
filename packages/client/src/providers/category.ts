@@ -1,11 +1,11 @@
-import { httpProvider } from "./http";
+import { httpProvider } from './http';
 
 export class CategoryProvider {
   /**
    * 获取所有标签
    */
   static async getCategory(): Promise<ICategory[]> {
-    return httpProvider.get("/category");
+    return httpProvider.get('/category');
   }
 
   /**
@@ -13,7 +13,15 @@ export class CategoryProvider {
    * @param data
    */
   static async add(data): Promise<ICategory> {
-    return httpProvider.post("/category", data);
+    return httpProvider.post('/category', data);
+  }
+
+  /**
+   * 获取分类
+   * @param id
+   */
+  static async getCategoryById(id): Promise<ICategory> {
+    return httpProvider.get(`/category/${id}`);
   }
 
   /**
