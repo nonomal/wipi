@@ -7,11 +7,11 @@ export const httpProvider = axios.create({
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:4000/api'
       : 'https://api.blog.wipi.tech/api',
-  timeout: 20000,
+  timeout: 60000,
 });
 
 httpProvider.interceptors.request.use(
-  config => {
+  (config) => {
     if (typeof window !== 'undefined') {
       const token = window.sessionStorage.getItem('token');
 
@@ -23,13 +23,13 @@ httpProvider.interceptors.request.use(
     return config;
   },
 
-  err => {
+  (err) => {
     throw new Error('发起请求出错');
   }
 );
 
 httpProvider.interceptors.response.use(
-  data => {
+  (data) => {
     if (data.status && data.status == 200 && data.data.status == 'error') {
       typeof window !== 'undefined' &&
         message.error({ message: data.data.msg });
@@ -45,7 +45,7 @@ httpProvider.interceptors.response.use(
 
     return res.data;
   },
-  err => {
+  (err) => {
     if (err && err.response && err.response.status) {
       const status = err.response.status;
 
