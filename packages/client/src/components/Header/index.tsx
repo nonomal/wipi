@@ -10,14 +10,14 @@ function throttle(fn, threshhold) {
   var timer;
   threshhold || (threshhold = 250);
 
-  return function() {
+  return function () {
     var context = this;
     var args = arguments;
     var now = +new Date();
 
     if (last && now < last + threshhold) {
       clearTimeout(timer);
-      timer = setTimeout(function() {
+      timer = setTimeout(function () {
         last = now;
         fn.apply(context, args);
       }, threshhold);
@@ -38,13 +38,24 @@ export const _Header = ({ setting, menus }) => {
   const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
-    let beforeY = 0;
+    let beforeY =
+      document.documentElement.scrollTop ||
+      window.pageYOffset ||
+      window.scrollY ||
+      document.body.scrollTop;
 
     const handler = throttle(() => {
-      const y = (window as any).scrollY;
-      setAffix(y > 65);
+      let y =
+        document.documentElement.scrollTop ||
+        window.pageYOffset ||
+        window.scrollY ||
+        document.body.scrollTop;
+
+      setAffix(y > 0);
       setAffixVisible(beforeY > y);
-      beforeY = y;
+      setTimeout(() => {
+        beforeY = y;
+      }, 0);
     }, 200);
 
     document.addEventListener('scroll', handler);
@@ -89,7 +100,7 @@ export const _Header = ({ setting, menus }) => {
 
           <nav className={cls(visible ? style.active : false)}>
             <ul>
-              {menus.map(menu => (
+              {menus.map((menu) => (
                 <li
                   key={menu.label}
                   className={cls({

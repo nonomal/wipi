@@ -16,10 +16,10 @@ $height: 64px;
   &.isFixed {
     position: fixed;
     z-index: 100;
-    transform: translate3d(0, -100%, 0);
+    transform: translateY(-100%);
 
     &.visible {
-      transform: translateZ(0);
+      transform: translateY(0);
     }
   }
 
