@@ -38,7 +38,7 @@ interface IFileProps {
   total: number;
 }
 
-const copy = value => {
+const copy = (value) => {
   let textarea: any = document.createElement('textarea');
   textarea.id = 't';
   textarea.style.height = 0;
@@ -52,6 +52,18 @@ const copy = value => {
 };
 
 let viewer: any = null;
+
+const resolveFileSize = (size) => {
+  if (size < 1024) {
+    return size + ' Byte';
+  }
+
+  if (size < 1024 * 1024) {
+    return Math.ceil(size / 1024).toFixed(2) + ' KB';
+  }
+
+  return Math.ceil(size / 1024 / 1024).toFixed(2) + ' MB';
+};
 
 const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
   const ref = useRef();
@@ -89,19 +101,19 @@ const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
 
   const getFiles = useCallback((params = {}) => {
     return FileProvider.getFiles(params)
-      .then(res => {
+      .then((res) => {
         setParams(params);
         setFiles(res[0]);
         setLoading(false);
         return res;
       })
-      .catch(err => {
+      .catch((err) => {
         setLoading(false);
       });
   }, []);
 
   const deleteFile = useCallback(
-    id => {
+    (id) => {
       FileProvider.deleteFile(id).then(() => {
         setVisible(false);
         setLoading(true);
@@ -163,7 +175,7 @@ const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
             },
           ]}
           onSearch={getFiles}
-          customDataTable={data => (
+          customDataTable={(data) => (
             <List
               className={style.imgs}
               grid={{
@@ -254,7 +266,9 @@ const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
             <Col span={12}>
               <DescriptionItem
                 title="文件大小"
-                content={currentFile && currentFile.size + ' Byte'}
+                content={resolveFileSize(
+                  (currentFile && currentFile.size) || 0
+                )}
               />
             </Col>
           </Row>
