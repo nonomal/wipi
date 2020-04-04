@@ -59,10 +59,10 @@ const resolveFileSize = (size) => {
   }
 
   if (size < 1024 * 1024) {
-    return Math.ceil(size / 1024).toFixed(2) + ' KB';
+    return (size / 1024).toFixed(2) + ' KB';
   }
 
-  return Math.ceil(size / 1024 / 1024).toFixed(2) + ' MB';
+  return (size / 1024 / 1024).toFixed(2) + ' MB';
 };
 
 const File: NextPage<IFileProps> = ({ files: defaultFiles = [], total }) => {
