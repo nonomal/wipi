@@ -11,7 +11,7 @@ interface IProps {
   page: IPage;
 }
 
-const Page: NextPage<IProps> = props => {
+const Page: NextPage<IProps> = (props) => {
   const { setting = {}, page } = props as any;
 
   const ref = useRef(null);
@@ -47,8 +47,8 @@ const Page: NextPage<IProps> = props => {
           </Helmet>
           <div className="container">
             {page.cover && (
-              <div className={style.meta}>
-                <img className={style.cover} src={page.cover} alt="文章封面" />
+              <div className={style.coverWrapper}>
+                <img src={page.cover} alt="文章封面" />
               </div>
             )}
             <div className={style.content}>
@@ -66,7 +66,7 @@ const Page: NextPage<IProps> = props => {
   );
 };
 
-Page.getInitialProps = async ctx => {
+Page.getInitialProps = async (ctx) => {
   const { id } = ctx.query;
   const page = await PageProvider.getPage(id);
   return { page };

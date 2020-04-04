@@ -3,13 +3,16 @@
   margin-top: 40px;
 }
 
-.meta {
+.coverWrapper {
+  width: 100%;
+  max-width: 768px;
+  margin: 0 auto;
   padding-bottom: 1.5rem;
-  text-align: center;
 
-  .cover {
+  img {
     display: inline-block;
-    max-width: 100%;
+    width: 100%;
+    height: auto;
   }
 }
 
