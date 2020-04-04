@@ -44,7 +44,7 @@ export const ArticleList: React.FC<IProps> = ({
                         </div>
                       </LazyLoad>
                     )}
-                    <div style={{ width: '100%' }}>
+                    <div className={style.textInfoWrapper}>
                       <p className={style.title}>{article.title}</p>
                       <p className={style.desc}>{article.summary}</p>
                       <div className={style.meta}>
