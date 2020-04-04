@@ -33,7 +33,20 @@ export class CategoryService {
    * 获取所有分类
    */
   async findAll(): Promise<Category[]> {
-    return this.categoryRepository.find({ order: { createAt: 'ASC' } });
+    const data = await this.categoryRepository
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.articles', 'articles')
+      .orderBy('category.createAt', 'ASC')
+      .getMany();
+
+    data.forEach((d) => {
+      Object.assign(d, { articleCount: d.articles.length });
+      delete d.articles;
+    });
+
+    return data;
+
+    // return this.categoryRepository.find({ order: { createAt: 'ASC' } });
   }
 
   /**
@@ -41,7 +54,15 @@ export class CategoryService {
    * @param id
    */
   async findById(id): Promise<Category> {
-    return this.categoryRepository.findOne(id);
+    const data = await this.categoryRepository
+      .createQueryBuilder('category')
+      .where('category.id=:id')
+      .orWhere('category.label=:id')
+      .orWhere('category.value=:id')
+      .setParameter('id', id)
+      .getOne();
+
+    return data;
   }
 
   async findByIds(ids): Promise<Array<Category>> {
