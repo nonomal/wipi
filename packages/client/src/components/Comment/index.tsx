@@ -88,7 +88,7 @@ export const CommentItem = ({
         </div>
         {subComments && subComments.length ? (
           <div className={style.subComments}>
-            {subComments.map(subComment => (
+            {subComments.map((subComment) => (
               <CommentItem
                 key={subComment.id}
                 comment={subComment}
@@ -169,13 +169,13 @@ export const MyComment: React.FC<IProps> = ({
         page,
         pageSize,
       })
-        .then(res => {
+        .then((res) => {
           setLoading(false);
 
           if (!loadMore) {
             setComments(res[0]);
           } else {
-            setComments(comments => [...comments, ...res[0]]);
+            setComments((comments) => [...comments, ...res[0]]);
           }
 
           setTotal(res[1]);
@@ -186,7 +186,7 @@ export const MyComment: React.FC<IProps> = ({
             viewer.update();
           }
         })
-        .catch(err => {
+        .catch((err) => {
           setLoading(false);
         });
     },
@@ -212,7 +212,7 @@ export const MyComment: React.FC<IProps> = ({
         replyComment={null}
       />
       <div className={style.commentContainer}>
-        {comments.map(comment => {
+        {comments.map((comment) => {
           return (
             <CommentItem
               key={comment.id}
@@ -226,7 +226,7 @@ export const MyComment: React.FC<IProps> = ({
         })}
       </div>
       <div className={style.pagination}>
-        {page * pageSize < total ? (
+        {page * pageSize < total && !loading ? (
           <Button
             type="primary"
             onClick={loadMore}
