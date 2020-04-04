@@ -31,7 +31,20 @@ export class TagService {
    * 获取所有标签
    */
   async findAll(): Promise<Tag[]> {
-    return this.tagRepository.find({ order: { createAt: 'ASC' } });
+    const data = await this.tagRepository
+      .createQueryBuilder('tag')
+      .leftJoinAndSelect('tag.articles', 'articles')
+      .orderBy('tag.createAt', 'ASC')
+      .getMany();
+
+    data.forEach((d) => {
+      Object.assign(d, { articleCount: d.articles.length });
+      delete d.articles;
+    });
+
+    return data;
+
+    // return this.tagRepository.find({ order: { createAt: 'ASC' } });
   }
 
   /**
@@ -39,7 +52,15 @@ export class TagService {
    * @param id
    */
   async findById(id): Promise<Tag> {
-    return this.tagRepository.findOne(id);
+    const data = await this.tagRepository
+      .createQueryBuilder('tag')
+      .where('tag.id=:id')
+      .orWhere('tag.label=:id')
+      .orWhere('tag.value=:id')
+      .setParameter('id', id)
+      .getOne();
+
+    return data;
   }
 
   /**
@@ -58,7 +79,7 @@ export class TagService {
       .getOne();
 
     if (status) {
-      data.articles = data.articles.filter(a => a.status === status);
+      data.articles = data.articles.filter((a) => a.status === status);
       return data;
     } else {
       return data;
