@@ -81,6 +81,12 @@
       img {
         transform: scale(1.2);
       }
+
+      .info {
+        .title {
+          color: $primaryColor;
+        }
+      }
     }
 
     .imgWrapper {
@@ -106,15 +112,24 @@
       justify-content: space-between;
 
       .title {
+        position: relative;
         color: #292525;
         font-weight: 600;
         font-size: 20px;
-        // margin-bottom: 20px;
         line-height: 1.4;
         text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+
+        // &::before {
+        //   content: attr(data-category);
+        //   font-size: 0.8em;
+        //   padding: 4px 6px;
+        //   color: #fff;
+        //   background-color: $primaryColor;
+        //   margin-right: 8px;
+        // }
       }
 
       .desc {
@@ -129,7 +144,20 @@
 
       .meta {
         margin: 0;
-        color: $primaryColor;
+        color: #666;
+        clear: both;
+
+        .category {
+          color: #333;
+        }
+
+        .seperator {
+          margin: 0 4px;
+        }
+
+        .pullRight {
+          float: right;
+        }
       }
     }
   }

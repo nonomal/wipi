@@ -1,9 +1,9 @@
-import React from "react";
-import Link from "next/link";
-import cls from "classnames";
-import LazyLoad from "react-lazyload";
-import * as dayjs from "dayjs";
-import style from "./index.module.scss";
+import React from 'react';
+import Link from 'next/link';
+import cls from 'classnames';
+import LazyLoad from 'react-lazyload';
+import * as dayjs from 'dayjs';
+import style from './index.module.scss';
 
 interface IProps {
   articles: IArticle[];
@@ -14,15 +14,15 @@ interface IProps {
 export const ArticleList: React.FC<IProps> = ({
   articles = [],
   bordered = false,
-  asCard = false
+  asCard = false,
 }) => {
   return (
     <div
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
       className={cls(style.wrapper, asCard ? style.asCard : false)}
     >
       {articles && articles.length ? (
-        articles.map(article => {
+        articles.map((article) => {
           return (
             <div
               key={article.id}
@@ -45,9 +45,17 @@ export const ArticleList: React.FC<IProps> = ({
                     <p className={style.title}>{article.title}</p>
                     <p className={style.desc}>{article.summary}</p>
                     <p className={style.meta}>
-                      {dayjs
-                        .default(article.publishAt)
-                        .format("YYYY-MM-DD HH:mm:ss")}
+                      <span className={style.category}>
+                        {article.category ? article.category.label : ''}
+                      </span>
+                      <span className={style.seperator}>·</span>
+                      <span>
+                        {dayjs
+                          .default(article.publishAt)
+                          .format('YYYY-MM-DD HH:mm:ss')}
+                      </span>
+                      <span className={style.seperator}>·</span>
+                      <span>{article.views} 次阅读</span>
                     </p>
                   </div>
                 </a>
