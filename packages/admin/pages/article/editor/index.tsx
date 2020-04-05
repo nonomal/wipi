@@ -28,19 +28,19 @@ const Editor: NextPage = () => {
 
     if (article.tags) {
       try {
-        article.tags = article.tags.map(t => t.id).join(',');
+        article.tags = article.tags.map((t) => t.id).join(',');
       } catch (e) {
         console.log(e);
       }
     }
 
     if (id) {
-      return ArticleProvider.updateArticle(id, article).then(res => {
+      return ArticleProvider.updateArticle(id, article).then((res) => {
         setId(res.id);
         message.success('文章已保存为草稿');
       });
     } else {
-      return ArticleProvider.addArticle(article).then(res => {
+      return ArticleProvider.addArticle(article).then((res) => {
         setId(res.id);
         message.success('文章已保存为草稿');
       });
@@ -74,10 +74,10 @@ const Editor: NextPage = () => {
     setSettingDrawerVisible(true);
   }, [article, id]);
 
-  const saveOrPublish = patch => {
+  const saveOrPublish = (patch) => {
     const data = Object.assign({}, article, patch);
 
-    const handle = res => {
+    const handle = (res) => {
       setId(res.id);
       message.success(
         data.status === 'draft' ? '文章已保存为草稿' : '文章已发布'
@@ -105,11 +105,12 @@ const Editor: NextPage = () => {
           onBack={() => window.close()}
           title={
             <Input
+              width={300}
               placeholder="请输入文章标题"
               defaultValue={article.title}
-              onChange={e => {
+              onChange={(e) => {
                 const value = e.target.value;
-                setArticle(article => {
+                setArticle((article) => {
                   article.title = value;
                   return article;
                 });
@@ -137,8 +138,8 @@ const Editor: NextPage = () => {
         <article>
           <CKEditor
             value={article.content}
-            onChange={value => {
-              setArticle(article => {
+            onChange={(value) => {
+              setArticle((article) => {
                 article.content = value;
                 return article;
               });

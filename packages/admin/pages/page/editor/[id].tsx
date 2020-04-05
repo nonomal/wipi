@@ -30,12 +30,12 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
     page.status = 'draft';
 
     if (id) {
-      return PageProvider.updatePage(id, page).then(res => {
+      return PageProvider.updatePage(id, page).then((res) => {
         setId(res.id);
         message.success('页面已保存为草稿');
       });
     } else {
-      return PageProvider.addPage(page).then(res => {
+      return PageProvider.addPage(page).then((res) => {
         setId(res.id);
         message.success('页面已保存为草稿');
       });
@@ -70,12 +70,12 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
     page.status = 'publish';
 
     if (id) {
-      return PageProvider.updatePage(id, page).then(res => {
+      return PageProvider.updatePage(id, page).then((res) => {
         setId(res.id);
         message.success('页面已发布');
       });
     } else {
-      return PageProvider.addPage(page).then(res => {
+      return PageProvider.addPage(page).then((res) => {
         setId(res.id);
         message.success('页面已发布');
       });
@@ -96,12 +96,13 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
           onBack={() => window.close()}
           title={
             <Input
+              width={300}
               placeholder="请输入页面名称"
               defaultValue={page.name}
-              onChange={e => {
+              onChange={(e) => {
                 const value = e.target.value;
 
-                setPage(page => {
+                setPage((page) => {
                   page.name = value;
                   return page;
                 });
@@ -137,8 +138,8 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
         <article>
           <CKEditor
             value={page.content}
-            onChange={value => {
-              setPage(page => {
+            onChange={(value) => {
+              setPage((page) => {
                 page.content = value;
                 return page;
               });
@@ -163,10 +164,10 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
             />
           }
           defaultValue={page.cover}
-          onChange={e => {
+          onChange={(e) => {
             const value = e.target.value;
 
-            setPage(page => {
+            setPage((page) => {
               page.cover = value;
               return page;
             });
@@ -176,9 +177,9 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
           style={{ marginTop: 16 }}
           placeholder="请配置页面路径"
           defaultValue={page.path}
-          onChange={e => {
+          onChange={(e) => {
             const value = e.target.value;
-            setPage(page => {
+            setPage((page) => {
               page.path = value;
               return page;
             });
@@ -222,7 +223,7 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
   );
 };
 
-Editor.getInitialProps = async ctx => {
+Editor.getInitialProps = async (ctx) => {
   const { id } = ctx.query;
   const page = await PageProvider.getPage(id);
   return { page };

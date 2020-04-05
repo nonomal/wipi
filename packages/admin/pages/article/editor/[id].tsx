@@ -133,6 +133,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
           onBack={() => window.close()}
           title={
             <Input
+              width={300}
               placeholder="请输入文章标题"
               value={title}
               onChange={(e) => {
