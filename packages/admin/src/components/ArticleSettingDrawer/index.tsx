@@ -39,10 +39,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
     (article.category && article.category.id) || null
   );
   const [selectedTags, setSelectedTags] = useState(
-    (article.tags &&
-      article.tags.length &&
-      article.tags.map((tag) => tag.id)) ||
-      []
+    (Array.isArray(article.tags) && article.tags.map((tag) => tag.id)) || []
   );
   const [cover, setCover] = useState(article.cover || null);
 
@@ -51,10 +48,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
     setCommentable(article.isCommentable || true);
     setSelectedCategory((article.category && article.category.id) || null);
     setSelectedTags(
-      (article.tags &&
-        article.tags.length &&
-        article.tags.map((tag) => tag.id)) ||
-        []
+      (Array.isArray(article.tags) && article.tags.map((tag) => tag.id)) || []
     );
     setCover(article.cover || null);
   }, [article.isCommentable, article.category, article.tags, article.cover]);

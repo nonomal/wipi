@@ -39,7 +39,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
       article.category = article.category.id;
     }
 
-    if (article.tags) {
+    if (Array.isArray(article.tags)) {
       try {
         article.tags = article.tags.map((t) => t.id).join(',');
       } catch (e) {
