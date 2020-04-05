@@ -26,7 +26,7 @@ const Editor: NextPage = () => {
 
     article.status = 'draft';
 
-    if (article.tags) {
+    if (Array.isArray(article.tags)) {
       try {
         article.tags = article.tags.map((t) => t.id).join(',');
       } catch (e) {
@@ -105,7 +105,7 @@ const Editor: NextPage = () => {
           onBack={() => window.close()}
           title={
             <Input
-              width={300}
+              style={{ width: 300 }}
               placeholder="请输入文章标题"
               defaultValue={article.title}
               onChange={(e) => {

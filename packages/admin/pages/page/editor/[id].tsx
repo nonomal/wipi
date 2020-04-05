@@ -96,7 +96,7 @@ const Editor: NextPage<IProps> = ({ page: defaultPage = {} }) => {
           onBack={() => window.close()}
           title={
             <Input
-              width={300}
+              style={{ width: 300 }}
               placeholder="请输入页面名称"
               defaultValue={page.name}
               onChange={(e) => {
