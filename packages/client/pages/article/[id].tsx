@@ -155,12 +155,6 @@ const Article: NextPage<IProps> = (props) => {
                         .format('YYYY-MM-DD HH:mm:ss')}
                     </p>
                     <p>
-                      更新时间：
-                      {dayjs
-                        .default(article.updateAt)
-                        .format('YYYY-MM-DD HH:mm:ss')}
-                    </p>
-                    <p>
                       版权信息：
                       <a
                         href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
