@@ -33,8 +33,6 @@ const Home: NextPage<IProps> = (props) => {
   const [page, setPage] = useState(1);
   const [articles, setArticles] = useState<IArticle[]>(defaultArticles);
 
-  console.log(category);
-
   useEffect(() => {
     const handler = () => {
       const y = (window as any).scrollY;
