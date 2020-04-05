@@ -39,7 +39,10 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
     (article.category && article.category.id) || null
   );
   const [selectedTags, setSelectedTags] = useState(
-    (article.tags && article.tags.map(tag => tag.id)) || []
+    (article.tags &&
+      article.tags.length &&
+      article.tags.map((tag) => tag.id)) ||
+      []
   );
   const [cover, setCover] = useState(article.cover || null);
 
@@ -47,13 +50,18 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
     setSummary(article.summary);
     setCommentable(article.isCommentable || true);
     setSelectedCategory((article.category && article.category.id) || null);
-    setSelectedTags((article.tags && article.tags.map(tag => tag.id)) || []);
+    setSelectedTags(
+      (article.tags &&
+        article.tags.length &&
+        article.tags.map((tag) => tag.id)) ||
+        []
+    );
     setCover(article.cover || null);
   }, [article.isCommentable, article.category, article.tags, article.cover]);
 
   useEffect(() => {
-    CategoryProvider.getCategory().then(res => setCategorys(res));
-    TagProvider.getTags().then(tags => setTags(tags));
+    CategoryProvider.getCategory().then((res) => setCategorys(res));
+    TagProvider.getTags().then((tags) => setTags(tags));
   }, []);
 
   const save = () => {
@@ -97,7 +105,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
             placeholder="请输入文章摘要"
             autoSize={{ minRows: 6, maxRows: 8 }}
             value={summary}
-            onChange={e => {
+            onChange={(e) => {
               setSummary(e.target.value);
             }}
           />
@@ -108,7 +116,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
         content={
           <Input.Password
             value={password}
-            onChange={e => {
+            onChange={(e) => {
               setPassWord(e.target.value);
             }}
             placeholder="输入后查看需要密码"
@@ -128,7 +136,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
             onChange={setSelectedCategory}
             style={{ width: '100%' }}
           >
-            {categorys.map(t => (
+            {categorys.map((t) => (
               <Select.Option key={t.id} value={t.id}>
                 {t.label}
               </Select.Option>
@@ -145,7 +153,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
             onChange={setSelectedTags}
             style={{ width: '100%' }}
           >
-            {tags.map(tag => (
+            {tags.map((tag) => (
               <Select.Option key={tag.id} value={tag.id}>
                 {tag.label}
               </Select.Option>
@@ -164,7 +172,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
             <Input
               placeholder="或输入外部链接"
               value={cover}
-              onChange={e => {
+              onChange={(e) => {
                 setCover(e.target.value);
               }}
             />
@@ -176,7 +184,7 @@ export const ArticleSettingDrawer: React.FC<IProps> = ({
         closeAfterClick={true}
         visible={fileVisible}
         onClose={() => setFileVisible(false)}
-        onChange={url => setCover(url)}
+        onChange={(url) => setCover(url)}
       />
       <div
         style={{

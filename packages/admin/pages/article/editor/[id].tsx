@@ -23,7 +23,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
   const [title, setArticleTitle] = useState<any>(null);
 
   useEffect(() => {
-    ArticleProvider.getArticle(id).then(res => {
+    ArticleProvider.getArticle(id).then((res) => {
       setArticle(res);
       setArticleTitle(res.title);
     });
@@ -35,22 +35,26 @@ const Editor: NextPage<IProps> = ({ id }) => {
       return;
     }
 
+    if (article.category && article.category.id) {
+      article.category = article.category.id;
+    }
+
     if (article.tags) {
       try {
-        article.tags = article.tags.map(t => t.id).join(',');
+        article.tags = article.tags.map((t) => t.id).join(',');
       } catch (e) {
         console.log(e);
       }
     }
 
     if (id) {
-      ArticleProvider.updateArticle(id, article).then(res => {
+      ArticleProvider.updateArticle(id, article).then((res) => {
         message.success(
           res.status === 'draft' ? '文章已保存为草稿' : '文章已发布'
         );
       });
     } else {
-      ArticleProvider.addArticle(article).then(res => {
+      ArticleProvider.addArticle(article).then((res) => {
         message.success(
           res.status === 'draft' ? '文章已保存为草稿' : '文章已发布'
         );
@@ -85,10 +89,27 @@ const Editor: NextPage<IProps> = ({ id }) => {
     setSettingDrawerVisible(true);
   }, [article, id]);
 
-  const saveOrPublish = patch => {
+  const saveOrPublish = (patch) => {
     const data = Object.assign({}, article, patch);
 
-    const handle = res => {
+    if (data.category && data.category.id) {
+      data.category = data.category.id;
+    }
+
+    if (!data.title) {
+      message.warn('至少输入文章标题');
+      return;
+    }
+
+    if (data.tags) {
+      try {
+        data.tags = data.tags.map((t) => t.id).join(',');
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    const handle = (res) => {
       message.success(data.status === 'draft' ? '文章已保存' : '文章已发布');
     };
 
@@ -114,7 +135,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
             <Input
               placeholder="请输入文章标题"
               value={title}
-              onChange={e => {
+              onChange={(e) => {
                 setArticleTitle(e.target.value);
               }}
             />
@@ -140,8 +161,8 @@ const Editor: NextPage<IProps> = ({ id }) => {
         <article>
           <CKEditor
             value={article.content}
-            onChange={value => {
-              setArticle(article => {
+            onChange={(value) => {
+              setArticle((article) => {
                 article.content = value;
                 return article;
               });
@@ -167,7 +188,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
   );
 };
 
-Editor.getInitialProps = async ctx => {
+Editor.getInitialProps = async (ctx) => {
   const { id } = ctx.query;
   return { id };
 };
