@@ -10,7 +10,8 @@
   width: 100vw;
   height: 0;
   opacity: 0;
-  background: rgba(255, 255, 255, 0.95);
+  color: var(--main-text-color);
+  background: var(--bg);
   overflow: hidden;
   transition: opacity ease-in-out 0.3s;
 
@@ -21,7 +22,7 @@
   }
 
   &.hasResult {
-    background: rgba(255, 255, 255, 1);
+    background: var(--bg);
   }
 
   @media (min-width: 768px) {
@@ -59,8 +60,8 @@
     position: relative;
     width: 100%;
     margin-bottom: 40px;
-    border-bottom: 1px solid $borderColor;
-    color: $textMainColor;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--main-text-color);
 
     &.active {
     }

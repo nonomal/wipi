@@ -1,5 +1,5 @@
 import React from 'react';
-import { BackTop } from 'antd';
+import { BackTop, Switch } from 'antd';
 import { Helmet } from 'react-helmet';
 import { Header } from '@components/Header';
 import { Footer } from '@components/Footer';
@@ -32,7 +32,7 @@ export const Layout: React.FC<Iprops> = ({
 }) => {
   const menus = [
     ...defaultMenus,
-    ...pages.map(r => ({
+    ...pages.map((r) => ({
       path: `/page/` + r.path,
       label: r.name,
     })),
@@ -52,6 +52,9 @@ export const Layout: React.FC<Iprops> = ({
       </Helmet>
       <Header setting={setting} menus={menus} />
       <main>{children}</main>
+
+      <div></div>
+
       <BackTop />
       {needFooter && <Footer setting={setting} />}
     </div>

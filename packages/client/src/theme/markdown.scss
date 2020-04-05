@@ -4,8 +4,8 @@
   .markdown {
     padding-left: 0;
     padding-right: 0;
-    color: $textMainColor !important;
-    background-color: #fff !important;
+    color: var(--main-text-color) !important;
+    background-color: var(--bg) !important;
     overflow: hidden !important;
 
     > :first-child {
@@ -23,7 +23,7 @@
 
     hr {
       border-width: 0 0 2px;
-      border-color: $borderColor;
+      border-color: var(--border-color);
       margin-top: 4rem;
       margin-bottom: 4rem;
     }
@@ -33,7 +33,7 @@
     p a,
     ul li a,
     a.markdown {
-      color: $linkColor;
+      color: var(--link-color);
       text-decoration: underline;
       font-weight: 500;
     }
@@ -45,7 +45,7 @@
     h5,
     h6 {
       font-weight: 700;
-      color: $textMainColor;
+      color: var(--main-text-color);
 
       > * {
         color: inherit !important;
@@ -76,9 +76,9 @@
       code {
         padding: 2px 4px;
         font-size: 90%;
-        color: $primaryColor;
-        background-color: #f9f2f4;
-        border-radius: $borderRadius;
+        color: var(--main-text-color);
+        background-color: var(--primary-color);
+        border-radius: var(--border-radius);
       }
     }
 
@@ -89,15 +89,15 @@
 
     blockquote {
       font-size: 14px;
-      border-left: 4px solid $primaryColor;
+      border-left: 4px solid var(--primary-color);
       padding: 12px 24px 12px 12px;
       margin-top: 1em;
       border-left-width: 4px;
       border-left-style: solid;
-      background-color: #f8f8f8;
+      background-color: var(--bg-second);
       position: relative;
-      border-bottom-right-radius: 2px;
-      border-top-right-radius: 2px;
+      border-bottom-right-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
 
       p {
         margin: 0;
@@ -109,36 +109,36 @@
       text-align: center;
       border-collapse: collapse;
       border-spacing: 0;
-      border: 1px solid $borderColor;
+      border: 1px solid var(--border-color);
       overflow: auto;
     }
 
     table th {
       font-size: 0.875rem;
       font-weight: 600;
-      color: #4a5568;
+      color: var(--main-text-color);
       padding: 0.5rem;
-      background-color: #f7fafc;
+      background-color: var(--bg-second);
       text-align: center;
     }
 
     table tr:nth-child(2n) {
-      background-color: #fcfcfc;
+      background-color: var(--bg);
     }
 
     table td {
       padding: 0.5rem;
       border-top-width: 1px;
-      border-color: $borderColor;
+      border-color: var(--border-color);
       font-size: 0.875rem;
     }
 
     table td code {
-      background-color: #f7fafc;
+      background-color: var(--bg);
       padding-left: 0.25rem;
       padding-right: 0.25rem;
       font-size: 0.75rem;
-      color: #6b46c1;
+      color: var(--main-text-color);
       vertical-align: baseline;
     }
 
@@ -147,7 +147,7 @@
       width: 100%;
       clear: both;
       text-align: center;
-      border: 1px solid $borderColor;
+      border: 1px solid var(--border-color);
     }
 
     figure.image-style-side {
@@ -168,8 +168,8 @@
       display: table-caption;
       caption-side: bottom;
       word-break: break-word;
-      color: $textSecondColor;
-      background-color: #f4f4f4;
+      color: var(--second-text-color);
+      background-color: var(--bg-second);
       padding: 0.6em;
       font-size: 0.75em;
       outline-offset: -1px;
@@ -209,9 +209,9 @@
       justify-content: center;
       height: 1.5rem;
       width: 1.5rem;
-      background-color: #e2e8f0;
+      background-color: var(--bg-second);
       border-radius: 9999px;
-      color: #4a5568;
+      color: var(--second-text-color);
       font-size: 0.75rem;
       font-weight: 700;
       content: counter(item);
@@ -231,17 +231,17 @@
       margin: 0 0 10px;
       font-size: 13px;
       line-height: 1.42857143;
-      color: $textMainColor;
+      color: var(--main-text-color);
       word-break: break-all;
       word-wrap: break-word;
-      background-color: #f5f5f5;
-      border: 1px solid $borderColor;
+      background-color: var(--bg-code);
+      border: 1px solid var(--border-color);
       padding: 0;
       margin-bottom: 20px;
       background: none;
       border: none;
       font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
-      border-radius: $borderRadius;
+      border-radius: var(--border-radius);
       font-weight: 400;
       scrollbar-width: none;
 
@@ -249,10 +249,10 @@
         display: block;
         overflow-x: auto;
         padding: 1.4em;
-        color: #333;
+        color: var(--main-text-color);
         line-height: 1.45;
-        background-color: #f6f8fa;
-        border-radius: $borderRadius;
+        background-color: var(--bg-code);
+        border-radius: var(--border-radius);
       }
 
       code.language-go:before,

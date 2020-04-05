@@ -1,8 +1,9 @@
 @import '../../theme/var.scss';
 
 .wrapper {
-  background: #f4f4f4;
+  background: var(--bg-body);
   padding: 40px 0;
+  border: 1px solid var(--border-color);
 }
 
 .comments {
@@ -15,7 +16,7 @@
     font-size: 16px;
     line-height: 22px;
     letter-spacing: 0.06em;
-    color: $textMainColor;
+    color: var(--main-text-color);
     margin-bottom: 30px;
     text-align: center;
   }
@@ -36,12 +37,16 @@
     font-size: 16px;
     line-height: 22px;
     letter-spacing: 0.06em;
-    color: $textMainColor;
+    color: var(--main-text-color);
     margin-bottom: 30px;
     text-align: center;
   }
 
   .articleContainer {
+    > div {
+      box-shadow: none !important;
+      background-color: transparent !important;
+    }
   }
 
   @media (max-width: 768px) {

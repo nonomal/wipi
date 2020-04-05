@@ -1,17 +1,17 @@
 @import '../../theme/var.scss';
 
 .wrapper {
-  box-shadow: $boxShadow;
-  border-radius: $borderRadius;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-second);
   margin-bottom: 1.3rem;
   line-height: 1.29;
 
   .title {
     padding: 1rem 1.3rem;
-    color: $textMainColor;
+    color: var(--main-text-color);
     font-weight: bold;
-    background-color: #fff;
-    border-bottom: 1px solid $borderColor;
+    border-bottom: 1px solid var(--border-color);
 
     span {
       margin-left: 8px;
@@ -20,16 +20,14 @@
 
   ul {
     padding: 1rem;
-    background-color: #fff;
-    box-shadow: $borderColor;
   }
 
   li {
     padding: 8px 7px;
-    color: $textSecondColor;
+    color: var(--second-text-color);
     line-height: 1.5em;
     margin: 0 7px 7px 0;
-    border-radius: $borderRadius;
+    border-radius: var(--border-radius);
     transition: all ease-in-out 0.2s;
 
     a {
@@ -38,13 +36,13 @@
       justify-content: space-between;
 
       > span:first-of-type {
-        color: $textMainColor;
+        color: var(var(--main-text-color));
       }
     }
 
     &:hover {
       color: #fff;
-      background-color: $primaryColor;
+      background-color: var(--primary-color);
 
       a > span:first-of-type {
         color: inherit;
@@ -53,7 +51,7 @@
 
     &.active {
       color: #fff;
-      background-color: $primaryColor;
+      background-color: var(--primary-color);
 
       a > span:first-of-type {
         color: inherit;
