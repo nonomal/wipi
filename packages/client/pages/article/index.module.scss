@@ -58,7 +58,7 @@
         margin-top: 1em;
         border-left-width: 4px;
         border-left-style: solid;
-        background-color: var(--bg-second);
+        background-color: var(--bg-code);
         position: relative;
         border-bottom-right-radius: var(--border-radius);
         border-top-right-radius: var(--border-radius);
@@ -81,7 +81,7 @@
       .tags {
         width: 100%;
         display: flex;
-        justify-content: center;
+        // justify-content: center;
 
         .tag {
           display: inline-flex;

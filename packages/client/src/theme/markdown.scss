@@ -76,7 +76,7 @@
       code {
         padding: 2px 4px;
         font-size: 90%;
-        color: var(--main-text-color);
+        color: #fff;
         background-color: var(--primary-color);
         border-radius: var(--border-radius);
       }
@@ -94,7 +94,7 @@
       margin-top: 1em;
       border-left-width: 4px;
       border-left-style: solid;
-      background-color: var(--bg-second);
+      background-color: var(--bg-code);
       position: relative;
       border-bottom-right-radius: var(--border-radius);
       border-top-right-radius: var(--border-radius);
@@ -169,7 +169,7 @@
       caption-side: bottom;
       word-break: break-word;
       color: var(--second-text-color);
-      background-color: var(--bg-second);
+      background-color: var(--bg-code);
       padding: 0.6em;
       font-size: 0.75em;
       outline-offset: -1px;
@@ -209,7 +209,7 @@
       justify-content: center;
       height: 1.5rem;
       width: 1.5rem;
-      background-color: var(--bg-second);
+      background-color: var(--bg-code);
       border-radius: 9999px;
       color: var(--second-text-color);
       font-size: 0.75rem;
