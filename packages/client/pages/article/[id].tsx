@@ -18,6 +18,8 @@ interface IProps {
   article: IArticle;
 }
 
+let hasHljsInited = false;
+
 const Article: NextPage<IProps> = (props) => {
   const { setting = {}, article } = props as any;
   const ref = useRef(null);
@@ -58,10 +60,17 @@ const Article: NextPage<IProps> = (props) => {
   // 高亮
   useEffect(() => {
     if (!shouldCheckPassWord) {
-      hljs.initHighlightingOnLoad();
-      hljs.highlightBlock(ref.current);
+      if (!hasHljsInited) {
+        hljs.initHighlightingOnLoad();
+        hasHljsInited = true;
+      }
+
+      setTimeout(() => {
+        const blocks = ref.current.querySelectorAll('pre code');
+        blocks.forEach((block) => hljs.highlightBlock(block));
+      }, 0);
     }
-  }, [shouldCheckPassWord]);
+  }, [shouldCheckPassWord, article.id]);
 
   // 大图插件
   useEffect(() => {
@@ -136,33 +145,33 @@ const Article: NextPage<IProps> = (props) => {
                 dangerouslySetInnerHTML={{ __html: article.content }}
               ></div>
 
-              <div className={style.articleInfo}>
-                <blockquote>
-                  <p>
-                    发布时间：
-                    {dayjs
-                      .default(article.publishAt)
-                      .format('YYYY-MM-DD HH:mm:ss')}
-                  </p>
-                  <p>
-                    更新时间：
-                    {dayjs
-                      .default(article.updateAt)
-                      .format('YYYY-MM-DD HH:mm:ss')}
-                  </p>
-                  <p>
-                    版权信息：
-                    <a
-                      href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
-                      target="_blank"
-                    >
-                      非商用-署名-自由转载
-                    </a>
-                  </p>
-                </blockquote>
-              </div>
-
               <div className={style.articleFooter}>
+                <div className={style.articleInfo}>
+                  <blockquote>
+                    <p>
+                      发布时间：
+                      {dayjs
+                        .default(article.publishAt)
+                        .format('YYYY-MM-DD HH:mm:ss')}
+                    </p>
+                    <p>
+                      更新时间：
+                      {dayjs
+                        .default(article.updateAt)
+                        .format('YYYY-MM-DD HH:mm:ss')}
+                    </p>
+                    <p>
+                      版权信息：
+                      <a
+                        href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+                        target="_blank"
+                      >
+                        非商用-署名-自由转载
+                      </a>
+                    </p>
+                  </blockquote>
+                </div>
+
                 {article.tags && article.tags.length ? (
                   <div className={style.tags}>
                     {article.tags.map((tag) => {

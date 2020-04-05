@@ -25,9 +25,12 @@ const Page: NextPage<IProps> = (props) => {
   useEffect(() => {
     if (ref.current) {
       hljs.initHighlightingOnLoad();
-      hljs.highlightBlock(ref.current);
+      setTimeout(() => {
+        const blocks = ref.current.querySelectorAll('pre code');
+        blocks.forEach((block) => hljs.highlightBlock(block));
+      }, 0);
     }
-  }, []);
+  }, [page.id]);
 
   // 大图插件
   useEffect(() => {

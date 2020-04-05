@@ -20,6 +20,10 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 0 8px 21px;
+
+  > div {
+    padding-top: 0.5rem;
+  }
 }
 
 @media (max-width: 768px) {

@@ -3,6 +3,7 @@ import { Button, Icon, Avatar } from 'antd';
 import { format } from 'timeago.js';
 import cls from 'classnames';
 import Viewer from 'viewerjs';
+import hljs from 'highlight.js';
 import { CommentProvider } from '@providers/comment';
 import { Editor } from './Editor';
 import style from './index.module.scss';
@@ -185,6 +186,11 @@ export const MyComment: React.FC<IProps> = ({
           } else {
             viewer.update();
           }
+
+          setTimeout(() => {
+            const blocks = ref.current.querySelectorAll('pre code');
+            blocks.forEach((block) => hljs.highlightBlock(block));
+          }, 0);
         })
         .catch((err) => {
           setLoading(false);
@@ -197,6 +203,10 @@ export const MyComment: React.FC<IProps> = ({
     setPage(page + 1);
     getComments(page + 1, pageSize, true);
   };
+
+  useEffect(() => {
+    hljs.initHighlightingOnLoad();
+  }, []);
 
   useEffect(() => {
     setPage(1);

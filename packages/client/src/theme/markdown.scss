@@ -88,14 +88,15 @@
     }
 
     blockquote {
+      position: relative;
       font-size: 14px;
       border-left: 4px solid var(--primary-color);
       padding: 12px 24px 12px 12px;
       margin-top: 1em;
       border-left-width: 4px;
       border-left-style: solid;
+      // color: rgba(255, 255, 255, 0.85);
       background-color: var(--bg-code);
-      position: relative;
       border-bottom-right-radius: var(--border-radius);
       border-top-right-radius: var(--border-radius);
 
@@ -118,7 +119,7 @@
       font-weight: 600;
       color: var(--main-text-color);
       padding: 0.5rem;
-      background-color: var(--bg-second);
+      background-color: var(--bg-body);
       text-align: center;
     }
 
@@ -128,8 +129,7 @@
 
     table td {
       padding: 0.5rem;
-      border-top-width: 1px;
-      border-color: var(--border-color);
+      border: 1px solid var(--border-color);
       font-size: 0.875rem;
     }
 
@@ -189,33 +189,11 @@
     }
 
     ol {
-      list-style-type: none;
-      counter-reset: item;
-      padding-left: 0;
+      list-style-type: decimal;
     }
 
     ol > li {
       position: relative;
-      padding-left: 2rem;
-    }
-
-    ol > li:before {
-      position: absolute;
-      top: 0;
-      left: 0;
-      margin-top: -2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 1.5rem;
-      width: 1.5rem;
-      background-color: var(--bg-code);
-      border-radius: 9999px;
-      color: var(--second-text-color);
-      font-size: 0.75rem;
-      font-weight: 700;
-      content: counter(item);
-      counter-increment: item;
     }
 
     pre::-webkit-scrollbar,
@@ -253,96 +231,6 @@
         line-height: 1.45;
         background-color: var(--bg-code);
         border-radius: var(--border-radius);
-      }
-
-      code.language-go:before,
-      code.language-css:before,
-      code.language-sql:before,
-      code.language-php:before,
-      code.language-html:before,
-      code.language-json:before,
-      code.language-bash:before,
-      code.language-less:before,
-      code.language-scss:before,
-      code.language-nginx:before,
-      code.language-javascript:before,
-      code.language-typescript:before,
-      code.language-js:before,
-      code.language-ts:before,
-      code.language-shell:before,
-      code.language-stylus:before,
-      code.language-python:before,
-      code.language-nginx:before {
-        position: absolute;
-        top: 0;
-        right: 0;
-        color: hsla(0, 0%, 54.9%, 0.8);
-        text-align: right;
-        font-size: 0.75em;
-        padding: 4px 8px 0;
-        font-weight: 600;
-      }
-
-      code.language-go:before {
-        content: 'go';
-      }
-
-      code.language-css:before {
-        content: 'css';
-      }
-
-      code.language-sql:before {
-        content: 'sql';
-      }
-
-      code.language-php:before {
-        content: 'php';
-      }
-
-      code.language-bash:before {
-        content: 'bash';
-      }
-
-      code.language-less:before {
-        content: 'less';
-      }
-
-      code.language-scss:before {
-        content: 'scss';
-      }
-
-      code.language-shell:before {
-        content: 'shell';
-      }
-
-      code.language-nginx:before {
-        content: 'nginx';
-      }
-
-      code.language-stylus:before {
-        content: 'stylus';
-      }
-
-      code.language-python:before {
-        content: 'python';
-      }
-
-      code.language-html:before {
-        content: 'HTML';
-      }
-
-      code.language-javascript:before,
-      code.language-js:before {
-        content: 'JavaScript';
-      }
-
-      code.language-typescript:before,
-      code.language-ts:before {
-        content: 'TypeScript';
-      }
-
-      code.language-css:before {
-        content: 'css';
       }
     }
   }
