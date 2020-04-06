@@ -30,10 +30,12 @@ const Editor: NextPage<IProps> = ({ id }) => {
   }, [id]);
 
   const save = useCallback(() => {
-    if (!article.title) {
+    if (!article.title && !title) {
       message.warn('至少输入文章标题');
       return;
     }
+
+    article.title = title;
 
     if (article.category && article.category.id) {
       article.category = article.category.id;
@@ -96,10 +98,12 @@ const Editor: NextPage<IProps> = ({ id }) => {
       data.category = data.category.id;
     }
 
-    if (!data.title) {
+    if (!data.title && !title) {
       message.warn('至少输入文章标题');
       return;
     }
+
+    data.title = title;
 
     if (Array.isArray(data.tags)) {
       try {
