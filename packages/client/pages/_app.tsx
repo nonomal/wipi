@@ -28,8 +28,8 @@ class MyApp extends App {
     const [appProps, setting, tags, categories, pages] = await Promise.all([
       App.getInitialProps(ctx),
       SettingProvider.getSetting(),
-      TagProvider.getTags(),
-      CategoryProvider.getCategory(),
+      TagProvider.getTags({ articleStatus: 'publish' }),
+      CategoryProvider.getCategory({ articleStatus: 'publish' }),
       PageProvider.getAllPublisedPages(),
     ]);
     return { ...appProps, setting, tags, categories, pages: pages[0] || [] };

@@ -4,8 +4,8 @@ export class CategoryProvider {
   /**
    * 获取所有标签
    */
-  static async getCategory(): Promise<ICategory[]> {
-    return httpProvider.get('/category');
+  static async getCategory(params): Promise<ICategory[]> {
+    return httpProvider.get('/category', { params });
   }
 
   /**
