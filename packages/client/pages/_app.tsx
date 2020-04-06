@@ -8,7 +8,7 @@ import { TagProvider } from '@providers/tag';
 import { Layout } from '@/layout/Layout';
 import { NProgress } from '@components/NProgress';
 import 'viewerjs/dist/viewer.css';
-import 'highlight.js/styles/github-gist.css';
+import 'highlight.js/styles/monokai-sublime.css';
 import '@/theme/antd.less';
 import '@/theme/reset.scss';
 import '@/theme/markdown.scss';

@@ -72,14 +72,14 @@
 
     p {
       line-height: 1.75rem;
+    }
 
-      code {
-        padding: 2px 4px;
-        font-size: 90%;
-        color: #fff;
-        background-color: var(--primary-color);
-        border-radius: var(--border-radius);
-      }
+    * code {
+      padding: 2px 4px;
+      font-size: 90%;
+      color: #fff;
+      background-color: var(--primary-color);
+      border-radius: var(--border-radius);
     }
 
     img {
@@ -209,7 +209,7 @@
       margin: 0 0 10px;
       font-size: 13px;
       line-height: 1.42857143;
-      color: var(--main-text-color);
+      // color: var(--main-text-color);
       word-break: break-all;
       word-wrap: break-word;
       background-color: var(--bg-code);
@@ -227,7 +227,7 @@
         display: block;
         overflow-x: auto;
         padding: 1.4em;
-        color: var(--main-text-color);
+        // color: var(--main-text-color);
         line-height: 1.45;
         background-color: var(--bg-code);
         border-radius: var(--border-radius);
