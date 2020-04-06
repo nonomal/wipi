@@ -62,7 +62,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
         );
       });
     }
-  }, [article, id]);
+  }, [article, id, title]);
 
   const preview = useCallback(() => {
     if (id) {
