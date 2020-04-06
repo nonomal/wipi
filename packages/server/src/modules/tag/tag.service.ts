@@ -30,12 +30,26 @@ export class TagService {
   /**
    * 获取所有标签
    */
-  async findAll(): Promise<Tag[]> {
-    const data = await this.tagRepository
+  async findAll(queryParams): Promise<Tag[]> {
+    const { articleStatus } = queryParams;
+    const qb = this.tagRepository
       .createQueryBuilder('tag')
-      .leftJoinAndSelect('tag.articles', 'articles')
-      .orderBy('tag.createAt', 'ASC')
-      .getMany();
+      .orderBy('tag.createAt', 'ASC');
+
+    if (articleStatus) {
+      qb.leftJoinAndSelect(
+        'tag.articles',
+        'articles',
+        'articles.status=:status',
+        {
+          status: articleStatus,
+        }
+      );
+    } else {
+      qb.leftJoinAndSelect('tag.articles', 'articles');
+    }
+
+    const data = await qb.getMany();
 
     data.forEach((d) => {
       Object.assign(d, { articleCount: d.articles.length });

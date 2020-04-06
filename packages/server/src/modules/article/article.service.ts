@@ -59,7 +59,7 @@ export class ArticleService {
     }
 
     if (otherParams) {
-      Object.keys(otherParams).forEach(key => {
+      Object.keys(otherParams).forEach((key) => {
         query
           .andWhere(`article.${key} LIKE :${key}`)
           .setParameter(`${key}`, `%${otherParams[key]}%`);
@@ -68,7 +68,7 @@ export class ArticleService {
 
     const [data, total] = await query.getManyAndCount();
 
-    data.forEach(d => {
+    data.forEach((d) => {
       if (d.needPassword) {
         delete d.content;
       }
@@ -89,7 +89,7 @@ export class ArticleService {
       .where('category.value=:value', { value: category })
       .orderBy('article.publishAt', 'DESC');
 
-    const { page, pageSize, status } = queryParams;
+    const { page = 1, pageSize = 12, status } = queryParams;
     query.skip((+page - 1) * +pageSize);
     query.take(+pageSize);
 
@@ -99,7 +99,7 @@ export class ArticleService {
 
     const [data, total] = await query.getManyAndCount();
 
-    data.forEach(d => {
+    data.forEach((d) => {
       if (d.needPassword) {
         delete d.content;
       }
@@ -116,11 +116,12 @@ export class ArticleService {
   async findArticlesByTag(tag, queryParams) {
     const query = this.articleRepository
       .createQueryBuilder('article')
-      .leftJoinAndSelect('article.tags', 'tag')
-      .where('tag.value=:value', { value: tag })
+      .innerJoinAndSelect('article.tags', 'tag', 'tag.value=:value', {
+        value: tag,
+      })
       .orderBy('article.publishAt', 'DESC');
 
-    const { page, pageSize, status } = queryParams;
+    const { page = 1, pageSize = 12, status } = queryParams;
     query.skip((+page - 1) * +pageSize);
     query.take(+pageSize);
 
@@ -130,7 +131,7 @@ export class ArticleService {
 
     const [data, total] = await query.getManyAndCount();
 
-    data.forEach(d => {
+    data.forEach((d) => {
       if (d.needPassword) {
         delete d.content;
       }
@@ -164,7 +165,7 @@ export class ArticleService {
 
     let ret = {};
 
-    data.forEach(d => {
+    data.forEach((d) => {
       const year = new Date(d.publishAt).getFullYear();
       const month = new Date(d.publishAt).getMonth();
 
@@ -364,7 +365,7 @@ export class ArticleService {
       } catch (e) {}
 
       const data = await query.getMany();
-      return data.filter(d => d.id !== articleId && d.status === 'publish');
+      return data.filter((d) => d.id !== articleId && d.status === 'publish');
     }
   }
 }

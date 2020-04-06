@@ -34,8 +34,8 @@ export class TagController {
    * 获取所有标签
    */
   @Get()
-  findAll(): Promise<Tag[]> {
-    return this.tagService.findAll();
+  findAll(@Query() queryParams): Promise<Tag[]> {
+    return this.tagService.findAll(queryParams);
   }
 
   /**

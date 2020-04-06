@@ -34,8 +34,8 @@ export class CategoryController {
    * 获取所有标签
    */
   @Get()
-  findAll(): Promise<Category[]> {
-    return this.categoryService.findAll();
+  findAll(@Query() queryParams): Promise<Category[]> {
+    return this.categoryService.findAll(queryParams);
   }
 
   /**

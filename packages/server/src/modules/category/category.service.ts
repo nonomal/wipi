@@ -32,12 +32,26 @@ export class CategoryService {
   /**
    * 获取所有分类
    */
-  async findAll(): Promise<Category[]> {
-    const data = await this.categoryRepository
+  async findAll(queryParams): Promise<Category[]> {
+    const { articleStatus } = queryParams;
+    const qb = this.categoryRepository
       .createQueryBuilder('category')
-      .leftJoinAndSelect('category.articles', 'articles')
-      .orderBy('category.createAt', 'ASC')
-      .getMany();
+      .orderBy('category.createAt', 'ASC');
+
+    if (articleStatus) {
+      qb.leftJoinAndSelect(
+        'category.articles',
+        'articles',
+        'articles.status=:status',
+        {
+          status: articleStatus,
+        }
+      );
+    } else {
+      qb.leftJoinAndSelect('category.articles', 'articles');
+    }
+
+    const data = await qb.getMany();
 
     data.forEach((d) => {
       Object.assign(d, { articleCount: d.articles.length });
