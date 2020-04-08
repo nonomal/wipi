@@ -62,7 +62,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
   }, []);
 
   const save = useCallback(() => {
-    UserProvider.update(user).then(res => {
+    UserProvider.update(user).then((res) => {
       setUser(res);
       window.sessionStorage.setItem('user', JSON.stringify(res));
       message.success('用户信息已保存');
@@ -87,7 +87,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
     const data = { ...user, oldPassword, newPassword: newPassword2 };
     UserProvider.updatePassword(data).then(() => {
       message.success('密码已更新，请重新登录');
-      window.localStorage.clear();
+      window.sessionStorage.clear();
       Router.replace('/admin/login');
     });
   };
@@ -116,7 +116,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
             }
             bordered
             dataSource={data}
-            renderItem={item => (
+            renderItem={(item) => (
               <List.Item>
                 <Typography.Text>{item}</Typography.Text>
               </List.Item>
@@ -127,8 +127,8 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
             onClose={() => {
               setVisible(false);
             }}
-            onChange={url => {
-              setUser(user => {
+            onChange={(url) => {
+              setUser((user) => {
                 user.avatar = url;
                 return user;
               });
@@ -145,9 +145,9 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
                     <Input
                       placeholder="请输入用户名"
                       defaultValue={user.name}
-                      onChange={e => {
+                      onChange={(e) => {
                         let value = e.target.value;
-                        setUser(user => {
+                        setUser((user) => {
                           user.name = value;
                           return user;
                         });
@@ -158,7 +158,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
                     <Input
                       placeholder="请输入邮箱"
                       defaultValue={user.email}
-                      onChange={e => {
+                      onChange={(e) => {
                         let value = e.target.value;
                         let regexp = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
 
@@ -166,7 +166,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
                           return;
                         }
 
-                        setUser(user => {
+                        setUser((user) => {
                           user.email = value;
                           return user;
                         });
@@ -182,7 +182,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
                     <Input.Password
                       placeholder="请输入原密码"
                       value={oldPassword}
-                      onChange={e => {
+                      onChange={(e) => {
                         let value = e.target.value;
                         setOldPassword(value);
                       }}
@@ -192,7 +192,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
                     <Input.Password
                       placeholder="请输入新密码"
                       value={newPassword1}
-                      onChange={e => {
+                      onChange={(e) => {
                         let value = e.target.value;
                         setNewPassword1(value);
                       }}
@@ -202,7 +202,7 @@ const Ownspace: NextPage<IOwnspaceProps> = ({
                     <Input.Password
                       placeholder="请确认新密码"
                       value={newPassword2}
-                      onChange={e => {
+                      onChange={(e) => {
                         let value = e.target.value;
                         setNewPassword2(value);
                       }}
