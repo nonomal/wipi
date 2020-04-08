@@ -5,7 +5,7 @@ import { CommentProvider } from '@providers/comment';
 import { BfEditor } from './BfEditor';
 import style from './index.module.scss';
 
-const isEmptyContent = (content) => /<p>(\s)*<\/p>/.test(content);
+const isEmptyContent = (content) => true;
 
 export const Editor = ({
   hostId,
