@@ -65,8 +65,8 @@ export const CommentItem = ({
       </header>
       <main style={{ paddingLeft: isChildren ? 24 + 10 : 32 + 10 }}>
         <div
-          className={cls('markdown', style.content)}
-          dangerouslySetInnerHTML={{ __html: comment.html }}
+          className={cls(style.content)}
+          dangerouslySetInnerHTML={{ __html: comment.content }}
         ></div>
         <div className={style.meta}>
           {comment.userAgent ? <span>{comment.userAgent}</span> : null}
