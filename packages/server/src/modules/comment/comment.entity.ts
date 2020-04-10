@@ -20,9 +20,6 @@ export class Comment {
   @Column({ type: 'mediumtext', default: null, charset: 'utf8mb4' }) // 评论内容
   content: string;
 
-  @Column({ type: 'mediumtext', default: null, charset: 'utf8mb4' }) // 评论内容
-  html: string;
-
   @Column({ type: 'boolean', default: false })
   pass: boolean; // 是否审核通过
 

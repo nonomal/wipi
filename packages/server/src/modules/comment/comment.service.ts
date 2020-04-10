@@ -42,7 +42,7 @@ function buildTree(list) {
   return tree;
 }
 
-const parseUserAgent = userAgent => {
+const parseUserAgent = (userAgent) => {
   const uaparser = new UAParser();
   uaparser.setUA(userAgent);
   const uaInfo = uaparser.getResult();
@@ -82,8 +82,6 @@ export class CommentService {
       throw new HttpException('缺失参数', HttpStatus.BAD_REQUEST);
     }
 
-    const { html } = marked(content);
-    comment.html = html;
     comment.pass = false;
     comment.userAgent = parseUserAgent(userAgent);
     const newComment = await this.commentRepository.create(comment);
@@ -152,7 +150,7 @@ export class CommentService {
       try {
         // 通知所有管理员审核评论
         const [users] = await this.userService.findAll({ role: 'admin' });
-        users.forEach(user => {
+        users.forEach((user) => {
           if (user.email) {
             sendEmail(user.name, user.email);
           }
@@ -184,7 +182,7 @@ export class CommentService {
     }
 
     if (otherParams) {
-      Object.keys(otherParams).forEach(key => {
+      Object.keys(otherParams).forEach((key) => {
         query
           .andWhere(`comment.${key} LIKE :${key}`)
           .setParameter(`${key}`, `%${otherParams[key]}%`);
