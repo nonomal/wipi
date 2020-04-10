@@ -39,7 +39,7 @@ const Comment: NextPage<IProps> = ({
 
   // 获取评论
   const getComments = useCallback((params = {}) => {
-    return CommentProvider.getComments(params).then(res => {
+    return CommentProvider.getComments(params).then((res) => {
       setParams(params);
       setComments(res[0]);
       return res;
@@ -58,7 +58,7 @@ const Comment: NextPage<IProps> = ({
   );
 
   // 回复评论
-  const replayComment = useCallback(comment => {
+  const replayComment = useCallback((comment) => {
     setSelectedComment(comment);
   }, []);
 
@@ -68,7 +68,8 @@ const Comment: NextPage<IProps> = ({
     }
 
     const userInfo = JSON.parse(window.sessionStorage.getItem('user'));
-    const email = (userInfo && userInfo.mail) || (setting && setting.smtpFromUser);
+    const email =
+      (userInfo && userInfo.mail) || (setting && setting.smtpFromUser);
 
     const notify = () => {
       notification.error({
@@ -77,7 +78,7 @@ const Comment: NextPage<IProps> = ({
       });
     };
 
-    const handle = email => {
+    const handle = (email) => {
       const data = {
         name: userInfo.name,
         email,
@@ -97,12 +98,12 @@ const Comment: NextPage<IProps> = ({
           setReplyContent('');
           getComments(params);
         })
-        .catch(_ => notify());
+        .catch((_) => notify());
     };
 
     if (!email) {
       SettingProvider.getSetting()
-        .then(res => {
+        .then((res) => {
           if (res && res.smtpFromUser) {
             handle(res.smtpFromUser);
           } else {
@@ -117,7 +118,7 @@ const Comment: NextPage<IProps> = ({
 
   // 删除评论
   const deleteComment = useCallback(
-    id => {
+    (id) => {
       CommentProvider.deleteComment(id).then(() => {
         message.success('评论删除成功');
         getComments(params);
@@ -139,8 +140,8 @@ const Comment: NextPage<IProps> = ({
     },
     {
       title: '内容',
-      dataIndex: 'html',
-      key: 'html',
+      dataIndex: 'content',
+      key: 'content',
       width: 160,
       render: (_, record) => (
         <Button
@@ -159,8 +160,8 @@ const Comment: NextPage<IProps> = ({
       title: '父级评论',
       dataIndex: 'parentCommentId',
       key: 'parentCommentId',
-      render: id => {
-        const target = comments.find(c => c.id === id);
+      render: (id) => {
+        const target = comments.find((c) => c.id === id);
         return (target && target.name) || '无';
       },
     },
@@ -189,7 +190,7 @@ const Comment: NextPage<IProps> = ({
       title: '状态',
       dataIndex: 'pass',
       key: 'pass',
-      render: pass => (
+      render: (pass) => (
         <Badge
           color={!pass ? 'gold' : 'green'}
           text={!pass ? '未通过' : '通过'}
@@ -200,7 +201,7 @@ const Comment: NextPage<IProps> = ({
       title: '创建时间',
       dataIndex: 'createAt',
       key: 'createAt',
-      render: date => dayjs.default(date).format('YYYY-MM-DD HH:mm:ss'),
+      render: (date) => dayjs.default(date).format('YYYY-MM-DD HH:mm:ss'),
     },
   ];
 
@@ -253,7 +254,7 @@ const Comment: NextPage<IProps> = ({
                   {[
                     { label: '已通过', value: 1 },
                     { label: '未通过', value: 0 },
-                  ].map(t => {
+                  ].map((t) => {
                     return (
                       <Select.Option key={t.label} value={t.value as any}>
                         {t.label}
@@ -278,7 +279,7 @@ const Comment: NextPage<IProps> = ({
             rows={10}
             placeholder="支持 Markdown"
             value={replyContent}
-            onChange={e => {
+            onChange={(e) => {
               let val = e.target.value;
               setReplyContent(val);
             }}
@@ -296,7 +297,7 @@ const Comment: NextPage<IProps> = ({
           <div
             className="markdown"
             dangerouslySetInnerHTML={{
-              __html: selectedComment && selectedComment.html,
+              __html: selectedComment && selectedComment.content,
             }}
           ></div>
         </Modal>
