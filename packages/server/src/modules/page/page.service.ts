@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as dayjs from 'dayjs';
 import { Page } from './page.entity';
 
 @Injectable()
@@ -45,7 +46,7 @@ export class PageService {
       query.andWhere('page.status=:status').setParameter('status', status);
     }
     if (otherParams) {
-      Object.keys(otherParams).forEach(key => {
+      Object.keys(otherParams).forEach((key) => {
         query
           .andWhere(`page.${key} LIKE :${key}`)
           .setParameter(`${key}`, `%${otherParams[key]}%`);
@@ -94,7 +95,10 @@ export class PageService {
 
     const newPage = {
       ...page,
-      publishAt: status === 'publish' ? new Date() : old.publishAt,
+      publishAt:
+        status === 'publish'
+          ? dayjs().format('YYYY-MM-DD HH:mm:ss')
+          : old.publishAt,
     };
 
     const updatedPage = await this.pageRepository.merge(old, newPage);

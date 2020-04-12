@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as dayjs from 'dayjs';
 import { TagService } from '../tag/tag.service';
 import { CategoryService } from '../category/category.service';
 import { Article } from './article.entity';
@@ -26,7 +27,14 @@ export class ArticleService {
       throw new HttpException('文章标题已存在', HttpStatus.BAD_REQUEST);
     }
 
-    let { tags, category } = article;
+    let { tags, category, status } = article;
+
+    if (status === 'publish') {
+      Object.assign(article, {
+        publishAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      });
+    }
+
     tags = await this.tagService.findByIds(('' + tags).split(','));
     let existCategory = await this.categoryService.findById(category);
     const newArticle = await this.articleRepository.create({
@@ -254,7 +262,7 @@ export class ArticleService {
       needPassword: !!article.password,
       publishAt:
         oldArticle.status === 'draft' && status === 'publish'
-          ? new Date()
+          ? dayjs().format('YYYY-MM-DD HH:mm:ss')
           : oldArticle.publishAt,
     };
 
