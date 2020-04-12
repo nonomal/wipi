@@ -18,7 +18,7 @@ const columns = [
     title: '状态',
     dataIndex: 'status',
     key: 'status',
-    render: status => {
+    render: (status) => {
       const isDraft = status === 'draft';
       return (
         <Badge
@@ -32,7 +32,7 @@ const columns = [
     title: '分类',
     key: 'category',
     dataIndex: 'category',
-    render: category =>
+    render: (category) =>
       category ? (
         <span>
           <Tag color={'magenta'} key={category.value}>
@@ -45,9 +45,9 @@ const columns = [
     title: '标签',
     key: 'tags',
     dataIndex: 'tags',
-    render: tags => (
+    render: (tags) => (
       <span>
-        {tags.map(tag => {
+        {tags.map((tag) => {
           let color = tag.label.length > 2 ? 'geekblue' : 'green';
           if (tag === 'loser') {
             color = 'volcano';
@@ -65,7 +65,7 @@ const columns = [
     title: '阅读量',
     dataIndex: 'views',
     key: 'views',
-    render: views => (
+    render: (views) => (
       <Badge
         count={views}
         showZero={true}
@@ -78,7 +78,7 @@ const columns = [
     title: '发布时间',
     dataIndex: 'publishAt',
     key: 'publishAt',
-    render: date => dayjs.default(date).format('YYYY-MM-DD HH:mm:ss'),
+    render: (date) => dayjs.default(date).format('YYYY-MM-DD HH:mm:ss'),
   },
 ];
 
@@ -129,14 +129,14 @@ const Home: NextPage<IHomeProps> = ({ articles = [] }) => {
           </span>
         </div>
         <Row gutter={16}>
-          {articles.slice(0, 4).map(article => {
+          {articles.slice(0, 4).map((article) => {
             return (
               <Col span={24 / 4} className={style.recentArticleItem}>
                 <Link
                   href={`/article/editor/[id]`}
                   as={`/article/editor/` + article.id}
                 >
-                  <a>
+                  <a target="_blank">
                     <img width={120} alt="文章封面" src={article.cover} />
                     <p className={style.title}>{article.title}</p>
                     <p className={style.desc}>{article.summary}</p>
