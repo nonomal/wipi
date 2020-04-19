@@ -1,9 +1,4 @@
-<p align="center">
-    <img width="300" src="https://wipi.oss-cn-shanghai.aliyuncs.com/2020-03-28/Logo_OrzWipi-40-360x120px.png" alt="logo">
-</p>
-
-<h2 align="center"></h2>
-
+<h1>Wipi</h1>
 
 前后端分离，服务端渲染的博客系统。支持特性：
 
