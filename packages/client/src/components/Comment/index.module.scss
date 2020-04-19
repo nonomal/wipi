@@ -129,6 +129,14 @@
       main {
         > div.content {
           padding: 0.8em 0;
+
+          img {
+            max-width: 100%;
+          }
+
+          blockquote {
+            background-color: transparent;
+          }
         }
 
         div.meta {
