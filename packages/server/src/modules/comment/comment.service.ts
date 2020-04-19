@@ -46,16 +46,11 @@ const parseUserAgent = (userAgent) => {
   const uaparser = new UAParser();
   uaparser.setUA(userAgent);
   const uaInfo = uaparser.getResult();
-  return `${uaInfo.browser.name} ${uaInfo.os.name} ${
-    uaInfo.device.vendor
-      ? uaInfo.device.vendor +
-        ' ' +
-        uaInfo.device.model +
-        ' ' +
-        uaInfo.device.type
-      : ''
-  }
-  `;
+  let msg = `${uaInfo.browser.name || ''} ${uaInfo.browser.version || ''} `;
+  msg += ` ${uaInfo.os.name || ''}  ${uaInfo.os.version || ''} `;
+  msg += `${uaInfo.device.vendor || ''} ${uaInfo.device.model || ''} ${uaInfo
+    .device.type || ''}`;
+  return msg;
 };
 @Injectable()
 export class CommentService {
