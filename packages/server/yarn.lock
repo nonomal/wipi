@@ -1690,6 +1690,11 @@ bcrypt@^3.0.7:
     nan "2.14.0"
     node-pre-gyp "0.14.0"
 
+bcryptjs@^2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/bcryptjs/-/bcryptjs-2.4.3.tgz#9ab5627b93e60621ff7cdac5da9733027df1d0cb"
+  integrity sha1-mrVie5PmBiH/fNrF2pczAn3x0Ms=
+
 big.js@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-5.2.2.tgz#65f0af382f578bcdc742bd9c281e9cb2d7768328"
@@ -5505,7 +5510,7 @@ mz@^2.4.0, mz@^2.7.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-nan@2.14.0, nan@^2.12.1, nan@^2.14.0:
+nan@2.14.0, nan@^2.12.1:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
@@ -5638,7 +5643,7 @@ node-notifier@^5.4.2:
     shellwords "^0.1.1"
     which "^1.3.0"
 
-node-pre-gyp@0.14.0, node-pre-gyp@^0.14.0:
+node-pre-gyp@0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.14.0.tgz#9a0596533b877289bcad4e143982ca3d904ddc83"
   integrity sha512-+CvDC7ZttU/sSt9rFjix/P05iS43qHCOOGzcr3Ry99bXG7VX953+vFyEuph/tfqoYu8dttBkE86JSKBO2OzcxA==
@@ -5666,14 +5671,6 @@ node-summary@^1.2.0:
     lodash "^4.17.4"
     request "^2.81.0"
     sbd "^1.0.12"
-
-nodejieba@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/nodejieba/-/nodejieba-2.4.0.tgz#934b394d1650a1bce24beed7c252ce49bb997328"
-  integrity sha512-MpzLxgwwRlgDflwX7osfZgm3+/78bI3rIA7/ECe96AzevbMTqQdnFx74pRdaivf6TtfWPceCQAzODG80WMgQZA==
-  dependencies:
-    nan "^2.14.0"
-    node-pre-gyp "^0.14.0"
 
 nodemailer@^6.4.2:
   version "6.4.2"
