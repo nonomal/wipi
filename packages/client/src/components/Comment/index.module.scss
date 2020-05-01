@@ -7,13 +7,9 @@
   margin-bottom: 16px;
 
   :global {
-    .bf-container {
-      border: 1px solid var(--comment-editor-border-color);
-      margin-bottom: 16px;
-    }
-
-    .bf-content {
-      height: 200px;
+    .CodeMirror,
+    .te-mode-switch-section {
+      background-color: transparent !important;
     }
 
     .ant-btn-primary[disabled] {
@@ -31,8 +27,8 @@
 
   .nameAndMail {
     display: flex;
-
     justify-content: space-between;
+    margin-top: 16px;
 
     input {
       width: 49%;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button, Input, message } from 'antd';
 import cls from 'classnames';
 import { CommentProvider } from '@providers/comment';
-import { BfEditor } from './BfEditor';
+import { MdEditor } from './MdEditor';
 import style from './index.module.scss';
 
 const isEmptyContent = (content) => false;
@@ -75,26 +75,30 @@ export const Editor = ({
     }
 
     setLoading(true);
-    CommentProvider.addComment(data).then(() => {
-      message.success('评论成功，已提交审核');
-      setLoading(false);
-      setContent('');
-      let userInfo = { name, email };
-      try {
-        window.localStorage.setItem('user', JSON.stringify(userInfo));
-      } catch (err) {}
-      onSuccess();
-    });
+    CommentProvider.addComment(data)
+      .then(() => {
+        message.success('评论成功，已提交审核');
+        setLoading(false);
+        setContent('');
+        let userInfo = { name, email };
+        try {
+          window.localStorage.setItem('user', JSON.stringify(userInfo));
+        } catch (err) {}
+        onSuccess();
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
   };
 
   return (
     <div className={cls(style.editor)}>
       <div>
-        <BfEditor
+        <MdEditor
           onChange={(value) => {
             setContent(value);
           }}
-          value={''}
+          value={content}
         />
         <div className={style.nameAndMail}>
           <Input
@@ -118,14 +122,14 @@ export const Editor = ({
           renderFooter({
             loading,
             submit,
-            disabled: !name || !email || isEmptyContent(content),
+            disabled: !name || !email || !content,
           })
         ) : (
           <Button
             loading={loading}
             onClick={submit}
             type="primary"
-            disabled={!name || !email || isEmptyContent(content)}
+            disabled={!name || !email || !content}
           >
             评论
           </Button>
