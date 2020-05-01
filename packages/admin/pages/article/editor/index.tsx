@@ -3,7 +3,7 @@ import cls from 'classnames';
 import { NextPage } from 'next';
 import { Helmet } from 'react-helmet';
 import { Button, Input, message, PageHeader } from 'antd';
-import { Editor as CKEditor } from '@components/Editor';
+import { Editor as MDEditor } from '@components/Editor';
 import { FileSelectDrawer } from '@/components/FileSelectDrawer';
 import { ArticleSettingDrawer } from '@/components/ArticleSettingDrawer';
 import { ArticleProvider } from '@providers/article';
@@ -134,17 +134,19 @@ const Editor: NextPage = () => {
           ]}
         />
       </header>
-      <div className={cls('container', style.content)}>
+      <div className={cls(style.content)}>
         <article>
-          <CKEditor
-            value={article.content}
-            onChange={(value) => {
-              setArticle((article) => {
-                article.content = value;
-                return article;
-              });
-            }}
-          />
+          <div>
+            <MDEditor
+              value={article.content}
+              onChange={(value) => {
+                setArticle((article) => {
+                  article.content = value;
+                  return article;
+                });
+              }}
+            />
+          </div>
         </article>
       </div>
       <FileSelectDrawer

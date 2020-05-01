@@ -162,7 +162,7 @@ const Editor: NextPage<IProps> = ({ id }) => {
           ]}
         />
       </header>
-      <div className={cls('container', style.content)}>
+      <div className={cls(style.content)}>
         <article>
           <CKEditor
             value={article.content}
