@@ -5,11 +5,11 @@ import { NProgress } from '@components/NProgress';
 import 'viewerjs/dist/viewer.css';
 import '@/theme/antd.less';
 import '@/theme/reset.scss';
-// import '@/theme/markdown.scss';
+import '@/theme/markdown.scss';
 
 let lastUrl;
 
-const addView = url => {
+const addView = (url) => {
   if (/localhost/.test(url)) {
     return;
   }
