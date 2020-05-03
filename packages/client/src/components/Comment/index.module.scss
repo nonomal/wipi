@@ -62,11 +62,11 @@
 }
 
 .commentWrapper {
-  :global {
-    .markdown {
-      background-color: transparent !important;
-    }
-  }
+  // :global {
+  //   .markdown {
+  //     background-color: transparent !important;
+  //   }
+  // }
 
   .commentContainer {
     position: relative;
@@ -129,10 +129,6 @@
           img {
             max-width: 100%;
           }
-
-          blockquote {
-            background-color: transparent;
-          }
         }
 
         div.meta {
@@ -182,5 +178,32 @@
     text-align: center;
     color: var(--second-text-color);
     background-color: var(--bg-second);
+  }
+}
+
+:global {
+  .item-enter {
+    transition: opacity 200ms, transform 200ms;
+  }
+  @for $index from 0 to 10 {
+    .item-enter:nth-of-type(#{$index}) {
+      transform: translateY(-40px * $index);
+    }
+
+    .item-enter-active:nth-of-type(#{$index}) {
+      transition-delay: $index * 200ms;
+    }
+  }
+
+  .item-enter-active {
+    transform: translateY(0);
+  }
+  .item-exit {
+    opacity: 1;
+  }
+  .item-exit-active {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 200ms, transform 200ms;
   }
 }

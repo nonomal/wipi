@@ -18,7 +18,7 @@ export const Editor = ({
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [placeholder, setPlaceholder] = useState('');
+  const [mdEditor, setMdEditor] = useState('');
   const [content, setContent] = useState('');
 
   useEffect(() => {
@@ -30,18 +30,6 @@ export const Editor = ({
       setEmail(userInfo.email);
     } catch (err) {}
   }, [loading]);
-
-  useEffect(() => {
-    if (!parentComment) {
-      return;
-    }
-
-    if (replyComment) {
-      setPlaceholder(`回复 @${replyComment.name} ：`);
-    } else {
-      setPlaceholder('');
-    }
-  }, [replyComment, parentComment]);
 
   const submit = () => {
     let regexp = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
@@ -80,6 +68,7 @@ export const Editor = ({
         message.success('评论成功，已提交审核');
         setLoading(false);
         setContent('');
+        (mdEditor as any).setHtml('');
         let userInfo = { name, email };
         try {
           window.localStorage.setItem('user', JSON.stringify(userInfo));
@@ -98,7 +87,8 @@ export const Editor = ({
           onChange={(value) => {
             setContent(value);
           }}
-          value={content}
+          value={''}
+          getEditor={setMdEditor}
         />
         <div className={style.nameAndMail}>
           <Input

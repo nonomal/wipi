@@ -171,8 +171,6 @@ export const MyComment: React.FC<IProps> = ({
         pageSize,
       })
         .then((res) => {
-          setLoading(false);
-
           if (!loadMore) {
             setComments(res[0]);
           } else {
@@ -188,6 +186,7 @@ export const MyComment: React.FC<IProps> = ({
           }
 
           setTimeout(() => {
+            setLoading(false);
             const blocks = ref.current.querySelectorAll('pre code');
             blocks.forEach((block) => hljs.highlightBlock(block));
           }, 0);
@@ -222,7 +221,7 @@ export const MyComment: React.FC<IProps> = ({
         replyComment={null}
       />
       <div className={style.commentContainer}>
-        {comments.map((comment) => {
+        {comments.map((comment, i) => {
           return (
             <CommentItem
               key={comment.id}
@@ -236,7 +235,7 @@ export const MyComment: React.FC<IProps> = ({
         })}
       </div>
       <div className={style.pagination}>
-        {page * pageSize < total && !loading ? (
+        {loading || page * pageSize < total ? (
           <Button
             type="primary"
             onClick={loadMore}
@@ -248,6 +247,13 @@ export const MyComment: React.FC<IProps> = ({
         ) : (
           <span>{total > 0 ? `共 ${total} 组` : '快来抢沙发'}</span>
         )}
+
+        {/*
+        {page * pageSize < total && !loading ? (
+
+        ) : (
+
+        )} */}
       </div>
     </div>
   );

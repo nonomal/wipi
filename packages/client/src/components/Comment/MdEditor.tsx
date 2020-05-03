@@ -8,11 +8,16 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 interface IProps {
   value: string;
   onChange: (arg: any) => void;
+  getEditor: (editor: any) => void;
 }
 
 let ToastEditor;
 
-export const MdEditor: React.FC<IProps> = ({ value = '', onChange }) => {
+export const MdEditor: React.FC<IProps> = ({
+  value = '',
+  onChange,
+  getEditor,
+}) => {
   const ref = useRef(null);
   const [mounted, setMounted] = useState(false);
 
@@ -21,6 +26,7 @@ export const MdEditor: React.FC<IProps> = ({ value = '', onChange }) => {
       return;
     }
 
+    getEditor(ref.current.editorInst);
     ref.current.editorInst.setHtml(value);
   }, [mounted, value]);
 
