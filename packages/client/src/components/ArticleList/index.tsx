@@ -34,7 +34,11 @@ export const ArticleList: React.FC<IProps> = ({
                 asCard ? style.asCard : false
               )}
             >
-              <Link href={`/article/[id]`} as={`/article/${article.id}`}>
+              <Link
+                href={`/article/[id]`}
+                as={`/article/${article.id}`}
+                scroll={false}
+              >
                 <a>
                   <div className={style.info}>
                     {article.cover && (

@@ -24,7 +24,7 @@ export const Tags = ({ tags = [] }) => {
               routerTag === tag.value ? style.active : false
             )}
           >
-            <Link href={`/tag/[tag]`} as={`/tag/` + tag.value}>
+            <Link href={`/tag/[tag]`} as={`/tag/` + tag.value} scroll={false}>
               <a>
                 {tag.label} [{tag.articleCount}]
               </a>

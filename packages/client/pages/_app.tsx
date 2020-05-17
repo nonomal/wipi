@@ -1,5 +1,6 @@
 import React from 'react';
 import App from 'next/app';
+import Router from 'next/router';
 import { ViewProvider } from '@providers/view';
 import { SettingProvider } from '@providers/setting';
 import { PageProvider } from '@providers/page';
@@ -22,6 +23,11 @@ const addView = (url) => {
 
   ViewProvider.addView({ url });
 };
+
+Router.events.on('routeChangeComplete', () => {
+  console.log('change');
+  window.scrollTo(0, 0);
+});
 
 class MyApp extends App {
   static getInitialProps = async (ctx) => {

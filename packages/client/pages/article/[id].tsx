@@ -171,7 +171,11 @@ const Article: NextPage<IProps> = (props) => {
                     {article.tags.map((tag) => {
                       return (
                         <div className={style.tag} key={tag.id}>
-                          <Link href={'/tag/[tag]'} as={'/tag/' + tag.value}>
+                          <Link
+                            href={'/tag/[tag]'}
+                            as={'/tag/' + tag.value}
+                            scroll={false}
+                          >
                             <a>
                               <Icon type="tag" />
                               <span>{tag.label}</span>

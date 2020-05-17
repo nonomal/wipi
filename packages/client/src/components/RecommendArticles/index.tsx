@@ -41,7 +41,11 @@ export const RecommendArticles: React.FC<IProps> = ({
             return (
               <li key={article.id}>
                 <div>
-                  <Link href={`/article/[id]`} as={`/article/${article.id}`}>
+                  <Link
+                    href={`/article/[id]`}
+                    as={`/article/${article.id}`}
+                    scroll={false}
+                  >
                     <a>
                       <p className={style.articleTitle}>
                         <span>{article.title}</span>

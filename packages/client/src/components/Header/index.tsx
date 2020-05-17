@@ -133,13 +133,13 @@ export const _Header = ({ setting, menus }) => {
         <div className={cls('container')}>
           <div className={style.logo}>
             {/^http/.test(setting.systemLogo) ? (
-              <Link href="/">
+              <Link href="/" scroll={false}>
                 <a>
                   <img src={setting.systemLogo} alt="" />
                 </a>
               </Link>
             ) : (
-              <Link href="/">
+              <Link href="/" scroll={false}>
                 <a dangerouslySetInnerHTML={{ __html: setting.systemLogo }}></a>
               </Link>
             )}
@@ -172,11 +172,11 @@ export const _Header = ({ setting, menus }) => {
                   }}
                 >
                   {/page/.test(menu.path) ? (
-                    <Link href={'/page/[id]'} as={menu.path}>
+                    <Link href={'/page/[id]'} as={menu.path} scroll={false}>
                       <a>{menu.label}</a>
                     </Link>
                   ) : (
-                    <Link href={menu.path}>
+                    <Link href={menu.path} scroll={false}>
                       <a>{menu.label}</a>
                     </Link>
                   )}

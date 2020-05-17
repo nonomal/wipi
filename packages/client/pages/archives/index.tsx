@@ -21,7 +21,11 @@ const ArchiveItem = ({ month, articles = [] }) => {
       <ul>
         {articles.map((article) => (
           <li key={article.id}>
-            <Link href={`/article/[id]`} as={`/article/${article.id}`}>
+            <Link
+              href={`/article/[id]`}
+              as={`/article/${article.id}`}
+              scroll={false}
+            >
               <a>
                 <span className={style.meta}>
                   {dayjs.default(article.publishAt).format('MM-DD')}
