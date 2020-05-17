@@ -2,6 +2,7 @@
 
 ::-webkit-scrollbar-track {
   border-radius: 0;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -44,6 +45,7 @@ body {
   color: var(--main-text-color);
   background-color: var(--bg);
   line-height: 1.75em;
+  height: auto;
   overflow-x: hidden;
 }
 
