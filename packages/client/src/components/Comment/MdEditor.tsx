@@ -6,7 +6,7 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 
 interface IProps {
-  value: string;
+  value?: string;
   onChange: (arg: any) => void;
   getEditor: (editor: any) => void;
 }
@@ -27,7 +27,6 @@ export const MdEditor: React.FC<IProps> = ({
     }
 
     getEditor(ref.current.editorInst);
-    ref.current.editorInst.setHtml(value);
   }, [mounted, value]);
 
   useEffect(() => {

@@ -1,9 +1,9 @@
-import React from "react";
-import { NextPage } from "next";
-import cls from "classnames";
-import { MyComment } from "@/components/Comment";
-import { RecommendArticles } from "@components/RecommendArticles";
-import style from "./index.module.scss";
+import React from 'react';
+import { NextPage } from 'next';
+import cls from 'classnames';
+import { MyComment } from '@/components/Comment';
+import { RecommendArticles } from '@components/RecommendArticles';
+import style from './index.module.scss';
 
 interface IProps {
   articleId?: string;
@@ -14,7 +14,7 @@ interface IProps {
 export const CommentAndRecommendArticles: NextPage<IProps> = ({
   articleId,
   pageId,
-  isCommentable
+  isCommentable,
 }) => {
   return (
     <div className={cls(style.wrapper)}>

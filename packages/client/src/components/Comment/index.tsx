@@ -247,13 +247,6 @@ export const MyComment: React.FC<IProps> = ({
         ) : (
           <span>{total > 0 ? `共 ${total} 组` : '快来抢沙发'}</span>
         )}
-
-        {/*
-        {page * pageSize < total && !loading ? (
-
-        ) : (
-
-        )} */}
       </div>
     </div>
   );

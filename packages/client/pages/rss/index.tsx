@@ -24,18 +24,21 @@ Rss.getInitialProps = async (ctx) => {
     SettingProvider.getSetting(),
     CategoryProvider.getCategory({ articleStatus: 'publish' }),
   ]);
-  articles = articles[0];
+  articles = articles[0] as any;
 
-  const feed = new RSS({
-    title: setting.systemTitle,
-    description: setting.seoDesc,
-    feed_url: url.resolve(setting.systemUrl, 'rss'),
-    site_url: setting.systemUrl,
-    author: 'https://github.com/zhxuc',
-    categories: categories.map((c) => c.label),
-  });
+  const feed = new RSS(
+    {
+      title: setting.systemTitle,
+      description: setting.seoDesc,
+      feed_url: url.resolve(setting.systemUrl, 'rss'),
+      site_url: setting.systemUrl,
+      author: 'https://github.com/zhxuc',
+      categories: categories.map((c) => c.label),
+    },
+    null
+  );
 
-  articles.forEach((article) => {
+  articles.forEach((article: any) => {
     feed.item({
       title: article.title,
       description: article.summary,
@@ -45,7 +48,7 @@ Rss.getInitialProps = async (ctx) => {
     });
   });
 
-  res.write(feed.xml());
+  res.write(feed.xml(null));
   res.end();
 };
 

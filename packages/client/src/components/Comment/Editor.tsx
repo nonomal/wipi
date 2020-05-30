@@ -87,7 +87,6 @@ export const Editor = ({
           onChange={(value) => {
             setContent(value);
           }}
-          value={''}
           getEditor={setMdEditor}
         />
         <div className={style.nameAndMail}>
