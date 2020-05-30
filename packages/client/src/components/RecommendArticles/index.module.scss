@@ -16,10 +16,10 @@
     }
   }
 
-  ul {
+  ul.inlineWrapper {
     padding: 0 1rem 1rem;
 
-    li {
+    li.inlineItem {
       display: flex;
       flex-wrap: nowrap;
       align-items: stretch;
@@ -63,11 +63,11 @@
     flex-wrap: nowrap;
     align-items: stretch;
     overflow: auto;
+    padding: 1rem 0;
 
-    li {
+    li.horizontalItem {
       min-width: 245px;
       width: 245px;
-      height: 226px;
       border-radius: 5px;
       box-shadow: 0 6px 14px 0 rgba(26, 26, 26, 0.06);
       padding: 0;
@@ -76,6 +76,10 @@
       position: relative;
       overflow: hidden;
       transition: transform 0.3s;
+
+      &:hover {
+        transform: scale(1.04);
+      }
 
       img {
         height: 123px;
@@ -93,9 +97,9 @@
         min-width: 225px;
         color: #1a1a1a;
         line-height: 22px;
-        // margin: 12px;
         padding: 12px;
         border: 0;
+        margin-bottom: 0;
 
         overflow: hidden;
         text-overflow: ellipsis;
@@ -103,16 +107,8 @@
       }
 
       .meta {
-        position: absolute;
-        bottom: 12px;
-        left: 12px;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
         width: 100%;
+        padding: 12px;
         font-size: 14px;
         color: #8590a6;
         line-height: 20px;
