@@ -1,5 +1,3 @@
-@import '../../theme/var.scss';
-
 .container {
   display: flex;
   align-items: center;
@@ -11,7 +9,7 @@
   height: 0;
   opacity: 0;
   color: var(--main-text-color);
-  background: var(--bg);
+  background: var(--bg-body);
   overflow: hidden;
   transition: opacity ease-in-out 0.3s;
 
