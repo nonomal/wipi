@@ -69,9 +69,9 @@
       min-width: 245px;
       width: 245px;
       border-radius: 5px;
-      box-shadow: 0 6px 14px 0 rgba(26, 26, 26, 0.06);
+      box-shadow: var(--box-shadow);
       padding: 0;
-      background: #fff;
+      background: var(--bg-second);
       margin-right: 14px;
       position: relative;
       overflow: hidden;
@@ -95,7 +95,7 @@
         font-synthesis: style;
         font-size: 16px;
         min-width: 225px;
-        color: #1a1a1a;
+        color: var(--main-text-color);
         line-height: 22px;
         padding: 12px;
         border: 0;
