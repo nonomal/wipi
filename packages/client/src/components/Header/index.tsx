@@ -39,11 +39,18 @@ export const _Header = ({ setting, menus }) => {
   const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
-    const el = document.querySelector('#__next');
-    let beforeY = el.scrollTop;
+    let beforeY =
+      document.documentElement.scrollTop ||
+      window.pageYOffset ||
+      window.scrollY ||
+      document.body.scrollTop;
 
     const handler = throttle(() => {
-      let y = el.scrollTop;
+      let y =
+        document.documentElement.scrollTop ||
+        window.pageYOffset ||
+        window.scrollY ||
+        document.body.scrollTop;
 
       setAffix(y > 0);
       setAffixVisible(beforeY > y);
@@ -52,10 +59,10 @@ export const _Header = ({ setting, menus }) => {
       }, 0);
     }, 200);
 
-    el.addEventListener('scroll', handler);
+    document.addEventListener('scroll', handler);
 
     return () => {
-      el.removeEventListener('scroll', handler);
+      document.removeEventListener('scroll', handler);
     };
   }, []);
 

@@ -42,7 +42,7 @@ export const ArticleList: React.FC<IProps> = ({
                 <a>
                   <div className={style.info}>
                     {article.cover && (
-                      <LazyLoad height={180}>
+                      <LazyLoad height={110}>
                         <div className={style.imgWrapper}>
                           <img src={article.cover} alt="cover" />
                         </div>

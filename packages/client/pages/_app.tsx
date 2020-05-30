@@ -26,7 +26,7 @@ const addView = (url) => {
 
 Router.events.on('routeChangeComplete', () => {
   setTimeout(() => {
-    document.querySelector('#__next').scrollTop = 0;
+    window.scrollTo(0, 0);
   }, 0);
 });
 
