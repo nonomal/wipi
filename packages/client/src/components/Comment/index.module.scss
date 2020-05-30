@@ -1,5 +1,3 @@
-@import '../../theme/var.scss';
-
 .editor {
   padding: 16px;
   background-color: var(--bg-second);
@@ -16,6 +14,14 @@
       color: var(--main-text-color);
       border-color: var(--comment-editor-border-color);
       background-color: var(--comment-editor-btn-diable-bg);
+    }
+
+    .tui-editor-defaultUI .CodeMirror-scroll {
+      color: var(--main-text-color);
+    }
+
+    .CodeMirror-cursor {
+      border-left-color: var(--main-text-color);
     }
   }
 
@@ -178,32 +184,5 @@
     text-align: center;
     color: var(--second-text-color);
     background-color: var(--bg-second);
-  }
-}
-
-:global {
-  .item-enter {
-    transition: opacity 200ms, transform 200ms;
-  }
-  @for $index from 0 to 10 {
-    .item-enter:nth-of-type(#{$index}) {
-      transform: translateY(-40px * $index);
-    }
-
-    .item-enter-active:nth-of-type(#{$index}) {
-      transition-delay: $index * 200ms;
-    }
-  }
-
-  .item-enter-active {
-    transform: translateY(0);
-  }
-  .item-exit {
-    opacity: 1;
-  }
-  .item-exit-active {
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 200ms, transform 200ms;
   }
 }
