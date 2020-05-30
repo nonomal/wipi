@@ -18,6 +18,20 @@ export const CommentAndRecommendArticles: NextPage<IProps> = ({
 }) => {
   return (
     <div className={cls(style.wrapper)}>
+      {/* S 推荐阅读 */}
+      <div className={style.recmmendArticles}>
+        <p className={style.title}>推荐阅读</p>
+        <div className={style.articleContainer}>
+          <RecommendArticles
+            articleId={articleId}
+            needTitle={false}
+            asCard={false}
+            mode="horizontal"
+          />
+        </div>
+      </div>
+      {/* E 推荐阅读 */}
+
       {/* S 评论 */}
       {isCommentable && (
         <div className={style.comments}>
@@ -31,19 +45,6 @@ export const CommentAndRecommendArticles: NextPage<IProps> = ({
         </div>
       )}
       {/* E 评论 */}
-
-      {/* S 推荐阅读 */}
-      <div className={style.recmmendArticles}>
-        <p className={style.title}>推荐阅读</p>
-        <div className={style.articleContainer}>
-          <RecommendArticles
-            articleId={articleId}
-            needTitle={false}
-            asCard={false}
-          />
-        </div>
-      </div>
-      {/* E 推荐阅读 */}
     </div>
   );
 };

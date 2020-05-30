@@ -8,7 +8,7 @@ import style from './index.module.scss';
 
 interface IProps {
   articleId?: string;
-  mode?: 'inline' | 'vertical';
+  mode?: 'inline' | 'vertical' | 'horizontal';
   needTitle?: boolean;
   asCard?: boolean;
 }
@@ -52,6 +52,32 @@ export const RecommendArticles: React.FC<IProps> = ({
                         {' · '}
                         <span>{format(article.publishAt, 'zh_CN')}</span>
                       </p>
+                    </a>
+                  </Link>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : mode === 'horizontal' ? (
+        <ul className={style.horizontalWrapper}>
+          {(articles || []).map((article) => {
+            return (
+              <li key={article.id}>
+                <div>
+                  <Link
+                    href={`/article/[id]`}
+                    as={`/article/${article.id}`}
+                    scroll={false}
+                  >
+                    <a>
+                      <div>
+                        <img src={article.cover} alt="" />
+                      </div>
+                      <h1 className={style.title}>{article.title}</h1>
+                      <div className={style.meta}>
+                        {format(article.publishAt, 'zh_CN')}
+                      </div>
                     </a>
                   </Link>
                 </div>
